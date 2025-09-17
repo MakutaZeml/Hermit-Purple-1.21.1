@@ -1,6 +1,6 @@
 package com.zeml.ripplez_hp.init;
 
-import com.zeml.ripplez_hp.RipplesAddon;
+import com.zeml.ripplez_hp.HermitPurpleAddon;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -9,9 +9,9 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-@EventBusSubscriber(modid = RipplesAddon.MOD_ID)
+@EventBusSubscriber(modid = HermitPurpleAddon.MOD_ID)
 public final class AddonEntityTypes {
-	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, RipplesAddon.MOD_ID);
+	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, HermitPurpleAddon.MOD_ID);
 	
 	@SubscribeEvent
 	public static void registerAttributes(EntityAttributeCreationEvent event) {

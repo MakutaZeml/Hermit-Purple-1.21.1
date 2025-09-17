@@ -1,5 +1,23 @@
 {
-  "example_addon": [
-    "ripples_addon:example_addon"
-  ]
+  "oh_no_cringe":{
+    "subtitle": "ripplez_hp.subtitle.joseph_cringe",
+    "sounds": [ "ripplez_hp:user/joseph_cringe" ]
+  },
+  "user_hp": {
+    "subtitle": "ripplez_hp.subtitle.user_hp",
+    "sounds": [ "ripplez_hp:user/joseph_hp_1","ripplez_hp:user/joseph_hp_2" ]
+
+  },
+
+
+  "summon_hermit": {
+    "subtitle": "ripplez_hp.subtitle.summon_hermit",
+    "sounds": [ "ripplez_hp:hermit_purple/summon_1","ripplez_hp:hermit_purple/summon_2","ripplez_hp:hermit_purple/summon_3" ]
+  },
+  "unsummon_hermit": {
+    "subtitle": "ripplez_hp.subtitle.unsummon_hermit",
+    "sounds": [ "ripplez_hp:hermit_purple/unsummon_1" ]
+
+  }
+
 }

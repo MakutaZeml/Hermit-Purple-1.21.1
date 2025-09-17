@@ -1,13 +1,19 @@
 package com.zeml.ripplez_hp.init;
 
-import com.zeml.ripplez_hp.RipplesAddon;
+import com.zeml.ripplez_hp.HermitPurpleAddon;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class AddonSoundEvents {
-	public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT, RipplesAddon.MOD_ID);
+	public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT, HermitPurpleAddon.MOD_ID);
 
-	public static final DeferredHolder<SoundEvent, SoundEvent> EXAMPLE_SOUND = SOUNDS.register("example", SoundEvent::createVariableRangeEvent);
+	public static final DeferredHolder<SoundEvent, SoundEvent> OH_NO_CRINGE = SOUNDS.register("oh_no_cringe", SoundEvent::createVariableRangeEvent);
+	public static final DeferredHolder<SoundEvent, SoundEvent> USER_HP = SOUNDS.register("user_hp", SoundEvent::createVariableRangeEvent);
+
+	public static final DeferredHolder<SoundEvent, SoundEvent> SUMMON_HP = SOUNDS.register("summon_hermit", SoundEvent::createVariableRangeEvent);
+	public static final DeferredHolder<SoundEvent, SoundEvent> UNSUMMON_HP = SOUNDS.register("unsummon_hermit", SoundEvent::createVariableRangeEvent);
+
+
 }

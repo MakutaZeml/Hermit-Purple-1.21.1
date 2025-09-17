@@ -4,5 +4,7 @@
   "package": "com.zeml.ripplez_hp.mixin",
   "refmap": "mixins.ripplez_hp.refmap.json",
   "minVersion": "0.8.5",
-  "mixins": []
+  "mixins": [],
+  "client": [
+  ]
 }

@@ -9,11 +9,11 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 
-@Mod(RipplesAddon.MOD_ID)
-public class RipplesAddon {
+@Mod(HermitPurpleAddon.MOD_ID)
+public class HermitPurpleAddon {
     public static final String MOD_ID = "ripplez_hp";
 
-    public RipplesAddon(IEventBus modEventBus, ModContainer modContainer) {
+    public HermitPurpleAddon(IEventBus modEventBus, ModContainer modContainer) {
         AddonPlayerPowers.PLAYER_POWERS.register(modEventBus);
         AddonStandAbilities.load();
         AddonStandEffects.STAND_EFFECT_TYPES.register(modEventBus);

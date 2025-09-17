@@ -1,3 +1,18 @@
 {
+  "stand.ripplez_hp.hermit_purple": "Hermit Purple",
 
+  "jojo_ripples.skill.cringe": "Oh no Cringe!",
+  "jojo_ripples.ability.cringe": "\"Oh no, Cringe!\"",
+  "jojo_ripples.skill.cringe.desc": "Deal emotional damage to your opponent",
+  "jojo_ripples.skill.hp_doxx": "Spirit Divination",
+  "jojo_ripples.ability.hp_doxx": "Spirit Divination",
+  "jojo_ripples.skill.hp_doxx.desc": "Exposes the target location into a map",
+  "jojo_ripples.skill.hp_target": "Target Selection",
+  "jojo_ripples.ability.hp_target": "Target Selection",
+  "jojo_ripples.skill.hp_target.desc": "Opens a menu that let you select an specific target to use the spirit divination",
+  "jojo_ripples.skill.hp_block": "Hermito Thorns",
+  "jojo_ripples.ability.hp_block": "Hermito Thorns",
+  "jojo_ripples.skill.hp_block.desc": "Holding it protects you from any damage that isn't a projectile",
+
+  "filled_map.divination": "Spirit divination of %s"
 }
