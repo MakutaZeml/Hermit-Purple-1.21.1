@@ -86,7 +86,7 @@ configurations {
 
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
-    implementation(files("jars/JJBA-RipplesOfThePast-0.alpha-250914-a.jar"))
+    implementation(files("jars/JJBA-RipplesOfThePast-0.alpha-250917-a.jar"))
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
