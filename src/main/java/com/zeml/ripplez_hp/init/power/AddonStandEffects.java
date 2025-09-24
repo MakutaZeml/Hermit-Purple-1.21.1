@@ -3,7 +3,7 @@ package com.zeml.ripplez_hp.init.power;
 import com.github.standobyte.jojo.core.JojoRegistries;
 import com.github.standobyte.jojo.powersystem.standpower.StandEffectType;
 
-import com.zeml.ripplez_hp.HermitPurpleAddon;
+import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public final class AddonStandEffects {

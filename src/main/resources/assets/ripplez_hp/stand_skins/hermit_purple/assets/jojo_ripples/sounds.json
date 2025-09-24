@@ -1,0 +1,14 @@
+{
+  "stand_summon": {
+    "replace": true,
+    "sounds": [
+      "ripplez_hp:hermit_purple/summon_1",
+      "ripplez_hp:hermit_purple/summon_2",
+      "ripplez_hp:hermit_purple/summon_3"
+    ]
+  },
+  "stand_unsummon": {
+    "replace": true,
+    "sounds": [ "ripplez_hp:hermit_purple/unsummon_1" ]
+  }
+}

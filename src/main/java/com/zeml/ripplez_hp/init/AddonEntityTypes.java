@@ -1,6 +1,6 @@
 package com.zeml.ripplez_hp.init;
 
-import com.zeml.ripplez_hp.HermitPurpleAddon;
+import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;

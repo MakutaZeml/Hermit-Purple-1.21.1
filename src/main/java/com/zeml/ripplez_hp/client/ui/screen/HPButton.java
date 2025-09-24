@@ -1,14 +1,25 @@
 package com.zeml.ripplez_hp.client.ui.screen;
 
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.network.chat.Component;
-import net.neoforged.neoforge.client.extensions.IAbstractWidgetExtension;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.resources.ResourceLocation;
+
 
 @SuppressWarnings("deprecation")
-public class HPButton extends Button implements IAbstractWidgetExtension{
+public class HPButton extends ImageButton {
+
+    protected static final WidgetSprites SPRITES = new WidgetSprites(ResourceLocation.withDefaultNamespace("widget/button"), ResourceLocation.withDefaultNamespace("widget/button_disabled"), ResourceLocation.withDefaultNamespace("widget/button_highlighted"));
 
 
-    protected HPButton(int x, int y, int width, int height, Component message, OnPress onPress, CreateNarration createNarration) {
-        super(x, y, width, height, message, onPress, createNarration);
+    public HPButton(int x, int y, int width, int height, OnPress onPress) {
+        super(x, y, width, height, SPRITES, onPress);
     }
+
+    @Override
+    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
+    }
+
+
 }

@@ -9,7 +9,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.zeml.ripplez_hp.HermitPurpleAddon;
+import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.init.power.AddonStands;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;

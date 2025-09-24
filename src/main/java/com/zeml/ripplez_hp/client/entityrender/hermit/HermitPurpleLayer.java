@@ -1,7 +1,6 @@
 package com.zeml.ripplez_hp.client.entityrender.hermit;
 
 import com.github.standobyte.jojo.client.ClientGlobals;
-import com.github.standobyte.jojo.client.standskin.StandSkin;
 import com.github.standobyte.jojo.client.standskin.StandSkinsLoader;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.google.gson.JsonObject;
@@ -10,10 +9,9 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.zeml.ripplez_hp.HermitPurpleAddon;
+import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.init.power.AddonStands;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.DrownedModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;

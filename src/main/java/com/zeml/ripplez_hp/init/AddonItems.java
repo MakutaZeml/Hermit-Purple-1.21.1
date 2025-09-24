@@ -1,6 +1,6 @@
 package com.zeml.ripplez_hp.init;
 
-import com.zeml.ripplez_hp.HermitPurpleAddon;
+import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;

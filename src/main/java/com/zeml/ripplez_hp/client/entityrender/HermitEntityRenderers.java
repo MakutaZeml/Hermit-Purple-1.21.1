@@ -1,6 +1,6 @@
 package com.zeml.ripplez_hp.client.entityrender;
 
-import com.zeml.ripplez_hp.HermitPurpleAddon;
+import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.client.entityrender.hermit.HermitPurpleLayer;
 import com.zeml.ripplez_hp.client.entityrender.hermit.HermitPurpleOuterLayer;
 import net.minecraft.client.Minecraft;

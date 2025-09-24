@@ -10,9 +10,13 @@ import com.github.standobyte.jojo.powersystem.ability.controls.InputMethod;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionPhase;
 import com.github.standobyte.jojo.powersystem.entityaction.HeldInput;
 import com.github.standobyte.jojo.powersystem.standpower.entity.StandEntityAbility;
+import com.mojang.datafixers.util.Pair;
+import com.zeml.ripplez_hp.core.HermitPackets;
+import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -25,6 +29,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.MapItem;
 import net.minecraft.world.item.component.MapItemColor;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
@@ -50,12 +55,13 @@ public class MapDoxingAbility extends StandEntityAbility {
         if(level.isClientSide){
 
         }
+        HermitPurpleAddon.LOGGER.debug("mode {}, target {}", user.getData(AddonDataAttachmentTypes.MODE),user.getData(AddonDataAttachmentTypes.TARGET));
         byte scale = user.isShiftKeyDown()?(byte) 0: (byte)2;
         BlockPos blockPos = null;
         String target = null;
         ItemStack itemStack = user.getItemInHand(InteractionHand.OFF_HAND);
         if(itemStack.is(Items.MAP)){
-            if(user.getData(AddonDataAttachmentTypes.MODE) <= 4){
+            if(user.getData(AddonDataAttachmentTypes.MODE) < 4){
                 Entity entity = DoxingHelper.HPLivingObjectives(user);
                 if(entity != null){
                     blockPos = entity.getOnPos();
@@ -63,6 +69,22 @@ public class MapDoxingAbility extends StandEntityAbility {
 
                 }
             }else {
+                switch (user.getData(AddonDataAttachmentTypes.MODE)){
+                    case 4:
+                        blockPos = DoxingHelper.structurePos(user);
+                        String data = user.getData(AddonDataAttachmentTypes.TARGET).split(":")[1];
+                        data = data.replace("_"," ");
+                        target = data;
+
+                        break;
+                    case 5:
+                        blockPos = DoxingHelper.biomesPos(user);
+                        String biome = "biome.";
+
+                        target = Component.translatable(biome.concat(user.getData(AddonDataAttachmentTypes.TARGET).replace(":","."))).getString();
+                        break;
+                }
+
 
             }
             if(blockPos != null){

@@ -7,6 +7,7 @@
   "jojo_ripples.skill.hp_doxx": "Spirit Divination",
   "jojo_ripples.ability.hp_doxx": "Spirit Divination",
   "jojo_ripples.skill.hp_doxx.desc": "Exposes the target location into a map",
+  "jojo_ripples.skill.hp_doxx.controls": "Shift to increase the map Zoom",
   "jojo_ripples.skill.hp_target": "Target Selection",
   "jojo_ripples.ability.hp_target": "Target Selection",
   "jojo_ripples.skill.hp_target.desc": "Opens a menu that let you select an specific target to use the spirit divination",
@@ -14,5 +15,18 @@
   "jojo_ripples.ability.hp_block": "Hermito Thorns",
   "jojo_ripples.skill.hp_block.desc": "Holding it protects you from any damage that isn't a projectile",
 
-  "filled_map.divination": "Spirit divination of %s"
+  "filled_map.divination": "Spirit divination of %s",
+
+  "gui.hermitpurpletarget.title": "Hermit Purple target select",
+  "gui.hermitpurpletarget.tab_players": "Players",
+  "gui.hermitpurpletarget.tab_entities": "Entity",
+  "gui.hermitpurpletarget.tab_structures": "Structure",
+  "gui.hermitpurpletarget.tab_biomes": "Biomes",
+  "gui.hermitpurpletarget.tab_stands": "Stand",
+  "gui.hermitpurpletarget.random": "Random",
+  "gui.hermitpurpletarget.search_empty": "Couldn't find any target with that name",
+
+  "commands.hermit.target.failed": "Unable to set the target",
+  "commands.hermit.target.succes": "%s was set as %s target",
+  "commands.hermit.target.random": "Random"
 }

@@ -7,6 +7,7 @@ import com.github.standobyte.jojo.powersystem.ability.AbilityType;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.HermitAction;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.MapDoxingAbility;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.OhNoCringeAbility;
+import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.OpenTargetAbility;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 public final class AddonStandAbilities {
@@ -22,5 +23,10 @@ public final class AddonStandAbilities {
 	public static final DeferredHolder<AbilityType<?>, AbilityType<HermitAction>> THORNS = ABILITY_TYPES.register(
 			"hp_thorns", key ->new AbilityType<>(key, HermitAction::new)
 	);
+
+	public static final DeferredHolder<AbilityType<?>, AbilityType<OpenTargetAbility>> SELECT_TARGET = ABILITY_TYPES.register(
+			"hp_select", key -> new AbilityType<>(key, OpenTargetAbility::new)
+	);
+
 
 }

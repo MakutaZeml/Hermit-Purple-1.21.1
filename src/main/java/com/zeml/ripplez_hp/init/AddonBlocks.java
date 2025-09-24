@@ -1,6 +1,6 @@
 package com.zeml.ripplez_hp.init;
 
-import com.zeml.ripplez_hp.HermitPurpleAddon;
+import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public final class AddonBlocks {
