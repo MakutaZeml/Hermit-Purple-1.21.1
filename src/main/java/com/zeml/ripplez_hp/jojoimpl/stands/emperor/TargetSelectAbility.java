@@ -77,7 +77,7 @@ public class TargetSelectAbility extends EntityActionAbility {
                 return getData(data);
             }
         }else  if(user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem){
-            ItemStack itemStack = user.getItemInHand(InteractionHand.MAIN_HAND);
+            ItemStack itemStack = user.getItemInHand(InteractionHand.OFF_HAND);
             EmperorGunData data = itemStack.get(HermitDataComponents.EMPEROR);
             if(data != null){
                 return getData(data);
@@ -110,8 +110,8 @@ public class TargetSelectAbility extends EntityActionAbility {
             if(data != null){
                 return getModSprite(data);
             }
-        }else  if(user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem){
-            ItemStack itemStack = user.getItemInHand(InteractionHand.MAIN_HAND);
+        }else if(user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem){
+            ItemStack itemStack = user.getItemInHand(InteractionHand.OFF_HAND);
             EmperorGunData data = itemStack.get(HermitDataComponents.EMPEROR);
             if(data != null){
                 return getModSprite(data);

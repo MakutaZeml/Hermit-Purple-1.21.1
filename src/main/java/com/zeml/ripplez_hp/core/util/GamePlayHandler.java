@@ -1,5 +1,7 @@
-package com.zeml.ripplez_hp.util;
+package com.zeml.ripplez_hp.core.util;
 
+import com.github.standobyte.jojo.powersystem.standpower.StandPower;
+import com.zeml.ripplez_hp.init.AddonItems;
 import com.zeml.ripplez_hp.init.HermitDataComponents;
 import com.zeml.ripplez_hp.mc.item.component.EmperorGunData;
 import net.minecraft.server.level.ServerLevel;
@@ -15,6 +17,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 @EventBusSubscriber
 public class GamePlayHandler {
