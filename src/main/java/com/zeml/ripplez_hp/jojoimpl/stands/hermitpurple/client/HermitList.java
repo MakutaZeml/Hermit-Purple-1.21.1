@@ -1,6 +1,7 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.client;
 
 import com.google.common.collect.Lists;
+import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
@@ -55,10 +56,11 @@ public class HermitList extends ContainerObjectSelectionList<PurpleEntry> {
         this.mode = mode;
     }
 
-    public int getMode() {
-        return this.mode;
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        HermitPurpleAddon.getLogger().debug("CLICKED? {}",button);
+        return super.mouseClicked(mouseX, mouseY, button);
     }
-
 
     private void addPurpleEntry(Collection<?> list, List<PurpleEntry> purpleEntries){
         list.forEach(object->{

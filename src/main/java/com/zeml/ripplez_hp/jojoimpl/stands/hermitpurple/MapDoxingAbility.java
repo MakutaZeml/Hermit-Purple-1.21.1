@@ -61,7 +61,7 @@ public class MapDoxingAbility extends EntityActionAbility {
         if(level.isClientSide){
 
         }
-        HermitPurpleAddon.LOGGER.debug("mode {}, target {}", user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode(),user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget());
+        HermitPurpleAddon.LOGGER.debug("mode {}, target {}, {}", user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode(),user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget(), this.anim.toString());
         byte scale = user.isShiftKeyDown()?(byte) 0: (byte)2;
         BlockPos blockPos = null;
         String target = null;
@@ -126,6 +126,7 @@ public class MapDoxingAbility extends EntityActionAbility {
 
     @Override
     public ActionAnimIdentifier getEntityAnim(EntityActionInstance action) {
+        HermitPurpleAddon.getLogger().debug("Anim {}", super.getEntityAnim(action).toString());
         return super.getEntityAnim(action);
     }
 }

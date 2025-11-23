@@ -37,9 +37,7 @@ public class AddonStands {
 					
 					.addAbility("hp_doxx", AddonStandAbilities.MAP_DIVINATION)
 					.inHotbar(0, InputMethod.CLICK)
-					
-					.addAbility("placeholder3", AddonStandAbilities.CRINGE)
-					.inHotbar(0, InputMethod.CLICK)
+
 					
 					.addAbility("hp_block", AddonStandAbilities.THORNS)
 					.inHotbar(0, InputMethod.HOLD)
