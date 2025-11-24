@@ -1,6 +1,8 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.client;
 
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
+import com.zeml.ripplez_hp.core.packets.client.SetTargetPacket;
+import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -14,6 +16,7 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,6 +41,7 @@ public class PurpleEntry extends ContainerObjectSelectionList.Entry<PurpleEntry>
         this.name = getName(o);
         this.hpButton = new ImageButton(0, 0, 20, 20,SPRITES,(ctx)->{
             HermitPurpleAddon.getLogger().debug("Packet Sent {} {}", item.toString(),this.mode);
+            PacketDistributor.sendToServer(new SetTargetPacket(this.mode,item.toString()));
         });
         this.children = new ArrayList<>();
         this.children.add(this.hpButton);

@@ -18,6 +18,7 @@ import com.github.standobyte.jojo.powersystem.standpower.entity.StandEntityAbili
 import com.mojang.datafixers.util.Pair;
 import com.zeml.ripplez_hp.core.HermitPackets;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
+import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import net.minecraft.core.BlockPos;
@@ -39,6 +40,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class MapDoxingAbility extends EntityActionAbility {
     public MapDoxingAbility(AbilityType<?> abilityType, AbilityId abilityId) {
@@ -58,44 +60,38 @@ public class MapDoxingAbility extends EntityActionAbility {
 
     @Override
     public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime) {
-        if(level.isClientSide){
+        if(!level.isClientSide){
+            byte scale = user.isShiftKeyDown()?(byte) 0: (byte)2;
+            BlockPos blockPos = null;
+            String target = null;
+            ItemStack itemStack = user.getItemInHand(InteractionHand.OFF_HAND);
+            if(itemStack.is(Items.MAP)){
+                if(user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode() < 4){
+                    Entity entity = DoxingHelper.HPLivingObjectives(user);
+                    if(entity != null){
+                        blockPos = entity.getOnPos();
+                        target = entity.getName().getString();
 
-        }
-        HermitPurpleAddon.LOGGER.debug("mode {}, target {}, {}", user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode(),user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget(), this.anim.toString());
-        byte scale = user.isShiftKeyDown()?(byte) 0: (byte)2;
-        BlockPos blockPos = null;
-        String target = null;
-        ItemStack itemStack = user.getItemInHand(InteractionHand.OFF_HAND);
-        if(itemStack.is(Items.MAP)){
-            if(user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode() < 4){
-                Entity entity = DoxingHelper.HPLivingObjectives(user);
-                if(entity != null){
-                    blockPos = entity.getOnPos();
-                    target = entity.getName().getString();
+                    }
+                }else {
+                    switch (user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode()){
+                        case 4:
+                            blockPos = DoxingHelper.structurePos(user);
+                            String data = user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget().split(":")[1];
+                            data = data.replace("_"," ");
+                            target = data;
 
+                            break;
+                        case 5:
+                            blockPos = DoxingHelper.biomesPos(user);
+                            String biome = "biome.";
+
+                            target = Component.translatable(biome.concat(user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget().replace(":","."))).getString();
+                            break;
+                    }
                 }
-            }else {
-                switch (user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode()){
-                    case 4:
-                        blockPos = DoxingHelper.structurePos(user);
-                        String data = user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget().split(":")[1];
-                        data = data.replace("_"," ");
-                        target = data;
-
-                        break;
-                    case 5:
-                        blockPos = DoxingHelper.biomesPos(user);
-                        String biome = "biome.";
-
-                        target = Component.translatable(biome.concat(user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget().replace(":","."))).getString();
-                        break;
-                }
-
-
-            }
-            if(blockPos != null){
-                if(!level.isClientSide){
-                    itemStack.setCount(itemStack.getCount()-1);
+                if(blockPos != null){
+                    itemStack.setCount(itemStack.getCount() - 1);
                     ServerLevel serverLevel = (ServerLevel) level;
                     ItemStack map = MapItem.create(level,blockPos.getX(),blockPos.getZ(),scale,true,true);
                     MapItem.renderBiomePreviewMap(serverLevel,map);
@@ -104,24 +100,18 @@ public class MapDoxingAbility extends EntityActionAbility {
                     map.set(DataComponents.ITEM_NAME, Component.translatable(displayName, target));
                     map.set(DataComponents.MAP_COLOR, new MapItemColor(user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getColor()));
                     user.setItemInHand(InteractionHand.MAIN_HAND,map);
-                }else {
-                    if(ClientGlobals.canHearStands){
-                        EntityLingeringSoundInstance sound = new EntityLingeringSoundInstance(ClientsideSoundsHelper
-                                .withStandSkin(AddonSoundEvents.SUMMON_HP.get(), StandPower.get(user)),user.getSoundSource(),1,1f,user,level);
-                        ClientsideSoundsHelper.playNonVanillaClassSound(sound);
-                    }
-                    EntityLingeringSoundInstance sound = new EntityLingeringSoundInstance(ClientsideSoundsHelper
-                            .withStandSkin(AddonSoundEvents.USER_HP.get(), StandPower.get(user)),user.getSoundSource(),1,1f,user,level);
-                    ClientsideSoundsHelper.playNonVanillaClassSound(sound);
-
+                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(user,
+                            new StandSoundPacket(user.getId(),AddonSoundEvents.USER_HP,false,1,1));
+                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(user,
+                            new StandSoundPacket(user.getId(),AddonSoundEvents.SUMMON_HP,true,1,1));
                 }
             }
-
         }
 
         return super.onKeyPress(level, user, extraClientInput, inputMethod, clickHoldResolveTime);
 
     }
+
 
 
     @Override

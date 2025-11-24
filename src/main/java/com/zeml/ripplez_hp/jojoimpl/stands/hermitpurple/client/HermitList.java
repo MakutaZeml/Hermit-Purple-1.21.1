@@ -95,4 +95,11 @@ public class HermitList extends ContainerObjectSelectionList<PurpleEntry> {
         }
     }
 
+    @Override
+    public void setScrollAmount(double scroll) {
+        super.setScrollAmount(scroll);
+    }
+
+
+
 }

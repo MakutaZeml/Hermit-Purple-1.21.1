@@ -63,6 +63,8 @@ public class DoxingHelper {
         return user.level().players().stream().map(player -> {
             if(player.getName().getString().equals(user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget())){
                 return player;
+            } else if (player.getUUID().toString().equals(user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget())) {
+                return player;
             }
                     return null;
         }
@@ -110,7 +112,11 @@ public class DoxingHelper {
     public static BlockPos structurePos(@NotNull LivingEntity user){
         ServerLevel level = (ServerLevel) user.level();
         Registry<Structure> structures = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
-        Optional<Holder.Reference<Structure>> structureHolder = structures.getHolder(structures.getId(ResourceLocation.tryParse(user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget())));
+        String structure = user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget();
+        if(structure.contains("cities")){
+            structure = structure.replace("cities","city");
+        }
+        Optional<Holder.Reference<Structure>> structureHolder = structures.getHolder(structures.getId(ResourceLocation.tryParse(structure)));
         HermitPurpleAddon.LOGGER.debug("Pair {}", structureHolder);
         if(structureHolder.isPresent()){
             HolderSet<Structure> holderSet = HolderSet.direct(structureHolder.get());

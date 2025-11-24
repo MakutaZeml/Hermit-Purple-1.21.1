@@ -97,7 +97,7 @@ public class HermitTargetScreen extends Screen {
     @Override
     protected void init(){
         this.layout.addTitleHeader(TITLE, this.font);
-        this.hpSelectList = new HermitList(this.minecraft,this.width,this.listEnd() - 88,88,36);
+        this.hpSelectList = new HermitList(this.minecraft,this.width,this.listEnd() - 100,88,36);
         int i = this.hpSelectList.getRowWidth() / 3;
         int j = this.hpSelectList.getRowLeft();
         int k = this.hpSelectList.getRowRight();
@@ -267,5 +267,20 @@ public class HermitTargetScreen extends Screen {
     }
     private int backgroundUnits() {
         return this.windowHeight() / 16;
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        double scroll = Math.max(0,Math.min(hpSelectList.getMaxScroll(),hpSelectList.getScrollAmount()-50*scrollY)) ;
+        hpSelectList.setScrollAmount(scroll);
+        return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if(hpSelectList.isMouseOver(mouseX,mouseY)){
+            hpSelectList.mouseClicked(mouseX,mouseY,button);
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 }
