@@ -1,9 +1,12 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.client.renderer;
 
 import com.github.standobyte.jojo.client.ClientGlobals;
+import com.github.standobyte.jojo.client.entityrender.parsemodel.loader.ResourceModelEntry;
 import com.github.standobyte.jojo.client.entityrender.parsemodel.loader.RotpGeckoModelLoader;
 import com.github.standobyte.jojo.client.firstperson.FirstPersonModelLayer;
+import com.github.standobyte.jojo.client.standskin.StandSkin;
 import com.github.standobyte.jojo.client.standskin.StandSkinsLoader;
+import com.github.standobyte.jojo.client.utils.ModelUtil;
 import com.github.standobyte.jojo.mechanics.clothes.mannequin.MannequinEntity;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -25,12 +28,13 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 
 public class HermitPurpleLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M> implements FirstPersonModelLayer {
-    HermitPurpleModel purpleModel;
-    HermitPurpleModel thorns;
+    ResourceModelEntry purpleModel;
     private final ResourceLocation HERMIT = ResourceLocation.tryBuild(HermitPurpleAddon.MOD_ID,"textures/entity/stand/hermito_purple.png");
     private final ResourceLocation THORNS = ResourceLocation.tryBuild(HermitPurpleAddon.MOD_ID,"textures/entity/stand/hermito_torns.png");
     public HermitPurpleLayer(RenderLayerParent<T, M> renderer) {
         super(renderer);
+        this.purpleModel = RotpGeckoModelLoader.getInstance().getModelContainer(HermitPurpleAddon.resLoc("hermit_base"));
+        this.purpleModel.rendererInit(HermitPurpleModel::new);
     }
 
     @Override
@@ -41,21 +45,21 @@ public class HermitPurpleLayer<T extends LivingEntity, M extends HumanoidModel<T
 
         StandPower standData = StandPower.get(t);
         if(standData != null && standData.getPowerType() == AddonStands.HERMIT_PURPLE.get() && standData.isSummoned()){
-            boolean slim = t instanceof MannequinEntity mannequin && mannequin.isSlim() || t instanceof AbstractClientPlayer player && player.getSkin().model() == PlayerSkin.Model.SLIM;
-            ResourceLocation texture = StandSkinsLoader.getInstance().getSkin(StandPower.get(t)).getTexture(HERMIT);
+            boolean slim = ModelUtil.isSlimModel(t);
+            StandSkin standSkin = StandSkinsLoader.getInstance().getSkin(standData);
+            ResourceLocation texture = standSkin.getTexture(HERMIT);
             M parentModel = getParentModel();
+            HermitPurpleModel purpleModel = this.purpleModel.getModel(standSkin);
+            
             purpleModel = new HermitPurpleModel(RotpGeckoModelLoader.getInstance().getModelDefinition(HermitPurpleAddon.resLoc("hermit_base")).bakeRoot());
+            
             parentModel.copyPropertiesTo(purpleModel);
             purpleModel.setSlim(slim);
             purpleModel.poseLayer(parentModel);
             VertexConsumer ivertexbuilder = buffer.getBuffer(RenderType.entityCutoutNoCull(texture));
             purpleModel.renderToBuffer(poseStack,ivertexbuilder,packedLight, OverlayTexture.NO_OVERLAY);
 
-            ResourceLocation thorns_texture = StandSkinsLoader.getInstance().getSkin(StandPower.get(t)).getTexture(THORNS);
-            thorns = new HermitPurpleModel(RotpGeckoModelLoader.getInstance().getModelDefinition(HermitPurpleAddon.resLoc("hermit_base")).bakeRoot());
-            parentModel.copyPropertiesTo(thorns);
-            thorns.setSlim(slim);
-            thorns.poseLayer(parentModel);
+            ResourceLocation thorns_texture = standSkin.getTexture(THORNS);
             VertexConsumer thorns_vertex = buffer.getBuffer(RenderType.entityCutoutNoCull(thorns_texture));
             purpleModel.renderToBuffer(poseStack,thorns_vertex,packedLight, OverlayTexture.NO_OVERLAY);
 
@@ -68,9 +72,12 @@ public class HermitPurpleLayer<T extends LivingEntity, M extends HumanoidModel<T
 
         boolean slim = t instanceof AbstractClientPlayer player && player.getSkin().model() == PlayerSkin.Model.SLIM;
         ResourceLocation hermit = HERMIT;
-        if(StandPower.getOptional(t).isPresent() && StandPower.get(t).getPowerType() == AddonStands.HERMIT_PURPLE.get() && StandPower.get(t).isSummoned()) {
-            ResourceLocation texture = StandSkinsLoader.getInstance().getSkin(StandPower.get(t)).getTexture(hermit);
-            purpleModel = new HermitPurpleModel(RotpGeckoModelLoader.getInstance().getModelDefinition(HermitPurpleAddon.resLoc("hermit_base")).bakeRoot());
+        StandPower standData = StandPower.get(t);
+        if(standData != null && standData.getPowerType() == AddonStands.HERMIT_PURPLE.get() && standData.isSummoned()) {
+            StandSkin standSkin = StandSkinsLoader.getInstance().getSkin(standData);
+            ResourceLocation texture = standSkin.getTexture(hermit);
+            HermitPurpleModel purpleModel = (HermitPurpleModel) this.purpleModel.getModel(standSkin);
+            purpleModel.setAllVisible(true);
             purpleModel.setSlim(slim);
             purpleModel.head.visible = false;
             purpleModel.body.visible = false;

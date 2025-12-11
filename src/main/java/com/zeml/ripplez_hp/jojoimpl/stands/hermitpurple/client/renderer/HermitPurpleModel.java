@@ -33,6 +33,13 @@ public class HermitPurpleModel extends HumanoidModel {
         ((IPlayerLimbBend) (Object) rightArmSlim).jojo_ripples$setBendBone(thisBends.jojo_ripples$animRightArmBend(), false);
         ((IPlayerLimbBend) (Object) leftArmSlim).jojo_ripples$setBendBone(thisBends.jojo_ripples$animLeftArmBend(), false);
     }
+    
+    @Override
+    public void setAllVisible(boolean visible) {
+        super.setAllVisible(visible);
+        this.rightArmSlim.visible = visible;
+        this.leftArmSlim.visible = visible;
+    }
 
     public void setSlim(boolean slim){
         if (slim) {
