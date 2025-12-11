@@ -19,7 +19,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
@@ -27,7 +26,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 
-@OnlyIn(Dist.CLIENT)
 public class HermitTargetScreen extends Screen {
     private static final Component TITLE = Component.translatable("gui.hermitpurpletarget.title");
     private static final ResourceLocation BACKGROUND_SPRITE = ResourceLocation.withDefaultNamespace("social_interactions/background");
@@ -257,7 +255,6 @@ public class HermitTargetScreen extends Screen {
         this.searchBox.setValue(searchString);
     }
 
-    @OnlyIn(Dist.CLIENT)
     enum Mode{
         PLAYERS,
         ENTITIES,
