@@ -5,7 +5,5 @@
   "refmap": "mixins.ripplez_hp.refmap.json",
   "minVersion": "0.8.5",
   "mixins": [],
-  "client": [
-    "HPStandSkinsScreenMixin"
-  ]
+  "client": []
 }
