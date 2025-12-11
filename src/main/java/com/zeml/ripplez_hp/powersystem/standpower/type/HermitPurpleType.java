@@ -7,6 +7,7 @@ import org.joml.Quaternionf;
 import com.github.standobyte.jojo.client.standskin.StandSkin;
 import com.github.standobyte.jojo.client.standskin.StandSkinsScreen;
 import com.github.standobyte.jojo.powersystem.MovesetBuilder;
+import com.github.standobyte.jojo.powersystem.PowerClass;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.github.standobyte.jojo.powersystem.standpower.StandStats;
 import com.github.standobyte.jojo.powersystem.standpower.type.StandType;
@@ -52,12 +53,15 @@ public class HermitPurpleType extends StandType {
 
 
 		        Zombie zombie = new Zombie(Minecraft.getInstance().level);
+		        zombie.yHeadRot = 0;
 
-		        StandPower.getOptional(zombie).ifPresent(standPower -> {
+		        PowerClass.STAND.attachPower(zombie);
+		        StandPower standPower = StandPower.get(zombie);
+		        if (standPower != null) {
 		            standPower.setStand(AddonStands.HERMIT_PURPLE.get());
 		            standPower.setSummonedStand( new SummonedStand.BlankSummonedStand());
 		            standPower.setSelectedSkin(Optional.of(skin.skinId));
-		        });
+		        }
 
 		        RenderSystem.runAsFancy(()->{
 

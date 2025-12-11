@@ -28,7 +28,7 @@ public class HermitEntityRenderers {
     @SubscribeEvent
     public static void addLayers(EntityRenderersEvent.AddLayers event) {
         var renderers = Minecraft.getInstance().getEntityRenderDispatcher();
-        for (var renderer : renderers.getSkinMap().values()) {
+        for (var renderer : renderers.renderers.values()) {
             castToHumanoid(renderer).ifPresent(HermitEntityRenderers::addHumanoidLayers);
         }
         for (var playerRenderer : renderers.getSkinMap().values()) {

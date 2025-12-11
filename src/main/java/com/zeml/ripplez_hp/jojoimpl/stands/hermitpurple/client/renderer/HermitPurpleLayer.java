@@ -39,7 +39,8 @@ public class HermitPurpleLayer<T extends LivingEntity, M extends HumanoidModel<T
             return;
         }
 
-        if(StandPower.getOptional(t).isPresent() && StandPower.get(t).getPowerType() == AddonStands.HERMIT_PURPLE.get() && StandPower.get(t).isSummoned()){
+        StandPower standData = StandPower.get(t);
+        if(standData != null && standData.getPowerType() == AddonStands.HERMIT_PURPLE.get() && standData.isSummoned()){
             boolean slim = t instanceof MannequinEntity mannequin && mannequin.isSlim() || t instanceof AbstractClientPlayer player && player.getSkin().model() == PlayerSkin.Model.SLIM;
             ResourceLocation texture = StandSkinsLoader.getInstance().getSkin(StandPower.get(t)).getTexture(HERMIT);
             M parentModel = getParentModel();
