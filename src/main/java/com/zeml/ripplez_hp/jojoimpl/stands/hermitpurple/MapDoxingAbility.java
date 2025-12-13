@@ -64,6 +64,7 @@ public class MapDoxingAbility extends HermitAction {
     @Override
     public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime) {
         if(!level.isClientSide){
+            HermitPurpleAddon.getLogger().debug("Why is not working?");
             byte scale = user.isShiftKeyDown()?(byte) 0: (byte)2;
             BlockPos blockPos = null;
             String target = null;

@@ -1,7 +1,5 @@
 package com.zeml.ripplez_hp.mc.item;
 
-import com.github.standobyte.jojo.client.ClientGlobals;
-import com.github.standobyte.jojo.client.ClientUtil;
 import com.github.standobyte.jojo.client.sound.ClientsideSoundsHelper;
 import com.github.standobyte.jojo.core.packet.fromserver.StandSkinSoundPacket;
 import com.github.standobyte.jojo.init.ModStatusEffects;
@@ -27,6 +25,7 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -124,8 +123,8 @@ public class EmperorItem extends Item {
         return 10;
     }
 
-
-    public static boolean shot(Level level, EmperorGunData data, float multStamina, LivingEntity shooter){
+    @Nullable
+    public static EmperorBulletEntity shot(Level level, EmperorGunData data, float multStamina, LivingEntity shooter){
         Entity entity = ((ServerLevel) level).getEntity(data.getUuidOwner().get());
         if(entity instanceof LivingEntity){
             LivingEntity user = (LivingEntity) entity;
@@ -147,11 +146,11 @@ public class EmperorItem extends Item {
                     level.addFreshEntity(emperorBullet);
                     power.consumeStamina(35*multStamina);
                     PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, new StandSoundPacket(user.getId(),AddonSoundEvents.EMP_SHOT,true,1,1));
-                    return true;
+                    return emperorBullet;
                 }
             }
         }
-        return false;
+        return null;
     }
 
     private boolean duplicate(LivingEntity user){

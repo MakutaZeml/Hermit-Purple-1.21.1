@@ -32,13 +32,13 @@
 					]
 				},
 				{
-					"name": "hidden#vines",
+					"name": "vines",
 					"parent": "right_arm",
 					"pivot": [-6, 18, 0]
 				},
 				{
-					"name": "hidden#grab_vine",
-					"parent": "hidden#vines",
+					"name": "grab_vine",
+					"parent": "vines",
 					"pivot": [-5.5, 12.5, 0],
 					"cubes": [
 						{"origin": [-5, 12.5, -0.5], "size": [1, 1, 0], "pivot": [-4, 11.5, 0.5], "rotation": [90, 60, 0], "uv": [37, 5]},

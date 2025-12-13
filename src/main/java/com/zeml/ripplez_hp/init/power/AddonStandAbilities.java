@@ -4,10 +4,7 @@ import static com.github.standobyte.jojo.core.JojoRegistries.ABILITY_TYPES;
 
 import com.github.standobyte.jojo.powersystem.ability.AbilityType;
 
-import com.zeml.ripplez_hp.jojoimpl.stands.emperor.DeleteStandTargetAbility;
-import com.zeml.ripplez_hp.jojoimpl.stands.emperor.StandTargetAbility;
-import com.zeml.ripplez_hp.jojoimpl.stands.emperor.TargetDSelectAbility;
-import com.zeml.ripplez_hp.jojoimpl.stands.emperor.TargetSelectAbility;
+import com.zeml.ripplez_hp.jojoimpl.stands.emperor.*;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.*;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
@@ -47,5 +44,15 @@ public final class AddonStandAbilities {
 	public static final DeferredHolder<AbilityType<?>, AbilityType<DeleteStandTargetAbility>> EMP_DELETE_TARGET = ABILITY_TYPES.register(
 			"emp_delete_target", key -> new AbilityType<>(key, DeleteStandTargetAbility::new)
 	);
+
+	public static final DeferredHolder<AbilityType<?>, AbilityType<ShotAbility>> EMP_SHOT = ABILITY_TYPES.register(
+			"emp_shot", key -> new AbilityType<>(key, ShotAbility::new)
+	);
+
+	public static final DeferredHolder<AbilityType<?>, AbilityType<ShotBarrageAbility>> EMP_SHOT_BARRAGE = ABILITY_TYPES.register(
+			"emp_shot_barrage", key -> new AbilityType<>(key, ShotBarrageAbility::new)
+	);
+
+
 
 }

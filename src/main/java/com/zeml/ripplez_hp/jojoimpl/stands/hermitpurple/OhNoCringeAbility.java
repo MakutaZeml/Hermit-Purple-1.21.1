@@ -11,6 +11,7 @@ import com.github.standobyte.jojo.powersystem.entityaction.ActionPhase;
 import com.github.standobyte.jojo.powersystem.entityaction.HeldInput;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.github.standobyte.jojo.powersystem.standpower.entity.StandEntityAbility;
+import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,9 +30,13 @@ public class OhNoCringeAbility extends HermitAction {
     @Override
     public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime) {
         if(level.isClientSide){
+            HermitPurpleAddon.getLogger().debug("Sex");
+            /*
             EntityLingeringSoundInstance sound = new EntityLingeringSoundInstance(ClientsideSoundsHelper
                     .withStandSkin(AddonSoundEvents.OH_NO_CRINGE.get(), StandPower.get(user)),user.getSoundSource(),1,1f,user,level);
             ClientsideSoundsHelper.playNonVanillaClassSound(sound);
+
+             */
 
         }
         return super.onKeyPress(level, user, extraClientInput, inputMethod, clickHoldResolveTime);

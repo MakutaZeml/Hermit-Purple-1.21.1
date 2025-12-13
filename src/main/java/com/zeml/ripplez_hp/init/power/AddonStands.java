@@ -43,18 +43,17 @@ public class AddonStands {
 					.addAbility("hp_doxx", AddonStandAbilities.MAP_DIVINATION)
 					.inHotbar(0, InputMethod.CLICK)
 
-					
 					.addAbility("hp_block", AddonStandAbilities.THORNS)
 					.inHotbar(0, InputMethod.HOLD)
 					
 					.addAbility("cringe", AddonStandAbilities.CRINGE)
 					.inHotbar(0, InputMethod.CLICK)
 
-							.addSkill(StandUnlockableSkill.startingAbility("hp_vine"))
-							.addSkill(StandUnlockableSkill.startingAbility("hp_doxx"))
-							.addSkill(StandUnlockableSkill.unlockableAbility("hp_target",1))
-							.addSkill(StandUnlockableSkill.unlockableAbility("hp_block",1))
-							.addSkill(StandUnlockableSkill.unlockableAbility("cringe",2))
+					.addSkill(StandUnlockableSkill.startingAbility("hp_vine"))
+					.addSkill(StandUnlockableSkill.startingAbility("hp_doxx"))
+					.addSkill(StandUnlockableSkill.unlockableAbility("hp_target",1))
+					.addSkill(StandUnlockableSkill.unlockableAbility("hp_block",1))
+					.addSkill(StandUnlockableSkill.unlockableAbility("cringe",2))
 
 
 					, id));
@@ -72,6 +71,10 @@ public class AddonStands {
 
 							new MovesetBuilder()
 
+									.addAbility("emp_shot",AddonStandAbilities.EMP_SHOT).withBind(InputMethod.CLICK,InputKey.RMB)
+									.addAbility("emp_shot_barrage",AddonStandAbilities.EMP_SHOT_BARRAGE).withBind(InputMethod.HOLD ,InputKey.RMB)
+
+
 									.makeHotbar(0, InputKey.X, InputKey.C)
 
 									.addAbility("emp_target", AddonStandAbilities.EMP_TARGET)
@@ -84,6 +87,8 @@ public class AddonStands {
 									.addAbility("emp_delete_target",AddonStandAbilities.EMP_DELETE_TARGET)
 									.inHotbar(0,InputMethod.CLICK)
 
+									.addSkill(StandUnlockableSkill.startingAbility("emp_shot"))
+									.addSkill(StandUnlockableSkill.startingAbility("emp_shot_barrage"))
 									.addSkill(StandUnlockableSkill.startingAbility("emp_target"))
 									.addSkill(StandUnlockableSkill.unlockableAbility("emp_stand_target",3))
 									.addSkill(StandUnlockableSkill.unlockableAbility("emp_delete_target",0).prerequisiteSkill("emp_stand_target"))
