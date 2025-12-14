@@ -6,35 +6,50 @@
 				"identifier": "geometry.unknown",
 				"texture_width": 64,
 				"texture_height": 64,
-				"visible_bounds_width": 3,
-				"visible_bounds_height": 3.5,
-				"visible_bounds_offset": [0, 1.25, 0]
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 3,
+				"visible_bounds_offset": [0, 0.5, 0]
 			},
 			"bones": [
 				{
-					"name": "head",
-					"pivot": [0, 24, 0]
-				},
-				{
-					"name": "body",
-					"pivot": [0, 24, 0]
-				},
-				{
 					"name": "right_arm",
-					"pivot": [-5, 22, 0]
-				},
-				{
-					"name": "slot1_rArm",
-					"parent": "right_arm",
 					"pivot": [-5, 22, 0],
 					"cubes": [
-						{"origin": [-8, 12, -2], "size": [4, 12, 4], "uv": [40, 16]}
+						{
+							"origin": [-8, 18, -2],
+							"size": [4, 6, 4],
+							"uv": {
+								"north": {"uv": [44, 20], "uv_size": [4, 6]},
+								"east": {"uv": [40, 20], "uv_size": [4, 6]},
+								"south": {"uv": [52, 20], "uv_size": [4, 6]},
+								"west": {"uv": [48, 20], "uv_size": [4, 6]},
+								"up": {"uv": [44, 16], "uv_size": [4, 4]}
+							}
+						}
+					]
+				},
+				{
+					"name": "right_arm_bend",
+					"parent": "right_arm",
+					"pivot": [-6, 18, 0],
+					"cubes": [
+						{
+							"origin": [-8, 12, -2],
+							"size": [4, 6, 4],
+							"uv": {
+								"north": {"uv": [44, 26], "uv_size": [4, 6]},
+								"east": {"uv": [40, 26], "uv_size": [4, 6]},
+								"south": {"uv": [52, 26], "uv_size": [4, 6]},
+								"west": {"uv": [48, 26], "uv_size": [4, 6]},
+								"down": {"uv": [48, 20], "uv_size": [4, -4]}
+							}
+						}
 					]
 				},
 				{
 					"name": "hidden.vines",
-					"parent": "right_arm",
-					"pivot": [-6, 18, 0]
+					"parent": "right_arm_bend",
+					"pivot": [-6, 12, 0]
 				},
 				{
 					"name": "grab_vine",
@@ -50,18 +65,6 @@
 						{"origin": [-6, 9.5, -0.5], "size": [1, 1, 0], "pivot": [-5, 8.5, 0.5], "rotation": [90, 37.5, 0], "uv": [37, 5]},
 						{"origin": [-6, 5.5, -0.5], "size": [1, 1, 8], "pivot": [-6, 5.5, 0.5], "rotation": [90, 0, 0], "uv": [10, 26]}
 					]
-				},
-				{
-					"name": "left_arm",
-					"pivot": [5, 22, 0]
-				},
-				{
-					"name": "right_leg",
-					"pivot": [-1.9, 12, 0]
-				},
-				{
-					"name": "left_leg",
-					"pivot": [1.9, 12, 0]
 				}
 			]
 		}

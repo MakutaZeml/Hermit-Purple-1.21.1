@@ -48,14 +48,12 @@ public class HermitPurpleVinesLayer <T extends LivingEntity, M extends HumanoidM
             HermitPurpleVinesModel purpleModel = this.purpleModel.getModel(standSkin);
             
             purpleModel.setAllVisible(true);
+            parentModel.copyPropertiesTo(purpleModel);
             
             EntityRenderState.resetPose(purpleModel);
             if (((IHumanoidAnimModel) parentModel).jojo_rippes$isPlayingAnimation()) {
                 AnimFramePose curPlayerPose = AnimFramePose.reused;
                 RotpAnimDefinition.animate(purpleModel, curPlayerPose);
-            }
-            else {
-                parentModel.copyPropertiesTo(purpleModel);
             }
             
             VertexConsumer ivertexbuilder = buffer.getBuffer(RenderType.entityCutoutNoCull(texture));

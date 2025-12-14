@@ -12,7 +12,7 @@ public class HermitPurpleVinesModel extends HumanoidModel {
     public final ModelPart grab_vine;
     
     public HermitPurpleVinesModel(ModelPart root) {
-        super(HumanoidPlayerModel.addMissingHumanoid(root));
+        super(HumanoidPlayerModel.addMissingBoneDefinitions(root));
         
         this.vines = ((Model_1_21_2plus) this).jojo_ripples$getAnyDescendantWithName("hidden#vines").orElse(null);
         this.grab_vine = ((Model_1_21_2plus) this).jojo_ripples$getAnyDescendantWithName("hidden#vines").orElse(null);
