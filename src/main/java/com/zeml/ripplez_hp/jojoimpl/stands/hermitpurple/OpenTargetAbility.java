@@ -1,5 +1,6 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple;
 
+import com.github.standobyte.jojo.client.ClientProxy;
 import com.github.standobyte.jojo.powersystem.ability.AbilityId;
 import com.github.standobyte.jojo.powersystem.ability.AbilityType;
 import com.github.standobyte.jojo.powersystem.ability.AbilityUsageGroup;
@@ -10,7 +11,6 @@ import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.core.packets.server.HermitTargetDataPacket;
 import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.client.HermitTargetScreen;
-import com.zeml.ripplez_hp.tmp.ClientProxy;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -36,7 +36,7 @@ public class OpenTargetAbility extends EntityActionAbility {
             PacketDistributor.sendToPlayer((ServerPlayer) user, new HermitTargetDataPacket(user.getId(), data.mode, data.target, data.color,level.registryAccess().registryOrThrow(Registries.STRUCTURE).keySet()));
         }
         if(level.isClientSide){
-        	ClientProxy.openScreen(new HermitTargetScreen());
+            ClientProxy.openScreen(new HermitTargetScreen());
         }
         return super.onKeyPress(level, user, extraClientInput, inputMethod, clickHoldResolveTime);
     }
