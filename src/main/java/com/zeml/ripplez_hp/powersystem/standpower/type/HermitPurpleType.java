@@ -2,6 +2,7 @@ package com.zeml.ripplez_hp.powersystem.standpower.type;
 
 import java.util.Optional;
 
+import com.github.standobyte.jojo.mechanics.clothes.mannequin.MannequinEntity;
 import org.joml.Quaternionf;
 
 import com.github.standobyte.jojo.client.standskin.StandSkin;
@@ -36,7 +37,7 @@ public class HermitPurpleType extends StandType {
 			public void renderStand(GuiGraphics gui, int mouseX, int mouseY, float ticks, boolean isHovered, 
 					float posX, float posY, float scale, float scaleZoom, 
 					float yRot, float xRot, float xOffsetRatio, float yOffsetRatio) {
-		        Quaternionf rotation = (new Quaternionf()).rotateX(-xRot).rotateY(-yRot);
+				Quaternionf rotation = (new Quaternionf()).rotateX(-xRot).rotateY(-yRot+.75F);
 		        gui.pose().pushPose();
 		        gui.pose().translate(posX, posY, 350.0);
 		        gui.pose().translate(xOffsetRatio, yOffsetRatio, 0.0F);
@@ -52,10 +53,10 @@ public class HermitPurpleType extends StandType {
 
 
 
-		        Zombie zombie = new Zombie(Minecraft.getInstance().level);
-		        zombie.yHeadRot = 0;
+				MannequinEntity zombie = new MannequinEntity(Minecraft.getInstance().level);
+				zombie.setInvisible(true);
 
-		        PowerClass.STAND.attachPower(zombie);
+				PowerClass.STAND.attachPower(zombie);
 		        StandPower standPower = StandPower.get(zombie);
 		        if (standPower != null) {
 		            standPower.setStand(AddonStands.HERMIT_PURPLE.get());
