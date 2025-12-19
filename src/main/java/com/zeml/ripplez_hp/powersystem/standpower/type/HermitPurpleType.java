@@ -2,6 +2,7 @@ package com.zeml.ripplez_hp.powersystem.standpower.type;
 
 import java.util.Optional;
 
+import com.github.standobyte.jojo.client.utils.ModelUtil;
 import com.github.standobyte.jojo.mechanics.clothes.mannequin.MannequinEntity;
 import org.joml.Quaternionf;
 
@@ -55,7 +56,7 @@ public class HermitPurpleType extends StandType {
 
 				MannequinEntity zombie = new MannequinEntity(Minecraft.getInstance().level);
 				zombie.setInvisible(true);
-
+				zombie.setSlim(ModelUtil.isSlimModel(Minecraft.getInstance().player));
 				PowerClass.STAND.attachPower(zombie);
 		        StandPower standPower = StandPower.get(zombie);
 		        if (standPower != null) {

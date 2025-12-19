@@ -33,7 +33,7 @@ public class AddonStands {
 
 					.addAbility("hp_vine",AddonStandAbilities.VINE).withBind(InputMethod.CLICK,InputKey.LMB)
 					.addAbility("hp_vine2",AddonStandAbilities.VINE, vine->vine.isSubAbility = true)
-					.addAbility("hp_vine3",AddonStandAbilities.VINE, vine->vine.isSubAbility = true)
+					//.addAbility("hp_vine3",AddonStandAbilities.VINE, vine->vine.isSubAbility = true)
 
 					.makeHotbar(0, InputKey.X, InputKey.C)
 					
@@ -42,6 +42,9 @@ public class AddonStands {
 					
 					.addAbility("hp_doxx", AddonStandAbilities.MAP_DIVINATION)
 					.inHotbar(0, InputMethod.CLICK)
+
+					.addAbility("hp_compass",AddonStandAbilities.COMPASS_DIVINATION, compass -> compass.isSubAbility = true)
+							//.inHotbarSlotVariation("hp_doxx",null,InputMethod.HOLD)
 
 					.addAbility("hp_block", AddonStandAbilities.THORNS)
 					.inHotbar(0, InputMethod.HOLD)

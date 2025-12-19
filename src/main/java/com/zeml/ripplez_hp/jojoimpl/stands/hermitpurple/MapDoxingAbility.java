@@ -4,10 +4,8 @@ import com.github.standobyte.jojo.client.ClientGlobals;
 import com.github.standobyte.jojo.client.sound.ClientsideSoundsHelper;
 import com.github.standobyte.jojo.client.sound.sounds.EntityLingeringSoundInstance;
 import com.github.standobyte.jojo.powersystem.Power;
-import com.github.standobyte.jojo.powersystem.ability.AbilityId;
-import com.github.standobyte.jojo.powersystem.ability.AbilityType;
-import com.github.standobyte.jojo.powersystem.ability.AbilityUsageGroup;
-import com.github.standobyte.jojo.powersystem.ability.EntityActionAbility;
+import com.github.standobyte.jojo.powersystem.PowerClass;
+import com.github.standobyte.jojo.powersystem.ability.*;
 import com.github.standobyte.jojo.powersystem.ability.condition.ConditionCheck;
 import com.github.standobyte.jojo.powersystem.ability.controls.InputMethod;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionAnimIdentifier;
@@ -22,6 +20,7 @@ import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
+import com.zeml.ripplez_hp.init.power.AddonStandAbilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -33,6 +32,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.MapItem;
@@ -43,12 +43,24 @@ import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.NotNull;
 
 public class MapDoxingAbility extends HermitAction {
     public MapDoxingAbility(AbilityType<?> abilityType, AbilityId abilityId) {
         super(abilityType, abilityId);
         usageGroup = AbilityUsageGroup.UTILITY;
         setDefaultPhaseLength(ActionPhase.WINDUP,20);
+    }
+
+    @NotNull
+    @Override
+    public Ability replaceWithSubAbility(Power<?> context) {
+        StandPower standPower = PowerClass.STAND.cast(context);
+        if(context.getUser() != null && context.getUser().getItemInHand(InteractionHand.OFF_HAND).is(Items.COMPASS)
+                && standPower != null){
+            return standPower.getMoveset().getAbility("hp_compass");
+        }
+        return super.replaceWithSubAbility(context);
     }
 
     @Override
@@ -63,6 +75,9 @@ public class MapDoxingAbility extends HermitAction {
 
     @Override
     public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime) {
+        if(level.isClientSide){
+
+        }
         if(!level.isClientSide){
             HermitPurpleAddon.getLogger().debug("Why is not working?");
             byte scale = user.isShiftKeyDown()?(byte) 0: (byte)2;
@@ -78,20 +93,18 @@ public class MapDoxingAbility extends HermitAction {
 
                     }
                 }else {
-                    switch (user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode()){
-                        case 4:
+                    switch (user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode()) {
+                        case 4 -> {
                             blockPos = DoxingHelper.structurePos(user);
                             String data = user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget().split(":")[1];
-                            data = data.replace("_"," ");
+                            data = data.replace("_", " ");
                             target = data;
-
-                            break;
-                        case 5:
+                        }
+                        case 5 -> {
                             blockPos = DoxingHelper.biomesPos(user);
                             String biome = "biome.";
-
-                            target = Component.translatable(biome.concat(user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget().replace(":","."))).getString();
-                            break;
+                            target = Component.translatable(biome.concat(user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget().replace(":", "."))).getString();
+                        }
                     }
                 }
                 if(blockPos != null){

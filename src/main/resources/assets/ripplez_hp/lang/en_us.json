@@ -18,6 +18,7 @@
   "jojo_ripples.skill.cringe.controls": "Special ability",
   "jojo_ripples.skill.hp_doxx": "Spirit Divination",
   "jojo_ripples.ability.hp_doxx": "Spirit Divination",
+  "jojo_ripples.ability.hp_compass": "Spirit Compass Divination",
   "jojo_ripples.skill.hp_doxx.desc": "Exposes the target location into a map",
   "jojo_ripples.skill.hp_doxx.controls": "Special ability, Shift to increase the map Zoom",
   "jojo_ripples.skill.hp_target": "Target Selection",

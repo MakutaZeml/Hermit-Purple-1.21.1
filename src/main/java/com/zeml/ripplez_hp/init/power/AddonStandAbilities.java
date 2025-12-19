@@ -21,6 +21,9 @@ public final class AddonStandAbilities {
 			"hp_doxx", key ->new AbilityType<>(key, MapDoxingAbility::new)
 	);
 
+	public static final DeferredHolder<AbilityType<?>, AbilityType<HermitCompassAbility>> COMPASS_DIVINATION = ABILITY_TYPES.register(
+			"hp_compass", key ->new AbilityType<>(key, HermitCompassAbility::new)
+	);
 	public static final DeferredHolder<AbilityType<?>, AbilityType<HermitAction>> THORNS = ABILITY_TYPES.register(
 			"hp_thorns", key ->new AbilityType<>(key, HermitAction::new)
 	);

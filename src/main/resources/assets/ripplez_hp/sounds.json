@@ -19,6 +19,15 @@
 
   },
 
+  "vine_throw": {
+    "subtitle": "ripplez_hp.subtitle.throw_vine",
+    "sounds": [ "ripplez_hp:hermit_purple/hp_vine_throw","ripplez_hp:hermit_purple/hp_vine_throw_2" ]
+  },
+  "vine_swing": {
+    "subtitle": "ripplez_hp.subtitle.swing_vine",
+    "sounds": [ "ripplez_hp:hermit_purple/hp_vine_throw_2" ]
+  },
+
   "emp_shot": {
     "subtitle": "ripplez_hp.subtitle.emp_shot",
     "sounds": ["ripplez_hp:emperor/shot_1","ripplez_hp:emperor/shot_2"]
