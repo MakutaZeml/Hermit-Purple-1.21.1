@@ -35,10 +35,16 @@ public class AddonStands {
 					.addAbility("hp_vine2",AddonStandAbilities.VINE, vine->vine.isSubAbility = true)
 					//.addAbility("hp_vine3",AddonStandAbilities.VINE, vine->vine.isSubAbility = true)
 
+					.addAbility("hp_grab",AddonStandAbilities.VINE_GRAB).withBind(InputMethod.HOLD,InputKey.LMB)
+
+					.addAbility("hp_vine_heavy",AddonStandAbilities.VINE_HEAVY).withBind(InputMethod.CLICK,InputKey.RMB)
+
 					.makeHotbar(0, InputKey.X, InputKey.C)
 					
 					.addAbility("hp_target", AddonStandAbilities.SELECT_TARGET)
 					.inHotbar(0, InputMethod.CLICK)
+
+
 					
 					.addAbility("hp_doxx", AddonStandAbilities.MAP_DIVINATION)
 					.inHotbar(0, InputMethod.CLICK)
@@ -53,6 +59,8 @@ public class AddonStands {
 					.inHotbar(0, InputMethod.CLICK)
 
 					.addSkill(StandUnlockableSkill.startingAbility("hp_vine"))
+					.addSkill(StandUnlockableSkill.unlockableAbility("hp_grab",1))
+					.addSkill(StandUnlockableSkill.startingAbility("hp_vine_heavy"))
 					.addSkill(StandUnlockableSkill.startingAbility("hp_doxx"))
 					.addSkill(StandUnlockableSkill.unlockableAbility("hp_target",1))
 					.addSkill(StandUnlockableSkill.unlockableAbility("hp_block",1))

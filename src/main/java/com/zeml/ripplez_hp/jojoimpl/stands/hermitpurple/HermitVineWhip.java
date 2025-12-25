@@ -112,7 +112,7 @@ public class HermitVineWhip extends HermitAction{
         @Override
         public void onActionSet(@Nullable EntityActionInstance prevAction) {
             super.onActionSet(prevAction);
-            OrientedBoundingBox obb = new OrientedBoundingBox(new Vec3(0, 1.35, 0), 1.5d, 0.2d, 3d, getPerformer().getYRot(), getPerformer().getXRot());
+            OrientedBoundingBox obb = new OrientedBoundingBox(new Vec3(0, 1.35, 0), 1.5d, .5d, 8d, getPerformer().getYRot(), getPerformer().getXRot());
             this.vines = new ExtendableOBB(obb, 0.8F, (int) phasesLength.get(ActionPhase.PERFORM).floatValue(), 10, new Vec3(0, 1.35, 0));
         }
 
@@ -120,14 +120,14 @@ public class HermitVineWhip extends HermitAction{
         public void actionPerformStart() {
             LivingEntity user = getPowerUser();
             StandPower standPower = StandPower.get(user);
-            standPower.consumeStamina(25);
+            standPower.consumeStamina(10);
         }
 
         @Override
         public void actionTick() {
             if (getPhase() == ActionPhase.PERFORM && extendableOBB() != null) {
                 Vec3 pos = getPerformer().position();
-                Vec3 offset = new Vec3(0.07, 1.5, 1)
+                Vec3 offset = new Vec3(0.0, 1.5, 0.1)
                         .yRot(-getPerformer().yBodyRot * MathUtil.DEG_TO_RAD);
 
                 if( LivingComponentAction.getComponent(performer).getAction().ability.getAbilityId().nameInMoveset().toString().contains("2")){
@@ -168,10 +168,7 @@ public class HermitVineWhip extends HermitAction{
 
         @Override
         public ExtendableOBB extendableOBB() {
-            if (vines != null) {
-                return vines;
-            }
-            return null;
+            return vines;
         }
     }
 

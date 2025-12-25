@@ -8,8 +8,6 @@
     "sounds": [ "ripplez_hp:user/joseph_hp_1","ripplez_hp:user/joseph_hp_2" ]
 
   },
-
-
   "summon_hermit": {
     "sounds": [ "ripplez_hp:hermit_purple/summon_1","ripplez_hp:hermit_purple/summon_2","ripplez_hp:hermit_purple/summon_3" ]
   },
@@ -18,7 +16,6 @@
     "sounds": [ "ripplez_hp:hermit_purple/unsummon_1" ]
 
   },
-
   "vine_throw": {
     "subtitle": "ripplez_hp.subtitle.throw_vine",
     "sounds": [ "ripplez_hp:hermit_purple/hp_vine_throw","ripplez_hp:hermit_purple/hp_vine_throw_2" ]
@@ -26,6 +23,10 @@
   "vine_swing": {
     "subtitle": "ripplez_hp.subtitle.swing_vine",
     "sounds": [ "ripplez_hp:hermit_purple/hp_vine_throw_2" ]
+  },
+  "hp_grapple": {
+    "subtitle": "ripplez_hp.subtitle.grapple",
+    "sounds": [ "ripplez_hp:hermit_purple/hp_grapple_1","ripplez_hp:hermit_purple/hp_grapple_2","ripplez_hp:hermit_purple/hp_grapple_3" ]
   },
 
   "emp_shot": {

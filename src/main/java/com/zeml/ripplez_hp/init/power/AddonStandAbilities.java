@@ -14,6 +14,14 @@ public final class AddonStandAbilities {
 	public static final DeferredHolder<AbilityType<?>,AbilityType<HermitVineWhip>> VINE = ABILITY_TYPES.register(
 			"vine",key ->new AbilityType<>(key,HermitVineWhip::new));
 
+
+	public static final DeferredHolder<AbilityType<?>,AbilityType<HermitHeavyVineWhip>> VINE_HEAVY = ABILITY_TYPES.register(
+			"vine_heavy",key ->new AbilityType<>(key,HermitHeavyVineWhip::new));
+
+	public static final DeferredHolder<AbilityType<?>,AbilityType<HermitGrabAbility>> VINE_GRAB = ABILITY_TYPES.register(
+			"vine_grab",key ->new AbilityType<>(key, HermitGrabAbility::new));
+
+
 	public static final DeferredHolder<AbilityType<?>, AbilityType<OhNoCringeAbility>> CRINGE = ABILITY_TYPES.register(
 			"cringe", key -> new AbilityType<>(key, OhNoCringeAbility::new));
 
