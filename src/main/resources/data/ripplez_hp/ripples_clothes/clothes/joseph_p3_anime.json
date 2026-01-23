@@ -1,0 +1,45 @@
+{
+  "character": "ripplez_hp:joseph",
+  "story_part": "jojo_ripples:p3",
+  "pieces": {
+    "head": {
+      "asset_id": "ripplez_hp_clothes:joseph_p3_ova",
+      "texture_id": "ripplez_hp_clothes:joseph_p3_anime",
+      "item_model": "ripplez_hp_clothes:joseph_p3_anime_head",
+      "item_name": {
+        "translate": "item.ripplez_hp_clothes.joseph_p3_ova_head"
+      },
+      "equip_sound": "item.armor.equip_generic"
+    },
+
+    "chest": {
+      "asset_id": "ripplez_hp_clothes:joseph_p3_ova",
+      "texture_id": "ripplez_hp_clothes:joseph_p3_anime",
+      "item_model": "ripplez_hp_clothes:joseph_p3_anime_chest",
+      "item_name": {
+        "translate": "item.ripplez_hp_clothes.joseph_p3_ova_chest"
+      },
+      "equip_sound": "item.armor.equip_generic"
+    },
+
+    "legs": {
+      "asset_id": "ripplez_hp_clothes:joseph_p3_ova",
+      "texture_id": "ripplez_hp_clothes:joseph_p3_anime",
+      "item_model": "ripplez_hp_clothes:joseph_p3_anime_legs",
+      "item_name": {
+        "translate": "item.ripplez_hp_clothes.joseph_p3_ova_legs"
+      },
+      "equip_sound": "item.armor.equip_generic"
+    },
+
+    "feet": {
+      "asset_id": "ripplez_hp_clothes:joseph_p3_ova",
+      "texture_id": "ripplez_hp_clothes:joseph_p3_anime",
+      "item_model": "ripplez_hp_clothes:joseph_p3_ova_feet",
+      "item_name": {
+        "translate": "item.ripplez_hp_clothes.joseph_p3_ova_feet"
+      },
+      "equip_sound": "item.armor.equip_generic"
+    }
+  }
+}

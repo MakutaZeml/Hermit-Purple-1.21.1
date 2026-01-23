@@ -82,5 +82,21 @@
   "ripplez_hp.type.random": "Random",
   "ripplez_hp.type.players": "Players",
   "ripplez_hp.type.hostile": "Hostile mobs",
-  "ripplez_hp.type.non": "Just a Gun, I wish you are happy"
+  "ripplez_hp.type.non": "Just a Gun, I wish you are happy",
+
+  "item.ripplez_hp_clothes.joseph_p3_ova_head": "Joseph's Hat",
+  "item.ripplez_hp_clothes.joseph_p3_ova_chest": "Joseph's Coat",
+  "item.ripplez_hp_clothes.joseph_p3_ova_legs": "Joseph's Pants",
+  "item.ripplez_hp_clothes.joseph_p3_ova_feet": "Joseph's Shoes",
+
+  "item.ripplez_hp_clothes.joseph_p2_ny_head": "Joseph's New York's flat cap",
+  "item.ripplez_hp_clothes.joseph_p2_ny_chest": "Joseph's New York's Jacket",
+  "item.ripplez_hp_clothes.joseph_p2_ny_legs": "Joseph's New York's Pants",
+  "item.ripplez_hp_clothes.joseph_p2_ny_feet": "Joseph's New York's Shoes",
+
+  "character.ripplez_hp.joseph": "Joseph Joestar",
+  "character.ripplez_hp.joseph.short": "Joseph",
+  "clothes.ripplez_hp.joseph_p3_ova": "Stardust Crusaders (OVA)",
+  "clothes.ripplez_hp.joseph_p3_anime": "Stardust Crusaders (anime)",
+  "clothes.ripplez_hp.joseph_p2_ny_anime": "New York (anime)"
 }
