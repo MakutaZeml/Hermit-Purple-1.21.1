@@ -6,6 +6,7 @@ import com.github.standobyte.jojo.powersystem.ability.AbilityType;
 import com.github.standobyte.jojo.powersystem.ability.AbilityUsageGroup;
 import com.github.standobyte.jojo.powersystem.ability.EntityActionAbility;
 import com.github.standobyte.jojo.powersystem.ability.controls.InputMethod;
+import com.github.standobyte.jojo.powersystem.ability.input.ActionInputBuffer;
 import com.github.standobyte.jojo.powersystem.entityaction.HeldInput;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.core.packets.server.HermitTargetDataPacket;
@@ -28,7 +29,7 @@ public class OpenTargetAbility extends EntityActionAbility {
     }
 
     @Override
-    public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime) {
+    public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime, ActionInputBuffer.BufferingState bufferingState) {
         if(!level.isClientSide){
             HermitTargetData data = user.getData(AddonDataAttachmentTypes.HERMIT_DATA);
             data.setStructures(level.registryAccess().registryOrThrow(Registries.STRUCTURE).keySet());
@@ -38,6 +39,6 @@ public class OpenTargetAbility extends EntityActionAbility {
         if(level.isClientSide){
             ClientProxy.openScreen(new HermitTargetScreen());
         }
-        return super.onKeyPress(level, user, extraClientInput, inputMethod, clickHoldResolveTime);
+        return super.onKeyPress(level, user, extraClientInput, inputMethod, clickHoldResolveTime, bufferingState);
     }
 }

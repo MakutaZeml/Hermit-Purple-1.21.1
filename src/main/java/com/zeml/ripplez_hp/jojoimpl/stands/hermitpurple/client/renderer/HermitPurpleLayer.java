@@ -72,7 +72,7 @@ public class HermitPurpleLayer<T extends LivingEntity, M extends HumanoidModel<T
         if(standData != null && standData.getPowerType() == AddonStands.HERMIT_PURPLE.get() && standData.isSummoned()) {
             StandSkin standSkin = StandSkinsLoader.getInstance().getSkin(standData);
             ResourceLocation texture = standSkin.getTexture(HERMIT);
-            HermitPurpleModel purpleModel = (HermitPurpleModel) this.purpleModel.getModel(standSkin);
+            HermitPurpleModel purpleModel = this.purpleModel.getModel(standSkin);
             purpleModel.setAllVisible(true);
             purpleModel.setSlim(slim);
             purpleModel.head.visible = false;

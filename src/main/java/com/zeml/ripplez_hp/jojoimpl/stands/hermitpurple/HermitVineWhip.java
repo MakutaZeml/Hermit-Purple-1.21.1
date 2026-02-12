@@ -11,6 +11,7 @@ import com.github.standobyte.jojo.powersystem.ability.Ability;
 import com.github.standobyte.jojo.powersystem.ability.AbilityId;
 import com.github.standobyte.jojo.powersystem.ability.AbilityType;
 import com.github.standobyte.jojo.powersystem.ability.AbilityUsageGroup;
+import com.github.standobyte.jojo.powersystem.ability.condition.AvailableAbilities;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionOBB;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionPhase;
 import com.github.standobyte.jojo.powersystem.entityaction.EntityActionInstance;
@@ -49,8 +50,9 @@ public class HermitVineWhip extends HermitAction{
 
     }
 
+    @Nullable
     @Override
-    public Ability replaceWithSubAbility(Power<?> context) {
+    public Ability replaceWithSubAbility(Power<?> context, AvailableAbilities abilities) {
         StandPower standPower = PowerClass.STAND.cast(context);
         if (standPower != null) {
             Moveset moveset = standPower.getMoveset();
@@ -58,8 +60,10 @@ public class HermitVineWhip extends HermitAction{
             Ability punch = getVineCombo(context.getUser(), moveset);
             if (punch != null) return punch;
         }
-        return super.replaceWithSubAbility(context);
+
+        return super.replaceWithSubAbility(context, abilities);
     }
+
 
     @Deprecated
     protected List<String> punchNames = Util.make(new ArrayList<>(), list -> {
@@ -136,7 +140,7 @@ public class HermitVineWhip extends HermitAction{
                     this.extendableOBB().updatePosition(level(), pos, offset, getPerformer().getXRot(), (getPerformer().getYRot()-30*(curPhaseTick-3)));
                 }
                 if (!level().isClientSide()) {
-                    OBBCollisionUtil.getEntitiesInOBB(level(), this.extendableOBB().rotatableHitbox(), entity -> entity != getPerformer() && entity != getPowerUser()).forEach(entity -> {
+                    OBBCollisionUtil.getEntitiesInOBB(level(), this.extendableOBB().rotatableHitbox(), entity -> entity != getPerformer() && entity != getPowerUser() && performer.getVehicle() != entity).forEach(entity -> {
                         var damageType = DamageUtil.type(level(), ModDamageTypes.STAND_ATTACK);
                         DamageSource dmgSource = new DamageSource(damageType, performer);
                         float dmgAmount = StandStatFormulas.getLightAttackDamage(StandPower.get(performer).getPowerType().getStandStats().power());

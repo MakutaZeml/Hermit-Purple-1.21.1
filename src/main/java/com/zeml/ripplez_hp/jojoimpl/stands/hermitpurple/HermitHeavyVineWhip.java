@@ -13,9 +13,11 @@ import com.github.standobyte.jojo.powersystem.standpower.entity.StandOffsetFromU
 import com.github.standobyte.jojo.powersystem.standpower.entity.StandStatFormulas;
 import com.github.standobyte.jojo.util.MathUtil;
 import com.github.standobyte.jojo.util.damage.DamageUtil;
+import com.github.standobyte.jojo.util.damage.RipplesModifiedDamageSource;
 import com.github.standobyte.jojo.util.hitboxes.ExtendableOBB;
 import com.github.standobyte.jojo.util.hitboxes.OBBCollisionUtil;
 import com.github.standobyte.jojo.util.hitboxes.OrientedBoundingBox;
+import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -30,7 +32,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class HermitHeavyVineWhip extends HermitAction{
@@ -39,8 +43,8 @@ public class HermitHeavyVineWhip extends HermitAction{
     public HermitHeavyVineWhip(AbilityType<?> abilityType, AbilityId abilityId) {
         super(abilityType, abilityId, HermitHeavyVine::new);
         usageGroup = AbilityUsageGroup.COMBAT;
-        setDefaultPhaseLength(ActionPhase.WINDUP, StandStatFormulas.getHeavyAttackWindup(10, 0));
-        setDefaultPhaseLength(ActionPhase.PERFORM, 20);
+        setDefaultPhaseLength(ActionPhase.WINDUP, StandStatFormulas.getHeavyAttackWindup(10, 0)*2/3);
+        setDefaultPhaseLength(ActionPhase.PERFORM, 60);
         setDefaultPhaseLength(ActionPhase.RECOVERY, 10);
 
     }
@@ -54,10 +58,10 @@ public class HermitHeavyVineWhip extends HermitAction{
 
         private ExtendableOBB vines;
         private Set<Entity> entities = new HashSet<>();
+        private final Map<Entity,Float> entitesD = new HashMap<>();
 
         @Override
         public void onActionSet(@Nullable EntityActionInstance prevAction) {
-            super.onActionSet(prevAction);
             setStandOffset(0, 1.5, StandOffsetFromUser.Rotations.HEAD_XY, true);
             OrientedBoundingBox obb = new OrientedBoundingBox(new Vec3(0, 1.35, 0), 1d, 1d, 1d, getPerformer().getYRot(), getPerformer().getXRot());
             this.vines = new ExtendableOBB(obb, .8F, phasesLength.get(ActionPhase.PERFORM).intValue()+phasesLength.get(ActionPhase.RECOVERY).intValue(),
@@ -78,6 +82,7 @@ public class HermitHeavyVineWhip extends HermitAction{
 
         @Override
         public void actionTick() {
+            performer.setYBodyRot(performer.yHeadRot);
             if (getPhase() == ActionPhase.PERFORM && extendableOBB() != null){
                 Vec3 pos = getPerformer().position();
                 Vec3 offset = new Vec3(0.0, 1.5, 0.2)
@@ -85,20 +90,25 @@ public class HermitHeavyVineWhip extends HermitAction{
                 this.extendableOBB().updatePosition(level(), pos, offset, getPerformer().getXRot(), getPerformer().getYRot());
                 if (!level().isClientSide()){
                     Vec3 endPos = this.extendableOBB().rotatableHitbox().center.add(getPerformer().getLookAngle().scale(extendableOBB().rotatableHitbox().extent.length()));
-                    OBBCollisionUtil.getEntitiesInOBB(level(), this.extendableOBB().rotatableHitbox(), entity -> entity != getPerformer() && entity != getPowerUser() && !entities.contains(entity)).forEach(entity -> {
+                    OBBCollisionUtil.getEntitiesInOBB(level(), this.extendableOBB().rotatableHitbox(), entity -> entity != getPerformer() && entity != getPowerUser() && !entitesD.containsKey(entity)).forEach(entity -> {
                         var damageType = DamageUtil.type(level(), ModDamageTypes.STAND_ATTACK);
                         DamageSource dmgSource = new DamageSource(damageType, performer);
+                        RipplesModifiedDamageSource knockBack = (RipplesModifiedDamageSource) dmgSource;
+                        knockBack.jojo_ripples$modifyKnockback(0,0);
                         float dmgAmount = (float) StandPower.get(performer).getPowerType().getStandStats().power();
                         if(entity.hurt(dmgSource, dmgAmount)){
-                            entities.add(entity);
+                            entity.setNoGravity(true);
+                            entitesD.putIfAbsent(entity,(float)(entity.distanceTo(performer)/1.5));
                         }
 
                         // TODO Add hamon interaction when implemented and Block Interaction
                     });
-                    if(!entities.isEmpty()){
-                        entities.forEach(entity -> {
-                            entity.setDeltaMovement(0,Math.min(0,entity.getDeltaMovement().y), 0);
-                        });
+                    if(!entitesD.isEmpty()){
+                        entitesD.forEach(((entity, aFloat) -> {
+                            Vec3 move = this.extendableOBB().rotatableHitbox().center.add(getPerformer().getLookAngle().scale(aFloat));
+                            entity.teleportTo(move.x,Math.max(move.y-1.35,performer.getY()),move.z);
+
+                        }));
                     }
 
 
@@ -118,8 +128,14 @@ public class HermitHeavyVineWhip extends HermitAction{
                     syncPhaseChanges();
                 }
             }
-            if(this.getPhase() == ActionPhase.RECOVERY && getPhaseTicksLeft()==0){
-                vines = null;
+
+
+            if(this.getPhase() == ActionPhase.RECOVERY){
+                if(getPhaseTicksLeft()==0){
+                    vines = null;
+                }
+                entitesD.forEach(((entity, aFloat) -> entity.setNoGravity(false)));
+                entitesD.clear();
             }
         }
 
@@ -128,7 +144,7 @@ public class HermitHeavyVineWhip extends HermitAction{
         @Override
         public void actionPerformEnd() {
             this.extendableOBB().forceRetract(level(), getPerformer(), this.id);
-            entities.clear();
+
         }
 
         @Override

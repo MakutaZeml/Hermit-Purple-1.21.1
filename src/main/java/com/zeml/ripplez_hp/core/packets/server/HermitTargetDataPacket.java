@@ -17,9 +17,6 @@ import java.util.Set;
 
 public record HermitTargetDataPacket(int userID,int mode, String target, int color, Set<ResourceLocation> structures) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<HermitTargetDataPacket> TYPE =
-            new CustomPacketPayload.Type<>(HermitPurpleAddon.resLoc("hermit_data"));
-
 
     @Override
     public @NotNull Type<? extends CustomPacketPayload> type() {

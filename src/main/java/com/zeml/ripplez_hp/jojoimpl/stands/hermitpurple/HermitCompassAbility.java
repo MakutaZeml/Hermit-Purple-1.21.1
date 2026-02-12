@@ -1,14 +1,18 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple;
 
 import com.github.standobyte.jojo.powersystem.Power;
+import com.github.standobyte.jojo.powersystem.PowerClass;
+import com.github.standobyte.jojo.powersystem.ability.Ability;
 import com.github.standobyte.jojo.powersystem.ability.AbilityId;
 import com.github.standobyte.jojo.powersystem.ability.AbilityType;
 import com.github.standobyte.jojo.powersystem.ability.AbilityUsageGroup;
+import com.github.standobyte.jojo.powersystem.ability.condition.AvailableAbilities;
 import com.github.standobyte.jojo.powersystem.ability.condition.ConditionCheck;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionAnimIdentifier;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionPhase;
 import com.github.standobyte.jojo.powersystem.entityaction.EntityActionInstance;
 import com.github.standobyte.jojo.powersystem.entityaction.type.EntityActionType;
+import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
@@ -28,6 +32,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.LodestoneTracker;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -39,6 +44,17 @@ public class HermitCompassAbility extends HermitAction{
         setDefaultPhaseLength(ActionPhase.WINDUP,10);
         setDefaultPhaseLength(ActionPhase.PERFORM,200);
         usageGroup = AbilityUsageGroup.UTILITY;
+    }
+
+    @Nullable
+    @Override
+    public Ability replaceWithSubAbility(Power<?> context, AvailableAbilities abilities) {
+        StandPower standPower = PowerClass.STAND.cast(context);
+        if(context.getUser() != null && context.getUser().getItemInHand(InteractionHand.OFF_HAND).is(Items.COMPASS)
+                && standPower != null){
+            abilities.replaceOtherAbilityWith(context,"hp_doxx",this);
+        }
+        return super.replaceWithSubAbility(context, abilities);
     }
 
     @Override
@@ -54,10 +70,6 @@ public class HermitCompassAbility extends HermitAction{
         return ConditionCheck.NEGATIVE;
     }
 
-    @Override
-    public void initActionFromConfig(EntityActionInstance action, Level level, LivingEntity standUser, LivingEntity standEntity) {
-        super.initActionFromConfig(action, level, standUser, standEntity);
-    }
 
     @Override
     public ActionAnimIdentifier getEntityAnim(EntityActionInstance action) {

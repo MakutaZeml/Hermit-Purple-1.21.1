@@ -1,9 +1,20 @@
 package com.zeml.ripplez_hp.powersystem.standpower.type;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
+import com.github.standobyte.jojo.client.entityanim.AnimFramePose;
+import com.github.standobyte.jojo.client.entityanim.AnimationSet;
+import com.github.standobyte.jojo.client.entityrender.RipplesPlayerRenderState;
+import com.github.standobyte.jojo.client.entityrender.stand.StandEntityRenderState;
+import com.github.standobyte.jojo.client.entityrender.stand.StandEntityRenderer;
+import com.github.standobyte.jojo.client.ui.jojomenu.StandInfoScreen;
 import com.github.standobyte.jojo.client.utils.ModelUtil;
 import com.github.standobyte.jojo.mechanics.clothes.mannequin.MannequinEntity;
+import com.github.standobyte.jojo.powersystem.standpower.entity.EntityStandType;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import org.joml.Quaternionf;
 
 import com.github.standobyte.jojo.client.standskin.StandSkin;
@@ -52,13 +63,11 @@ public class HermitPurpleType extends StandType {
 		        EntityRenderDispatcher renderManager = Minecraft.getInstance().getEntityRenderDispatcher();
 		        renderManager.setRenderShadow(false);
 
-
-
-				MannequinEntity zombie = new MannequinEntity(Minecraft.getInstance().level);
-				zombie.setInvisible(true);
-				zombie.setSlim(ModelUtil.isSlimModel(Minecraft.getInstance().player));
-				PowerClass.STAND.attachPower(zombie);
-		        StandPower standPower = StandPower.get(zombie);
+				MannequinEntity mannequin = new MannequinEntity(Minecraft.getInstance().level);
+				mannequin.setInvisible(true);
+				mannequin.setSlim(ModelUtil.isSlimModel(Minecraft.getInstance().player));
+				PowerClass.STAND.attachPower(mannequin);
+		        StandPower standPower = StandPower.get(mannequin);
 		        if (standPower != null) {
 		            standPower.setStand(AddonStands.HERMIT_PURPLE.get());
 		            standPower.setSummonedStand( new SummonedStand.BlankSummonedStand());
@@ -66,14 +75,15 @@ public class HermitPurpleType extends StandType {
 		        }
 
 		        RenderSystem.runAsFancy(()->{
-
-		            renderManager.render(zombie, 0.0, 0.0, 0.0, 0.0F, ticks,gui.pose(),gui.bufferSource(), 15728880);
+		            renderManager.render(mannequin, 0.0, 0.0, 0.0, 0.0F, ticks,gui.pose(),gui.bufferSource(), 15728880);
 		        });
 		        gui.flush();
 		        renderManager.setRenderShadow(true);
 		        gui.pose().popPose();
 		        Lighting.setupFor3DItems();
 			}
+
 		};
 	}
+
 }

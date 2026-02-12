@@ -1,5 +1,6 @@
 package com.zeml.ripplez_hp.core;
 
+import com.zeml.ripplez_hp.core.packets.client.SetColorPacket;
 import com.zeml.ripplez_hp.core.packets.client.SetTargetPacket;
 import com.zeml.ripplez_hp.core.packets.server.HermitTargetDataPacket;
 import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
@@ -17,6 +18,7 @@ public class HermitPackets {
         HermitPurpleAddon.getLogger().debug("IS this PAcketing?");
         PayloadRegistrar registrar = event.registrar("1");
         registerPacket(registrar,PayloadRegistrar::playToServer, new SetTargetPacket.Handler(HermitPurpleAddon.resLoc("hermit")));
+        registerPacket(registrar,PayloadRegistrar::playToServer, new SetColorPacket.Handler(HermitPurpleAddon.resLoc("color")));
         registerPacket(registrar,PayloadRegistrar::playToClient, new HermitTargetDataPacket.Handler(HermitPurpleAddon.resLoc("hermit_data")));
         registerPacket(registrar,PayloadRegistrar::playToClient, new StandSoundPacket.Handler(HermitPurpleAddon.resLoc("stand_sound")));
 

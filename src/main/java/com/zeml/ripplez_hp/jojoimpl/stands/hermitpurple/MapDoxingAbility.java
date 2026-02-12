@@ -3,11 +3,15 @@ package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple;
 import com.github.standobyte.jojo.client.ClientGlobals;
 import com.github.standobyte.jojo.client.sound.ClientsideSoundsHelper;
 import com.github.standobyte.jojo.client.sound.sounds.EntityLingeringSoundInstance;
+import com.github.standobyte.jojo.client.standskin.StandSkin;
+import com.github.standobyte.jojo.client.standskin.StandSkinsLoader;
 import com.github.standobyte.jojo.powersystem.Power;
 import com.github.standobyte.jojo.powersystem.PowerClass;
 import com.github.standobyte.jojo.powersystem.ability.*;
+import com.github.standobyte.jojo.powersystem.ability.condition.AvailableAbilities;
 import com.github.standobyte.jojo.powersystem.ability.condition.ConditionCheck;
 import com.github.standobyte.jojo.powersystem.ability.controls.InputMethod;
+import com.github.standobyte.jojo.powersystem.ability.input.ActionInputBuffer;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionAnimIdentifier;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionPhase;
 import com.github.standobyte.jojo.powersystem.entityaction.EntityActionInstance;
@@ -17,6 +21,7 @@ import com.github.standobyte.jojo.powersystem.standpower.entity.StandEntityAbili
 import com.mojang.datafixers.util.Pair;
 import com.zeml.ripplez_hp.core.HermitPackets;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
+import com.zeml.ripplez_hp.core.packets.client.SetColorPacket;
 import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
@@ -44,6 +49,7 @@ import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MapDoxingAbility extends HermitAction {
     public MapDoxingAbility(AbilityType<?> abilityType, AbilityId abilityId) {
@@ -52,16 +58,19 @@ public class MapDoxingAbility extends HermitAction {
         setDefaultPhaseLength(ActionPhase.WINDUP,20);
     }
 
-    @NotNull
+    /*
+    @Nullable
     @Override
-    public Ability replaceWithSubAbility(Power<?> context) {
+    public Ability replaceWithSubAbility(Power<?> context, AvailableAbilities abilities) {
         StandPower standPower = PowerClass.STAND.cast(context);
         if(context.getUser() != null && context.getUser().getItemInHand(InteractionHand.OFF_HAND).is(Items.COMPASS)
                 && standPower != null){
             return standPower.getMoveset().getAbility("hp_compass");
         }
-        return super.replaceWithSubAbility(context);
+        return this;
     }
+
+  */
 
     @Override
     public ConditionCheck checkConditions(Power<?> context) {
@@ -73,10 +82,14 @@ public class MapDoxingAbility extends HermitAction {
         return ConditionCheck.NEGATIVE;
     }
 
-    @Override
-    public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime) {
-        if(level.isClientSide){
 
+    @Override
+    public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime, ActionInputBuffer.BufferingState bufferingState) {
+        if(level.isClientSide){
+            StandSkin skin = StandSkinsLoader.getCurSkin();
+            if(skin != null){
+                PacketDistributor.sendToServer(new SetColorPacket(skin.getColor()));
+            }
         }
         if(!level.isClientSide){
             HermitPurpleAddon.getLogger().debug("Why is not working?");
@@ -125,9 +138,10 @@ public class MapDoxingAbility extends HermitAction {
             }
         }
 
-        return super.onKeyPress(level, user, extraClientInput, inputMethod, clickHoldResolveTime);
-
+        return super.onKeyPress(level, user, extraClientInput, inputMethod, clickHoldResolveTime, bufferingState);
     }
+
+
 
 
 
