@@ -8,8 +8,6 @@ import com.github.standobyte.jojo.powersystem.ability.condition.ConditionCheck;
 import com.github.standobyte.jojo.powersystem.ability.controls.InputMethod;
 import com.github.standobyte.jojo.powersystem.entityaction.HeldInput;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
-import com.github.standobyte.jojo.util.target.ActionTarget;
-import com.github.standobyte.jojo.util.target.HitResultUtil;
 import com.zeml.ripplez_hp.init.HermitDataComponents;
 import com.zeml.ripplez_hp.mc.item.EmperorItem;
 import com.zeml.ripplez_hp.mc.item.component.EmperorGunData;

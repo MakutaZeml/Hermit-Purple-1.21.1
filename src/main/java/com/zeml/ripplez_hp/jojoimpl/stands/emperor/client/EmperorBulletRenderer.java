@@ -1,20 +1,20 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.emperor.client;
 
-import com.github.standobyte.jojo.client.ClientUtil;
 import com.github.standobyte.jojo.client.entityrender.entities.SimpleEntityRenderer;
 import com.github.standobyte.jojo.client.standskin.StandSkin;
-import com.github.standobyte.jojo.util.MathUtil;
+import com.github.standobyte.jojo.client.util.functions.ClientUtil;
+import com.github.standobyte.jojo.util.functions.MathUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.zeml.ripplez_hp.client.HermitClientUtil;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
-import com.zeml.ripplez_hp.jojoimpl.stands.emperor.EmperorBulletEntity;
+import com.zeml.ripplez_hp.jojoimpl.stands.emperor.entity.EmperorBulletEntity;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
@@ -23,7 +23,7 @@ import org.joml.Matrix3f;
 
 import java.util.List;
 
-public class EmperorBulletRenderer extends SimpleEntityRenderer<EmperorBulletEntity> {
+public class EmperorBulletRenderer extends SimpleEntityRenderer<EmperorBulletEntity, EntityModel<EmperorBulletEntity>> {
     protected double maxTrailLen = 4;
     protected float V1 = 0.015625f;
     protected float BEAM_WIDTH = 0.015f;

@@ -1,0 +1,25 @@
+{
+  "character": "ripplez_hp:joseph",
+  "story_part": "jojo_ripples:p2",
+  "pieces": {
+    "head": {
+      "asset_id": "ripplez_hp_clothes:joseph_p2_swi",
+      "texture_id": "ripplez_hp_clothes:joseph_p2_tank",
+      "item_model": "ripplez_hp_clothes:joseph_p2_tank_head",
+      "item_name": {
+        "translate": "item.ripplez_hp_clothes.joseph_p2_tank_head"
+      },
+      "equip_sound": "item.armor.equip_generic"
+    },
+
+    "chest": {
+      "asset_id": "ripplez_hp_clothes:joseph_p2_swi",
+      "texture_id": "ripplez_hp_clothes:joseph_p2_tank",
+      "item_model": "ripplez_hp_clothes:joseph_p2_tank_chest",
+      "item_name": {
+        "translate": "item.ripplez_hp_clothes.joseph_p2_tank_chest"
+      },
+      "equip_sound": "item.armor.equip_generic"
+    }
+  }
+}

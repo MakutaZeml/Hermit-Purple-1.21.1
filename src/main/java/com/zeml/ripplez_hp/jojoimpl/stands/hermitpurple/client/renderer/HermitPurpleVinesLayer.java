@@ -1,15 +1,14 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.client.renderer;
 
 import com.github.standobyte.jojo.client.ClientGlobals;
-import com.github.standobyte.jojo.client.entityanim.AnimFramePose;
 import com.github.standobyte.jojo.client.entityanim.IHumanoidAnimModel;
 import com.github.standobyte.jojo.client.entityanim.RotpAnimDefinition;
+import com.github.standobyte.jojo.client.entityanim.pose.AnimFramePose;
 import com.github.standobyte.jojo.client.entityrender.parsemodel.loader.ResourceModelEntry;
 import com.github.standobyte.jojo.client.entityrender.parsemodel.loader.RotpGeckoModelLoader;
 import com.github.standobyte.jojo.client.firstperson.FirstPersonModelLayer;
 import com.github.standobyte.jojo.client.standskin.StandSkin;
 import com.github.standobyte.jojo.client.standskin.StandSkinsLoader;
-import com.github.standobyte.jojo.client.utils.ModelUtil;
 import com.github.standobyte.jojo.mechanics.clothes.mannequin.MannequinEntity;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.github.standobyte.v1_21_4_stuff.renderstate.EntityRenderState;

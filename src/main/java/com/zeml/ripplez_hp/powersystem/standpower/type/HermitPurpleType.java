@@ -4,17 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import com.github.standobyte.jojo.client.entityanim.AnimFramePose;
-import com.github.standobyte.jojo.client.entityanim.AnimationSet;
-import com.github.standobyte.jojo.client.entityrender.RipplesPlayerRenderState;
-import com.github.standobyte.jojo.client.entityrender.stand.StandEntityRenderState;
-import com.github.standobyte.jojo.client.entityrender.stand.StandEntityRenderer;
-import com.github.standobyte.jojo.client.ui.jojomenu.StandInfoScreen;
-import com.github.standobyte.jojo.client.utils.ModelUtil;
+
+import com.github.standobyte.jojo.client.entityrender.ModelUtil;
 import com.github.standobyte.jojo.mechanics.clothes.mannequin.MannequinEntity;
-import com.github.standobyte.jojo.powersystem.standpower.entity.EntityStandType;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import org.joml.Quaternionf;
 
 import com.github.standobyte.jojo.client.standskin.StandSkin;
@@ -44,6 +36,8 @@ public class HermitPurpleType extends StandType {
     @Override
 	public StandSkinsScreen.SkinView makeSkinUIElement(StandSkin skin, StandSkinsScreen screen, int x, int y, int standY, int row, int column, boolean isBottomRow) {
 		return new StandSkinsScreen.SkinView(this, skin, screen, x, y, standY, row, column, isBottomRow) {
+
+
 
 			@Override
 			public void renderStand(GuiGraphics gui, int mouseX, int mouseY, float ticks, boolean isHovered, 

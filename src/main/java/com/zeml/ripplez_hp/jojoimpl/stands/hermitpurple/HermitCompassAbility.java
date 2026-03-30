@@ -104,6 +104,10 @@ public class HermitCompassAbility extends HermitAction{
                     GlobalPos globalPos = new GlobalPos(this.dimension, this.entity.getOnPos());
                     LodestoneTracker tracker = new LodestoneTracker(Optional.of(globalPos), false);
                     this.brujula.set(DataComponents.LODESTONE_TRACKER, tracker);
+                    StandPower standPower = StandPower.get(performer);
+                    if(standPower != null){
+                        standPower.addExp(.07F);
+                    }
                 }
             }
         }
@@ -162,6 +166,10 @@ public class HermitCompassAbility extends HermitAction{
                         compass.set(DataComponents.ITEM_NAME, Component.translatable(displayName, target));
                         user.setItemInHand(InteractionHand.MAIN_HAND,itemStack);
                         user.setItemInHand(InteractionHand.OFF_HAND, compass);
+                        StandPower standPower = StandPower.get(user);
+                        if(standPower != null){
+                            standPower.addExp(.2F);
+                        }
                         if(user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode() > 4 || this.entity == performer){
                             setPhaseStart(ActionPhase.RECOVERY);
                         }else {

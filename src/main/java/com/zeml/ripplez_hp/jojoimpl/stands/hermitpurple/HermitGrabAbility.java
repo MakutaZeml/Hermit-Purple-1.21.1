@@ -7,10 +7,10 @@ import com.github.standobyte.jojo.powersystem.entityaction.ActionOBB;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionPhase;
 import com.github.standobyte.jojo.powersystem.entityaction.EntityActionInstance;
 import com.github.standobyte.jojo.powersystem.entityaction.type.EntityActionType;
-import com.github.standobyte.jojo.util.MathUtil;
-import com.github.standobyte.jojo.util.hitboxes.ExtendableOBB;
-import com.github.standobyte.jojo.util.hitboxes.OBBCollisionUtil;
-import com.github.standobyte.jojo.util.hitboxes.OrientedBoundingBox;
+import com.github.standobyte.jojo.subsystems.hitboxes.ExtendableOBB;
+import com.github.standobyte.jojo.subsystems.hitboxes.OBBCollisionUtil;
+import com.github.standobyte.jojo.subsystems.hitboxes.OrientedBoundingBox;
+import com.github.standobyte.jojo.util.functions.MathUtil;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
@@ -118,13 +118,11 @@ public class HermitGrabAbility extends HermitAction{
                             entities.forEach(entity -> {
                                 //Maker sure the entities don't get to close
                                 retainPos = this.extendableOBB().rotatableHitbox().center.add(performer.getLookAngle().scale(2.3));
-                                HermitPurpleAddon.LOGGER.debug("Is this true chat? {} {} {}",phase == ActionPhase.WINDUP,(phase == ActionPhase.PERFORM && this.extendableOBB().rotatableHitbox().extent.length() < 2.3), this.extendableOBB().rotatableHitbox().extent.length());
                                 if(phase == ActionPhase.WINDUP || (phase == ActionPhase.PERFORM && this.extendableOBB().rotatableHitbox().extent.length() > 2.3)
                                 ){
                                     retainPos = endPos;
                                 }
                                 entity.teleportTo(retainPos.x,retainPos.y-1.35,retainPos.z);
-                                HermitPurpleAddon.LOGGER.debug("distance {} {} {} {} {}", entity, Math.sqrt(entity.distanceToSqr(performer.getX(),entity.getY(),performer.getZ())),curPhaseTick, phase, retainPos);
                             });
                             //Finish when it doesn't have entities
                         }else if(phase == ActionPhase.PERFORM && this.extendableOBB().rotatableHitbox().extent.length() < 2.3){

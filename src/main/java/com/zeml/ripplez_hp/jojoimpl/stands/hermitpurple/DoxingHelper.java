@@ -1,7 +1,7 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple;
 
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
-import com.github.standobyte.jojo.util.StandUtil;
+import com.github.standobyte.jojo.powersystem.standpower.StandUtil;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
 import net.minecraft.Util;
@@ -113,11 +113,7 @@ public class DoxingHelper {
         ServerLevel level = (ServerLevel) user.level();
         Registry<Structure> structures = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
         String structure = user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget();
-        if(structure.contains("cities")){
-            structure = structure.replace("cities","city");
-        }
         Optional<Holder.Reference<Structure>> structureHolder = structures.getHolder(structures.getId(ResourceLocation.tryParse(structure)));
-        HermitPurpleAddon.LOGGER.debug("Pair {}", structureHolder);
         if(structureHolder.isPresent()){
             HolderSet<Structure> holderSet = HolderSet.direct(structureHolder.get());
             return level.getChunkSource().getGenerator().findNearestMapStructure(level, holderSet,user.getOnPos(),3000,false).getFirst();

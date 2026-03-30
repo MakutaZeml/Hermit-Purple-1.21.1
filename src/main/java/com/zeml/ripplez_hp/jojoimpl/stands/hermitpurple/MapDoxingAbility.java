@@ -16,6 +16,7 @@ import com.github.standobyte.jojo.powersystem.entityaction.ActionAnimIdentifier;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionPhase;
 import com.github.standobyte.jojo.powersystem.entityaction.EntityActionInstance;
 import com.github.standobyte.jojo.powersystem.entityaction.HeldInput;
+import com.github.standobyte.jojo.powersystem.entityaction.type.EntityActionType;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.github.standobyte.jojo.powersystem.standpower.entity.StandEntityAbility;
 import com.mojang.datafixers.util.Pair;
@@ -53,94 +54,29 @@ import org.jetbrains.annotations.Nullable;
 
 public class MapDoxingAbility extends HermitAction {
     public MapDoxingAbility(AbilityType<?> abilityType, AbilityId abilityId) {
-        super(abilityType, abilityId);
+        super(abilityType, abilityId, DoxxingAction::new);
         usageGroup = AbilityUsageGroup.UTILITY;
         setDefaultPhaseLength(ActionPhase.WINDUP,20);
     }
 
-    /*
-    @Nullable
-    @Override
-    public Ability replaceWithSubAbility(Power<?> context, AvailableAbilities abilities) {
-        StandPower standPower = PowerClass.STAND.cast(context);
-        if(context.getUser() != null && context.getUser().getItemInHand(InteractionHand.OFF_HAND).is(Items.COMPASS)
-                && standPower != null){
-            return standPower.getMoveset().getAbility("hp_compass");
-        }
-        return this;
-    }
-
-  */
-
     @Override
     public ConditionCheck checkConditions(Power<?> context) {
-        if(context.getUser() != null && context.getUser().getItemInHand(InteractionHand.OFF_HAND).is(Items.MAP) &&
-                context.getUser().getItemInHand(InteractionHand.MAIN_HAND).isEmpty()
-        ){
-            return super.checkConditions(context);
+        HermitPurpleAddon.getLogger().debug("Condition {}",super.checkConditions(context) == ConditionCheck.POSITIVE);
+        return super.checkConditions(context);
+    }
+
+    @Override
+    public ConditionCheck checkSpecificConditions(Power<?> context) {
+        LivingEntity user = context.getUser();
+        if(user != null && user.getItemInHand(InteractionHand.OFF_HAND).is(Items.MAP) &&
+                user.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()){
+            HermitPurpleAddon.getLogger().debug("This is shit{}",user.getItemInHand(InteractionHand.OFF_HAND).is(Items.MAP) &&
+                    user.getItemInHand(InteractionHand.MAIN_HAND).isEmpty());
+            return ConditionCheck.POSITIVE;
         }
         return ConditionCheck.NEGATIVE;
     }
-
-
-    @Override
-    public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime, ActionInputBuffer.BufferingState bufferingState) {
-        if(level.isClientSide){
-            StandSkin skin = StandSkinsLoader.getCurSkin();
-            if(skin != null){
-                PacketDistributor.sendToServer(new SetColorPacket(skin.getColor()));
-            }
-        }
-        if(!level.isClientSide){
-            HermitPurpleAddon.getLogger().debug("Why is not working?");
-            byte scale = user.isShiftKeyDown()?(byte) 0: (byte)2;
-            BlockPos blockPos = null;
-            String target = null;
-            ItemStack itemStack = user.getItemInHand(InteractionHand.OFF_HAND);
-            if(itemStack.is(Items.MAP)){
-                if(user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode() < 4){
-                    Entity entity = DoxingHelper.HPLivingObjectives(user);
-                    if(entity != null){
-                        blockPos = entity.getOnPos();
-                        target = entity.getName().getString();
-
-                    }
-                }else {
-                    switch (user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode()) {
-                        case 4 -> {
-                            blockPos = DoxingHelper.structurePos(user);
-                            String data = user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget().split(":")[1];
-                            data = data.replace("_", " ");
-                            target = data;
-                        }
-                        case 5 -> {
-                            blockPos = DoxingHelper.biomesPos(user);
-                            String biome = "biome.";
-                            target = Component.translatable(biome.concat(user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget().replace(":", "."))).getString();
-                        }
-                    }
-                }
-                if(blockPos != null){
-                    itemStack.setCount(itemStack.getCount() - 1);
-                    ServerLevel serverLevel = (ServerLevel) level;
-                    ItemStack map = MapItem.create(level,blockPos.getX(),blockPos.getZ(),scale,true,true);
-                    MapItem.renderBiomePreviewMap(serverLevel,map);
-                    MapItemSavedData.addTargetDecoration(map,blockPos,"+", MapDecorationTypes.RED_X);
-                    String displayName = "filled_map.divination";
-                    map.set(DataComponents.ITEM_NAME, Component.translatable(displayName, target));
-                    map.set(DataComponents.MAP_COLOR, new MapItemColor(user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getColor()));
-                    user.setItemInHand(InteractionHand.MAIN_HAND,map);
-                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(user,
-                            new StandSoundPacket(user.getId(),AddonSoundEvents.USER_HP,false,1,1));
-                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(user,
-                            new StandSoundPacket(user.getId(),AddonSoundEvents.SUMMON_HP,true,1,1));
-                }
-            }
-        }
-
-        return super.onKeyPress(level, user, extraClientInput, inputMethod, clickHoldResolveTime, bufferingState);
-    }
-
+    
 
 
 
@@ -152,4 +88,73 @@ public class MapDoxingAbility extends HermitAction {
         }
         return super.getEntityAnim(action);
     }
+    
+    public static class DoxxingAction extends EntityActionInstance {
+
+        public DoxxingAction(EntityActionType ability) {
+            super(ability);
+        }
+
+        @Override
+        public void actionPerformStart() {
+            if(level().isClientSide){
+                StandSkin skin = StandSkinsLoader.getCurSkin();
+                if(skin != null){
+                    PacketDistributor.sendToServer(new SetColorPacket(skin.getColor()));
+                }
+            }
+            if(!level().isClientSide){
+                HermitPurpleAddon.getLogger().debug("Why is not working?");
+                byte scale = performer.isShiftKeyDown()?(byte) 0: (byte)2;
+                BlockPos blockPos = null;
+                String target = null;
+                ItemStack itemStack = performer.getItemInHand(InteractionHand.OFF_HAND);
+                if(itemStack.is(Items.MAP)){
+                    if(performer.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode() < 4){
+                        Entity entity = DoxingHelper.HPLivingObjectives(performer);
+                        if(entity != null){
+                            blockPos = entity.getOnPos();
+                            target = entity.getName().getString();
+
+                        }
+                    }else {
+                        switch (performer.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode()) {
+                            case 4 -> {
+                                blockPos = DoxingHelper.structurePos(performer);
+                                String data = performer.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget().split(":")[1];
+                                data = data.replace("_", " ");
+                                target = data;
+                            }
+                            case 5 -> {
+                                blockPos = DoxingHelper.biomesPos(performer);
+                                String biome = "biome.";
+                                target = Component.translatable(biome.concat(performer.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget().replace(":", "."))).getString();
+                            }
+                        }
+                    }
+                    if(blockPos != null){
+                        itemStack.setCount(itemStack.getCount() - 1);
+                        ServerLevel serverLevel = (ServerLevel) level();
+                        ItemStack map = MapItem.create(level(),blockPos.getX(),blockPos.getZ(),scale,true,true);
+                        MapItem.renderBiomePreviewMap(serverLevel,map);
+                        MapItemSavedData.addTargetDecoration(map,blockPos,"+", MapDecorationTypes.RED_X);
+                        String displayName = "filled_map.divination";
+                        map.set(DataComponents.ITEM_NAME, Component.translatable(displayName, target));
+                        map.set(DataComponents.MAP_COLOR, new MapItemColor(performer.getData(AddonDataAttachmentTypes.HERMIT_DATA).getColor()));
+                        performer.setItemInHand(InteractionHand.MAIN_HAND,map);
+                        StandPower standPower = StandPower.get(performer);
+                        if(standPower != null){
+                            standPower.addExp(.2F);
+                        }
+
+                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer,
+                                new StandSoundPacket(performer.getId(),AddonSoundEvents.USER_HP,false,1,1));
+                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer,
+                                new StandSoundPacket(performer.getId(),AddonSoundEvents.SUMMON_HP,true,1,1));
+                    }
+                }
+            }
+        }
+    }
+    
 }

@@ -14,7 +14,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
-import static com.github.standobyte.jojo.client.entityrender.ModEntityRenderers.castToHumanoid;
+import static com.github.standobyte.jojo.client.ModEntityTypeRenderers.castToHumanoid;
+
 
 @EventBusSubscriber(modid = HermitPurpleAddon.MOD_ID, value = Dist.CLIENT)
 public class HermitEntityRenderers {

@@ -8,9 +8,8 @@ import com.github.standobyte.jojo.powersystem.ability.condition.ConditionCheck;
 import com.github.standobyte.jojo.powersystem.ability.controls.InputMethod;
 import com.github.standobyte.jojo.powersystem.entityaction.HeldInput;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
-import com.github.standobyte.jojo.util.JojoModUtil;
-import com.github.standobyte.jojo.util.target.ActionTarget;
-import com.github.standobyte.jojo.util.target.HitResultUtil;
+import com.github.standobyte.jojo.subsystems.target.ActionTarget;
+import com.github.standobyte.jojo.subsystems.target.HitResultUtil;
 import com.zeml.ripplez_hp.init.HermitDataComponents;
 import com.zeml.ripplez_hp.mc.item.EmperorItem;
 import com.zeml.ripplez_hp.mc.item.component.EmperorGunData;
@@ -49,7 +48,7 @@ public class StandTargetAbility extends EntityActionAbility {
                     if(power != null && power.getStandInstance().isPresent() && power.getStandInstance().get().getStandType() != null &&
                             power.getStandInstance().get().getStandType().getStandStats() != null){
                         double maxRange = power.getStandInstance().get().getStandType().getStandStats().rangeMax();
-                        ActionTarget target = HitResultUtil.clip(user.getEyePosition(),user.getLookAngle(),maxRange,maxRange,level,entity -> entity.isAlive(),user,0);
+                        ActionTarget target = HitResultUtil.clip(user.getEyePosition(),user.getLookAngle(),maxRange,maxRange,level, entity -> entity.isAlive(),user,0);
                         if(target.getType() == ActionTarget.TargetType.ENTITY && target.getEntity() instanceof LivingEntity){
                             data.setUUIDTarget(Optional.of(target.getEntity().getUUID()));
                         }

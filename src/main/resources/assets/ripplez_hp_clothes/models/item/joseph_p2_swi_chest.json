@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "ripplez_hp_clothes:item/joseph_p2_swi_chest"
+  }
+}

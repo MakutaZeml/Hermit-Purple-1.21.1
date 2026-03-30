@@ -45,7 +45,6 @@ public class TargetSelectAbility extends EntityActionAbility {
     @Override
     public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime) {
         if(user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem){
-            HermitPurpleAddon.LOGGER.debug("ID {}", this.abilityId);
             ItemStack itemStack = user.getItemInHand(InteractionHand.MAIN_HAND);
             EmperorGunData data = itemStack.get(HermitDataComponents.EMPEROR);
             if(data != null){

@@ -1,7 +1,7 @@
 package com.zeml.ripplez_hp.init;
 
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
-import com.zeml.ripplez_hp.jojoimpl.stands.emperor.EmperorBulletEntity;
+import com.zeml.ripplez_hp.jojoimpl.stands.emperor.entity.EmperorBulletEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -26,6 +26,8 @@ public final class AddonEntityTypes {
 			.sized(0.0625F, 0.0625F)
 			.clientTrackingRange(10)
 			.build(createIDFor(key)));
+
+
 	
 	public static String createIDFor(ResourceLocation key) {
 		return key.toString();

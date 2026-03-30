@@ -1,9 +1,9 @@
-package com.zeml.ripplez_hp.jojoimpl.stands.emperor;
+package com.zeml.ripplez_hp.jojoimpl.stands.emperor.entity;
 
 import com.github.standobyte.jojo.client.ClientGlobals;
-import com.github.standobyte.jojo.mc.entity.projectile.ModdedProjectileEntity;
+import com.github.standobyte.jojo.customobjects.entity_projectile.ModdedProjectileEntity;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
-import com.github.standobyte.jojo.util.mc.EntityResolver;
+import com.github.standobyte.jojo.util.objects_mc.EntityResolver;
 import com.zeml.ripplez_hp.init.AddonEntityTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;

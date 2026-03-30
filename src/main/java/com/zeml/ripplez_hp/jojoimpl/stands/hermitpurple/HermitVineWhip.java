@@ -21,11 +21,11 @@ import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.github.standobyte.jojo.powersystem.standpower.entity.StandEntity;
 import com.github.standobyte.jojo.powersystem.standpower.entity.StandOffsetFromUser;
 import com.github.standobyte.jojo.powersystem.standpower.entity.StandStatFormulas;
-import com.github.standobyte.jojo.util.MathUtil;
-import com.github.standobyte.jojo.util.damage.DamageUtil;
-import com.github.standobyte.jojo.util.hitboxes.ExtendableOBB;
-import com.github.standobyte.jojo.util.hitboxes.OBBCollisionUtil;
-import com.github.standobyte.jojo.util.hitboxes.OrientedBoundingBox;
+import com.github.standobyte.jojo.subsystems.hitboxes.ExtendableOBB;
+import com.github.standobyte.jojo.subsystems.hitboxes.OBBCollisionUtil;
+import com.github.standobyte.jojo.subsystems.hitboxes.OrientedBoundingBox;
+import com.github.standobyte.jojo.util.functions.DamageUtil;
+import com.github.standobyte.jojo.util.functions.MathUtil;
 import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import net.minecraft.Util;
@@ -69,7 +69,7 @@ public class HermitVineWhip extends HermitAction{
     protected List<String> punchNames = Util.make(new ArrayList<>(), list -> {
         list.add("hp_vine");
         list.add("hp_vine2");
-        //list.add("hp_vine3");
+
     });
 
 
@@ -140,11 +140,15 @@ public class HermitVineWhip extends HermitAction{
                     this.extendableOBB().updatePosition(level(), pos, offset, getPerformer().getXRot(), (getPerformer().getYRot()-30*(curPhaseTick-3)));
                 }
                 if (!level().isClientSide()) {
+                    StandPower standPower = StandPower.get(performer);
                     OBBCollisionUtil.getEntitiesInOBB(level(), this.extendableOBB().rotatableHitbox(), entity -> entity != getPerformer() && entity != getPowerUser() && performer.getVehicle() != entity).forEach(entity -> {
                         var damageType = DamageUtil.type(level(), ModDamageTypes.STAND_ATTACK);
                         DamageSource dmgSource = new DamageSource(damageType, performer);
                         float dmgAmount = StandStatFormulas.getLightAttackDamage(StandPower.get(performer).getPowerType().getStandStats().power());
                         entity.hurt(dmgSource, dmgAmount );
+                        if(standPower != null){
+                            standPower.addExp(.05F);
+                        }
                         // TODO Add hamon interaction when implemented and Block Interaction
                     });
                 }

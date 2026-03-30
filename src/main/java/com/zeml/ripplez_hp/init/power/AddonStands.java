@@ -1,6 +1,7 @@
 package com.zeml.ripplez_hp.init.power;
 
 import com.github.standobyte.jojo.core.JojoRegistries;
+import com.github.standobyte.jojo.init.power.ModStands;
 import com.github.standobyte.jojo.powersystem.MovesetBuilder;
 import com.github.standobyte.jojo.powersystem.ability.controls.InputKey;
 import com.github.standobyte.jojo.powersystem.ability.controls.InputMethod;
@@ -50,7 +51,7 @@ public class AddonStands {
 					.inHotbar(0, InputMethod.CLICK)
 
 					.addAbility("hp_compass",AddonStandAbilities.COMPASS_DIVINATION, compass -> compass.isSubAbility = true)
-							//.inHotbarSlotVariation("hp_doxx",null,InputMethod.HOLD)
+
 
 					.addAbility("hp_block", AddonStandAbilities.THORNS)
 					.inHotbar(0, InputMethod.HOLD)
@@ -59,12 +60,12 @@ public class AddonStands {
 					.inHotbar(0, InputMethod.CLICK)
 
 					.addSkill(StandUnlockableSkill.startingAbility("hp_vine"))
-					.addSkill(StandUnlockableSkill.unlockableAbility("hp_grab",1))
+					.addSkill(StandUnlockableSkill.unlockableAbility("hp_grab",50))
 					.addSkill(StandUnlockableSkill.startingAbility("hp_vine_heavy"))
 					.addSkill(StandUnlockableSkill.startingAbility("hp_doxx"))
-					.addSkill(StandUnlockableSkill.unlockableAbility("hp_target",1))
-					.addSkill(StandUnlockableSkill.unlockableAbility("hp_block",1))
-					.addSkill(StandUnlockableSkill.unlockableAbility("cringe",2))
+					.addSkill(StandUnlockableSkill.startingAbility("hp_target"))
+					.addSkill(StandUnlockableSkill.unlockableAbility("hp_block",50))
+					.addSkill(StandUnlockableSkill.unlockableAbility("cringe",20))
 
 
 					, id));
@@ -84,6 +85,7 @@ public class AddonStands {
 
 									.addAbility("emp_shot",AddonStandAbilities.EMP_SHOT).withBind(InputMethod.CLICK,InputKey.RMB)
 									.addAbility("emp_shot_barrage",AddonStandAbilities.EMP_SHOT_BARRAGE).withBind(InputMethod.HOLD ,InputKey.RMB)
+
 
 
 									.makeHotbar(0, InputKey.X, InputKey.C)
@@ -106,4 +108,9 @@ public class AddonStands {
 
 
 							, id));
+
+	static{
+		ModStands.PLAYER_CAN_GET_FROM_ARROW.add(HERMIT_PURPLE);
+		ModStands.PLAYER_CAN_GET_FROM_ARROW.add(EMPEROR);
+	}
 }

@@ -6,6 +6,7 @@ import com.github.standobyte.jojo.powersystem.ability.AbilityId;
 import com.github.standobyte.jojo.powersystem.ability.AbilityType;
 import com.github.standobyte.jojo.powersystem.ability.EntityActionAbility;
 import com.github.standobyte.jojo.powersystem.ability.condition.ConditionCheck;
+import com.github.standobyte.jojo.powersystem.entityaction.ActionAnimIdentifier;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionPhase;
 import com.github.standobyte.jojo.powersystem.entityaction.EntityActionInstance;
 import com.github.standobyte.jojo.powersystem.entityaction.type.EntityActionType;
@@ -19,6 +20,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.function.Function;
+
+import static com.zeml.ripplez_hp.jojoimpl.stands.emperor.ShotAbility.isRight;
 
 public class ShotBarrageAbility extends EntityActionAbility {
 
@@ -47,6 +50,13 @@ public class ShotBarrageAbility extends EntityActionAbility {
         return ConditionCheck.NEGATIVE;
     }
 
+    @Override
+    public ActionAnimIdentifier getEntityAnim(EntityActionInstance action) {
+        if(!isRight(action.getPowerUser())){
+            return ActionAnimIdentifier.getOrCreate(abilityId.nameInMoveset().concat("_l"),false);
+        }
+        return super.getEntityAnim(action);
+    }
 
     public static class EmperorBarrage extends EntityActionInstance{
         public EmperorBarrage(EntityActionType ability) {

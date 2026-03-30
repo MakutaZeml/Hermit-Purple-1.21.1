@@ -1,6 +1,6 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple;
 
-import com.github.standobyte.jojo.util.entitycomponent.SynchronizableEntityData;
+import com.github.standobyte.jojo.entityattachment.SynchronizableEntityData;
 import com.zeml.ripplez_hp.core.HermitPackets;
 import com.zeml.ripplez_hp.core.packets.server.HermitTargetDataPacket;
 import net.minecraft.core.Registry;

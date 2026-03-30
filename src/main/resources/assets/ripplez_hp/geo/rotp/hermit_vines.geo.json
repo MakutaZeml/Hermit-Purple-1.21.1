@@ -47,21 +47,6 @@
 					]
 				},
 				{
-					"name": "hidden.grab_vine",
-					"parent": "right_arm_bend",
-					"pivot": [-5.5, 12.5, 0],
-					"cubes": [
-						{"origin": [-5, 12.5, -0.5], "size": [1, 1, 0], "pivot": [-4, 11.5, 0.5], "rotation": [90, 60, 0], "uv": [37, 5]},
-						{"origin": [-5, 7.5, -0.5], "size": [1, 1, 0], "pivot": [-4, 6.5, 0.5], "rotation": [90, 60, 0], "uv": [37, 9]},
-						{"origin": [-5, 10.5, -0.5], "size": [1, 1, 0], "pivot": [-4, 9.5, 0.5], "rotation": [90, 77.5, 0], "uv": [37, 9]},
-						{"origin": [-5, 13.5, -1.5], "size": [1, 1, 0], "pivot": [-4, 12.5, -0.5], "rotation": [90, 77.5, 0], "uv": [31, 5]},
-						{"origin": [-6, 8.5, 0.5], "size": [1, 1, 0], "pivot": [-5, 7.5, 1.5], "rotation": [90, 15, 0], "uv": [31, 5]},
-						{"origin": [-5, 11.5, 0.5], "size": [1, 1, 0], "pivot": [-4, 10.5, 1.5], "rotation": [90, 15, 0], "uv": [31, 5]},
-						{"origin": [-6, 9.5, -0.5], "size": [1, 1, 0], "pivot": [-5, 8.5, 0.5], "rotation": [90, 37.5, 0], "uv": [37, 5]},
-						{"origin": [-6, 5.5, -0.5], "size": [1, 1, 8], "pivot": [-6, 5.5, 0.5], "rotation": [90, 0, 0], "uv": [10, 26]}
-					]
-				},
-				{
 					"name": "hidden.main_vine",
 					"parent": "right_arm_bend",
 					"pivot": [-6.5, 12.5, -1]
@@ -69,7 +54,7 @@
 				{
 					"name": "main_vine1",
 					"parent": "hidden.main_vine",
-					"pivot": [-5, 11.5, -0.5],
+					"pivot": [-6.5, 12.5, -1],
 					"cubes": [
 						{"origin": [-6, 12.5, -1.5], "size": [1, 1, 0], "pivot": [-5, 11.5, -0.5], "rotation": [90, 60, 0], "uv": [37, 5]},
 						{"origin": [-6, 7.5, -1.5], "size": [1, 1, 0], "pivot": [-5, 6.5, -0.5], "rotation": [90, 60, 0], "uv": [37, 9]},
@@ -149,7 +134,7 @@
 				{
 					"name": "second_vine1",
 					"parent": "hidden.second_vine",
-					"pivot": [-6, 11.5, 1.5],
+					"pivot": [-7.5, 12.5, 1],
 					"cubes": [
 						{"origin": [-7, 12.5, 0.5], "size": [1, 1, 0], "pivot": [-6, 11.5, 1.5], "rotation": [90, 60, 0], "uv": [37, 5]},
 						{"origin": [-7, 7.5, 0.5], "size": [1, 1, 0], "pivot": [-6, 6.5, 1.5], "rotation": [90, 60, 0], "uv": [37, 9]},

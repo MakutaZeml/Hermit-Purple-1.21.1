@@ -1,0 +1,45 @@
+{
+  "character": "ripplez_hp:joseph",
+  "story_part": "jojo_ripples:p2",
+  "pieces": {
+    "head": {
+      "asset_id": "ripplez_hp_clothes:joseph_p2_swi",
+      "texture_id": "ripplez_hp_clothes:joseph_p2_swi",
+      "item_model": "ripplez_hp_clothes:joseph_p2_swi_head",
+      "item_name": {
+        "translate": "item.ripplez_hp_clothes.joseph_p2_swi_head"
+      },
+      "equip_sound": "item.armor.equip_generic"
+    },
+
+    "chest": {
+      "asset_id": "ripplez_hp_clothes:joseph_p2_swi",
+      "texture_id": "ripplez_hp_clothes:joseph_p2_swi",
+      "item_model": "ripplez_hp_clothes:joseph_p2_swi_chest",
+      "item_name": {
+        "translate": "item.ripplez_hp_clothes.joseph_p2_swi_chest"
+      },
+      "equip_sound": "item.armor.equip_generic"
+    },
+
+    "legs": {
+      "asset_id": "ripplez_hp_clothes:joseph_p2_swi",
+      "texture_id": "ripplez_hp_clothes:joseph_p2_swi",
+      "item_model": "ripplez_hp_clothes:joseph_p2_swi_legs",
+      "item_name": {
+        "translate": "item.ripplez_hp_clothes.joseph_p2_swi_legs"
+      },
+      "equip_sound": "item.armor.equip_generic"
+    },
+
+    "feet": {
+      "asset_id": "ripplez_hp_clothes:joseph_p2_swi",
+      "texture_id": "ripplez_hp_clothes:joseph_p2_swi",
+      "item_model": "ripplez_hp_clothes:joseph_p2_swi_feet",
+      "item_name": {
+        "translate": "item.ripplez_hp_clothes.joseph_p2_swi_feet"
+      },
+      "equip_sound": "item.armor.equip_generic"
+    }
+  }
+}

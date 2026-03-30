@@ -26,7 +26,6 @@ public class HermitPurpleAddon {
 
         AddonPlayerPowers.PLAYER_POWERS.register(modEventBus);
         AddonStandAbilities.load();
-        AddonStandEffects.STAND_EFFECT_TYPES.register(modEventBus);
         AddonStands.STANDS.register(modEventBus);
 
         AddonBlocks.BLOCKS.register(modEventBus);
@@ -43,7 +42,6 @@ public class HermitPurpleAddon {
 
     @SubscribeEvent
     private void registerNetwork(RegisterPayloadHandlersEvent event){
-        LOGGER.debug("Packets register happening");
         HermitPackets.register(event);
     }
 

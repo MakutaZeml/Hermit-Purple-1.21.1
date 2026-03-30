@@ -16,9 +16,9 @@
   "jojo_ripples.ability.hp_grab": "Vine Grab",
   "jojo_ripples.skill.hp_grab.desc": "Use hermit purple as a whip to grab your enemies",
   "jojo_ripples.skill.hp_grab.controls": "hold \uEAFD",
-  "jojo_ripples.skill.hp_vine_heavy": "Vine binding attack",
-  "jojo_ripples.ability.hp_vine_heavy": "Vine binding attack",
-  "jojo_ripples.skill.hp_vine_heavy.desc": "Use hermit purple as a whip to perform an strong attack to your enemies, you can infuse it hamon if you have learned hamon infusion",
+  "jojo_ripples.skill.hp_vine_heavy": "Heavy Vine Whip",
+  "jojo_ripples.ability.hp_vine_heavy": "Heavy Vine Whip",
+  "jojo_ripples.skill.hp_vine_heavy.desc": "Use hermit purple as a whip to perform an strong attack to your enemies with a low chance of disarming their offhand or the main hand, you can infuse it hamon if you have learned hamon infusion",
   "jojo_ripples.skill.hp_vine_heavy.controls": "\uEAFE",
   "jojo_ripples.skill.cringe": "Oh no Cringe!",
   "jojo_ripples.ability.cringe": "\"Oh no, Cringe!\"",
@@ -94,9 +94,19 @@
   "item.ripplez_hp_clothes.joseph_p2_ny_legs": "Joseph's New York's Pants",
   "item.ripplez_hp_clothes.joseph_p2_ny_feet": "Joseph's New York's Shoes",
 
+  "item.ripplez_hp_clothes.joseph_p2_swi_head": "Joseph's Switzerland's trapper hat",
+  "item.ripplez_hp_clothes.joseph_p2_swi_chest": "Joseph's Switzerland's Jacket",
+  "item.ripplez_hp_clothes.joseph_p2_swi_legs": "Joseph's Switzerland's Pants",
+  "item.ripplez_hp_clothes.joseph_p2_swi_feet": "Joseph's Switzerland's Boots",
+  "item.ripplez_hp_clothes.joseph_p2_tank_head": "Caesar's Head Band",
+  "item.ripplez_hp_clothes.joseph_p2_tank_chest": "Joseph's Tank",
+
   "character.ripplez_hp.joseph": "Joseph Joestar",
   "character.ripplez_hp.joseph.short": "Joseph",
   "clothes.ripplez_hp.joseph_p3_ova": "Stardust Crusaders (OVA)",
   "clothes.ripplez_hp.joseph_p3_anime": "Stardust Crusaders (anime)",
-  "clothes.ripplez_hp.joseph_p2_ny_anime": "New York (anime)"
+  "clothes.ripplez_hp.joseph_p2_ny_anime": "New York (anime)",
+  "clothes.ripplez_hp.joseph_p2_swi_anime": "Switzerland (anime)",
+  "clothes.ripplez_hp.joseph_p2_swi_tank": "Coliseum (anime)"
+
 }

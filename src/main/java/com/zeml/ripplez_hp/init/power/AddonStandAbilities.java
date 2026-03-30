@@ -60,6 +60,7 @@ public final class AddonStandAbilities {
 			"emp_shot", key -> new AbilityType<>(key, ShotAbility::new)
 	);
 
+
 	public static final DeferredHolder<AbilityType<?>, AbilityType<ShotBarrageAbility>> EMP_SHOT_BARRAGE = ABILITY_TYPES.register(
 			"emp_shot_barrage", key -> new AbilityType<>(key, ShotBarrageAbility::new)
 	);
