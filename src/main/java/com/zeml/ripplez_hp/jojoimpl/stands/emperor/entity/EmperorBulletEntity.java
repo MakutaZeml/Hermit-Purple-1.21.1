@@ -11,6 +11,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.LinkedList;
@@ -35,9 +36,7 @@ public class EmperorBulletEntity extends ModdedProjectileEntity {
     public void tick() {
         super.tick();
         if(!this.level().isClientSide){
-            if(this.getOwner() != null && distanceTo(this.getOwner())>standRange){
-                this.kill();
-            }
+
         }else {
             Vec3 pos = this.position();
 
@@ -56,24 +55,27 @@ public class EmperorBulletEntity extends ModdedProjectileEntity {
     protected void moveProjectile() {
         super.moveProjectile();
         Entity target = this.homingTarget.getEntity(level());
-
         if (target != null) {
             if (!target.isAlive()) {
                 this.homingTarget.setEntity(null);
             }
             else if (tickCount >= 3) {
-                Vec3 targetPos = target.getBoundingBox().getCenter();
-                Vec3 vecToTarget = targetPos.subtract(this.position());
-                setDeltaMovement(vecToTarget.normalize().scale(this.getDeltaMovement().length()));
-                StandPower standPower = userStandPower.get();
-                if (standPower != null) {
-                }
-                Level level = level();
-                if (level.isClientSide()) {
-                    if (ClientGlobals.canSeeStands) {
+                if((this.getOwner() != null && distanceTo(this.getOwner())<=this.standRange)|| this.getOwner() == null){
+                    Vec3 targetPos = target.getBoundingBox().getCenter();
+                    Vec3 vecToTarget = targetPos.subtract(this.position());
+                    setDeltaMovement(vecToTarget.normalize().scale(this.getDeltaMovement().length()));
+                    StandPower standPower = userStandPower.get();
+                    if (standPower != null) {
 
                     }
+                    Level level = level();
+                    if (level.isClientSide()) {
+                        if (ClientGlobals.canSeeStands) {
+
+                        }
+                    }
                 }
+
             }
         }
     }
@@ -119,6 +121,16 @@ public class EmperorBulletEntity extends ModdedProjectileEntity {
         homingTarget.saveNbt(nbt, "HomingTarget");
     }
 
+    @Override
+    protected void onHitEntity(EntityHitResult entityRayTraceResult) {
+        if (!level().isClientSide() && isAlive()) {
+            LivingEntity owner = getOwner();
+            if(owner != null){
+                StandPower.addExp(owner,.07F);
+            }
+        }
+        super.onHitEntity(entityRayTraceResult);
+    }
 
     @Override
     protected void readAdditionalSaveData(CompoundTag nbt) {

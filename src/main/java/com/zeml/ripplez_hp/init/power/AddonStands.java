@@ -87,7 +87,6 @@ public class AddonStands {
 									.addAbility("emp_shot_barrage",AddonStandAbilities.EMP_SHOT_BARRAGE).withBind(InputMethod.HOLD ,InputKey.RMB)
 
 
-
 									.makeHotbar(0, InputKey.X, InputKey.C)
 
 									.addAbility("emp_target", AddonStandAbilities.EMP_TARGET)
@@ -103,8 +102,8 @@ public class AddonStands {
 									.addSkill(StandUnlockableSkill.startingAbility("emp_shot"))
 									.addSkill(StandUnlockableSkill.startingAbility("emp_shot_barrage"))
 									.addSkill(StandUnlockableSkill.startingAbility("emp_target"))
-									.addSkill(StandUnlockableSkill.unlockableAbility("emp_stand_target",3))
-									.addSkill(StandUnlockableSkill.unlockableAbility("emp_delete_target",0).prerequisiteSkill("emp_stand_target"))
+									.addSkill(StandUnlockableSkill.unlockableAbility("emp_stand_target",50))
+									.addSkill(StandUnlockableSkill.tiedToMainSkill("emp_delete_target","emp_stand_target"))
 
 
 							, id));

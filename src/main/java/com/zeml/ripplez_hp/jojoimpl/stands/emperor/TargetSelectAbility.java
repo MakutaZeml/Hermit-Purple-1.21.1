@@ -6,6 +6,7 @@ import com.github.standobyte.jojo.powersystem.ability.AbilityType;
 import com.github.standobyte.jojo.powersystem.ability.EntityActionAbility;
 import com.github.standobyte.jojo.powersystem.ability.condition.ConditionCheck;
 import com.github.standobyte.jojo.powersystem.ability.controls.InputMethod;
+import com.github.standobyte.jojo.powersystem.ability.input.ActionInputBuffer;
 import com.github.standobyte.jojo.powersystem.entityaction.HeldInput;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.init.HermitDataComponents;
@@ -43,7 +44,7 @@ public class TargetSelectAbility extends EntityActionAbility {
     }
 
     @Override
-    public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime) {
+    public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime, ActionInputBuffer.BufferingState bufferingState) {
         if(user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem){
             ItemStack itemStack = user.getItemInHand(InteractionHand.MAIN_HAND);
             EmperorGunData data = itemStack.get(HermitDataComponents.EMPEROR);
@@ -57,8 +58,9 @@ public class TargetSelectAbility extends EntityActionAbility {
                 data.setMode(data.getMode()-1);
             }
         }
-        return super.onKeyPress(level, user, extraClientInput, inputMethod, clickHoldResolveTime);
+        return super.onKeyPress(level, user, extraClientInput, inputMethod, clickHoldResolveTime, bufferingState);
     }
+
 
     protected Component nameLess;
     protected Component random;
