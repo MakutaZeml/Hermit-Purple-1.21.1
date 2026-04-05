@@ -34,9 +34,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class HermitHeavyVineWhip extends HermitAction{
@@ -127,6 +125,7 @@ public class HermitHeavyVineWhip extends HermitAction{
                         BlockState blockCollision = OBBCollisionUtil.getCollidingBlock(level(), blockHitResult.getBlockPos());
                         if (blockCollision != null){
                             // TODO Add button, lever and other interactions
+                            HermitPurpleBlock.blockInteraction(level(),blockHitResult.getBlockPos());
                             this.extendableOBB().forceRetract(level(), getPerformer(), this.id);
                         }
                     }
