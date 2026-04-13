@@ -15,7 +15,6 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 public class HermitPackets {
 
     public static void register(RegisterPayloadHandlersEvent event){
-        HermitPurpleAddon.getLogger().debug("IS this PAcketing?");
         PayloadRegistrar registrar = event.registrar("1");
         registerPacket(registrar,PayloadRegistrar::playToServer, new SetTargetPacket.Handler(HermitPurpleAddon.resLoc("hermit")));
         registerPacket(registrar,PayloadRegistrar::playToServer, new SetColorPacket.Handler(HermitPurpleAddon.resLoc("color")));

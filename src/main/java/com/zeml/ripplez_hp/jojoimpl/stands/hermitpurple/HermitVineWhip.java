@@ -26,11 +26,13 @@ import com.github.standobyte.jojo.subsystems.hitboxes.OBBCollisionUtil;
 import com.github.standobyte.jojo.subsystems.hitboxes.OrientedBoundingBox;
 import com.github.standobyte.jojo.util.functions.DamageUtil;
 import com.github.standobyte.jojo.util.functions.MathUtil;
+import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import net.minecraft.Util;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -145,9 +147,11 @@ public class HermitVineWhip extends HermitAction{
                         var damageType = DamageUtil.type(level(), ModDamageTypes.STAND_ATTACK);
                         DamageSource dmgSource = new DamageSource(damageType, performer);
                         float dmgAmount = StandStatFormulas.getLightAttackDamage(StandPower.get(performer).getPowerType().getStandStats().power());
-                        entity.hurt(dmgSource, dmgAmount );
-                        if(standPower != null){
-                            standPower.addExp(.05F);
+                        if( Explosion.getSeenPercent(this.extendableOBB().rotatableHitbox().center, entity) != 0){
+                            entity.hurt(dmgSource, dmgAmount );
+                            if(standPower != null){
+                                standPower.addExp(.05F);
+                            }
                         }
                         // TODO Add hamon interaction when implemented and Block Interaction
                     });
