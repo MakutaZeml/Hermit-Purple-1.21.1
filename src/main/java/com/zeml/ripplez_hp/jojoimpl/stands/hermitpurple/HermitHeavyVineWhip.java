@@ -9,6 +9,7 @@ import com.github.standobyte.jojo.powersystem.entityaction.ActionPhase;
 import com.github.standobyte.jojo.powersystem.entityaction.EntityActionInstance;
 import com.github.standobyte.jojo.powersystem.entityaction.type.EntityActionType;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
+import com.github.standobyte.jojo.powersystem.standpower.entity.StandEntity;
 import com.github.standobyte.jojo.powersystem.standpower.entity.StandOffsetFromUser;
 import com.github.standobyte.jojo.powersystem.standpower.entity.StandStatFormulas;
 import com.github.standobyte.jojo.subsystems.hitboxes.ExtendableOBB;
@@ -46,9 +47,18 @@ public class HermitHeavyVineWhip extends HermitAction{
         setDefaultPhaseLength(ActionPhase.WINDUP, StandStatFormulas.getHeavyAttackWindup(10, 0));
         setDefaultPhaseLength(ActionPhase.PERFORM, 6);
         setDefaultPhaseLength(ActionPhase.RECOVERY, 15);
-
+        noFinisherBarDecay = true;
     }
 
+    @Override
+    public void initActionFromConfig(EntityActionInstance action, Level level,
+                                     LivingEntity powerUser, LivingEntity performer) {
+        super.initActionFromConfig(action, level, powerUser, performer);
+        if (!level.isClientSide()) {
+            action.phasesLength.put(ActionPhase.WINDUP, StandStatFormulas.getHeavyAttackWindup(
+                   StandPower.get(powerUser).getPowerType().getStandStats().speed() , 0));
+        }
+    }
 
     public static class HermitHeavyVine extends EntityActionInstance implements ActionOBB {
 
@@ -72,7 +82,13 @@ public class HermitHeavyVineWhip extends HermitAction{
         public void actionPerformStart() {
             LivingEntity user = getPowerUser();
             StandPower standPower = StandPower.get(user);
-            standPower.consumeStamina(25);
+            if(standPower != null){
+                standPower.consumeStamina(25);
+                if(!standPower.isSummoned() && standPower.getPowerType() != null){
+                    standPower.getPowerType().summon(user,standPower);
+                }
+            }
+
 
         }
 

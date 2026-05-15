@@ -61,7 +61,6 @@ public class MapDoxingAbility extends HermitAction {
 
     @Override
     public ConditionCheck checkConditions(Power<?> context) {
-        HermitPurpleAddon.getLogger().debug("Condition {}",super.checkConditions(context) == ConditionCheck.POSITIVE);
         return super.checkConditions(context);
     }
 
@@ -103,6 +102,13 @@ public class MapDoxingAbility extends HermitAction {
                     PacketDistributor.sendToServer(new SetColorPacket(skin.getColor()));
                 }
             }
+
+            StandPower standPower = StandPower.get(performer);
+            if(standPower != null){
+                if(!standPower.isSummoned() && standPower.getPowerType() != null){
+                    standPower.getPowerType().summon(performer,standPower);
+                }
+            }
             if(!level().isClientSide){
                 HermitPurpleAddon.getLogger().debug("Why is not working?");
                 byte scale = performer.isShiftKeyDown()?(byte) 0: (byte)2;
@@ -142,7 +148,6 @@ public class MapDoxingAbility extends HermitAction {
                         map.set(DataComponents.ITEM_NAME, Component.translatable(displayName, target));
                         map.set(DataComponents.MAP_COLOR, new MapItemColor(performer.getData(AddonDataAttachmentTypes.HERMIT_DATA).getColor()));
                         performer.setItemInHand(InteractionHand.MAIN_HAND,map);
-                        StandPower standPower = StandPower.get(performer);
                         if(standPower != null){
                             standPower.addExp(.2F);
                         }

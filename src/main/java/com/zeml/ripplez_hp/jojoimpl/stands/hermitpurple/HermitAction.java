@@ -14,6 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import java.util.function.Function;
 
 public class HermitAction extends EntityActionAbility {
+    public boolean noFinisherBarDecay = false;
     public HermitAction(AbilityType<?> abilityType, AbilityId abilityId) {
         super(abilityType, abilityId);
     }

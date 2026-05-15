@@ -119,6 +119,13 @@ public class HermitCompassAbility extends HermitAction{
                 String target = null;
                 LivingEntity user = performer;
                 boolean self = false;
+                StandPower standPower = StandPower.get(user);
+                if(standPower != null){
+                    standPower.consumeStamina(25);
+                    if(!standPower.isSummoned() && standPower.getPowerType() != null){
+                        standPower.getPowerType().summon(user,standPower);
+                    }
+                }
                 ItemStack itemStack = user.getItemInHand(InteractionHand.OFF_HAND);
                 if (itemStack.is(Items.COMPASS)) {
                     if (user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode() < 4) {
@@ -166,7 +173,7 @@ public class HermitCompassAbility extends HermitAction{
                         compass.set(DataComponents.ITEM_NAME, Component.translatable(displayName, target));
                         user.setItemInHand(InteractionHand.MAIN_HAND,itemStack);
                         user.setItemInHand(InteractionHand.OFF_HAND, compass);
-                        StandPower standPower = StandPower.get(user);
+
                         if(standPower != null){
                             standPower.addExp(.2F);
                         }

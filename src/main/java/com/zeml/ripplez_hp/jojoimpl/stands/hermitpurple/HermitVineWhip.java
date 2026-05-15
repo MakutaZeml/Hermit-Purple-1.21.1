@@ -1,9 +1,7 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple;
 
-import com.github.standobyte.jojo.client.ClientGlobals;
-import com.github.standobyte.jojo.client.sound.ClientsideSoundsHelper;
 import com.github.standobyte.jojo.init.ModDamageTypes;
-import com.github.standobyte.jojo.init.ModSoundEvents;
+import com.github.standobyte.jojo.mechanics.resolve.ResolveModeEffect;
 import com.github.standobyte.jojo.powersystem.Moveset;
 import com.github.standobyte.jojo.powersystem.Power;
 import com.github.standobyte.jojo.powersystem.PowerClass;
@@ -18,18 +16,17 @@ import com.github.standobyte.jojo.powersystem.entityaction.EntityActionInstance;
 import com.github.standobyte.jojo.powersystem.entityaction.LivingComponentAction;
 import com.github.standobyte.jojo.powersystem.entityaction.type.EntityActionType;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
-import com.github.standobyte.jojo.powersystem.standpower.entity.StandEntity;
-import com.github.standobyte.jojo.powersystem.standpower.entity.StandOffsetFromUser;
 import com.github.standobyte.jojo.powersystem.standpower.entity.StandStatFormulas;
 import com.github.standobyte.jojo.subsystems.hitboxes.ExtendableOBB;
 import com.github.standobyte.jojo.subsystems.hitboxes.OBBCollisionUtil;
 import com.github.standobyte.jojo.subsystems.hitboxes.OrientedBoundingBox;
 import com.github.standobyte.jojo.util.functions.DamageUtil;
 import com.github.standobyte.jojo.util.functions.MathUtil;
-import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
+import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import net.minecraft.Util;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Explosion;
@@ -62,7 +59,6 @@ public class HermitVineWhip extends HermitAction{
             Ability punch = getVineCombo(context.getUser(), moveset);
             if (punch != null) return punch;
         }
-
         return super.replaceWithSubAbility(context, abilities);
     }
 
@@ -102,10 +98,7 @@ public class HermitVineWhip extends HermitAction{
     }
 
 
-    @Override
-    public void initActionFromConfig(EntityActionInstance action, Level level, LivingEntity standUser, LivingEntity standEntity) {
-        super.initActionFromConfig(action, level, standUser, standEntity);
-    }
+
 
 
     public static class HermitVine extends EntityActionInstance implements ActionOBB {
@@ -126,7 +119,12 @@ public class HermitVineWhip extends HermitAction{
         public void actionPerformStart() {
             LivingEntity user = getPowerUser();
             StandPower standPower = StandPower.get(user);
-            standPower.consumeStamina(10);
+            if(standPower != null){
+                standPower.consumeStamina(10);
+                if(!standPower.isSummoned() && standPower.getPowerType() != null){
+                    standPower.getPowerType().summon(user,standPower);
+                }
+            }
         }
 
         @Override
