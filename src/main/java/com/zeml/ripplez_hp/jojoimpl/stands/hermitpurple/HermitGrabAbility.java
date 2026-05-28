@@ -54,7 +54,6 @@ public class HermitGrabAbility extends HermitAction{
 
         @Override
         public void actionTick(){
-            performer.setYBodyRot(performer.yHeadRot);
             if(extendableOBB() != null){
                 //Moving the vine
                 Vec3 pos = getPerformer().position();
