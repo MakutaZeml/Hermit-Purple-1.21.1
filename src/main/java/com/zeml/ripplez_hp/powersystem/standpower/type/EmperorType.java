@@ -2,10 +2,15 @@ package com.zeml.ripplez_hp.powersystem.standpower.type;
 
 import com.github.standobyte.jojo.client.standskin.StandSkin;
 import com.github.standobyte.jojo.client.standskin.StandSkinsScreen;
+import com.github.standobyte.jojo.init.ModSoundEvents;
+import com.github.standobyte.jojo.network.s2c.StandSkinSoundPacket;
+import com.github.standobyte.jojo.network.s2c.TrNonEntityStandSummonPacket;
 import com.github.standobyte.jojo.powersystem.MovesetBuilder;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.github.standobyte.jojo.powersystem.standpower.StandStats;
+import com.github.standobyte.jojo.powersystem.standpower.entity.EntityStandType;
 import com.github.standobyte.jojo.powersystem.standpower.type.StandType;
+import com.github.standobyte.jojo.powersystem.standpower.type.SummonedStand;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.zeml.ripplez_hp.core.util.EmperorUtil;
@@ -27,10 +32,11 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.joml.Quaternionf;
 
 
-public class EmperorType extends StandType {
+public class EmperorType extends EntityStandType {
 
     public EmperorType(StandStats stats, MovesetBuilder moveset, ResourceLocation id) {
         super(stats, moveset, id);
@@ -39,11 +45,45 @@ public class EmperorType extends StandType {
     @Override
     public boolean summon(LivingEntity user, StandPower standPower) {
         EmperorUtil.giveEmperor(user,standPower);
-        return super.summon(user, standPower);
+		if (!standPower.isSummoned() && standPower.canUsePower()) {
+			SummonedStand summonedStand = makeSummonedStand();
+			if (summonedStand == null) return false;
+
+			standPower.setSummonedStand(summonedStand);
+			if (user != null && !user.level().isClientSide()) {
+				PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, new TrNonEntityStandSummonPacket(user.getId(), true));
+				if (playSummonSound) {
+					PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, StandSkinSoundPacket.play(
+							user.position(), ModSoundEvents.STAND_SUMMON,
+							standPower, user.getSoundSource(), 1, 1));
+				}
+			}
+			return true;
+		}
+		return false;
     }
 
+	public void unsummon(LivingEntity user, StandPower standPower) {
+		forceUnsummon(user, standPower);
+	}
 
-    @EventBusSubscriber
+	public void forceUnsummon(LivingEntity user, StandPower standPower) {
+		if (standPower.isSummoned()) {
+			standPower.setSummonedStand(null);
+			if (user != null && !user.level().isClientSide()) {
+				PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, new TrNonEntityStandSummonPacket(user.getId(), false));
+				if (playUnsummonSound) {
+					PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, StandSkinSoundPacket.play(
+							user.position(), ModSoundEvents.STAND_UNSUMMON,
+							standPower, user.getSoundSource(), 1, 1));
+				}
+			}
+		}
+	}
+
+
+
+	@EventBusSubscriber
     public static class EmperorGive{
 
         @SubscribeEvent(priority = EventPriority.HIGH)
