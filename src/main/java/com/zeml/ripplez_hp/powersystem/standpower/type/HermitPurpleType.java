@@ -6,7 +6,17 @@ import java.util.function.BiConsumer;
 
 
 import com.github.standobyte.jojo.client.entityrender.ModelUtil;
+import com.github.standobyte.jojo.client.entityrender.stand.StandEntityRenderState;
+import com.github.standobyte.jojo.client.entityrender.stand.StandEntityRenderer;
+import com.github.standobyte.jojo.init.ModSoundEvents;
 import com.github.standobyte.jojo.mechanics.clothes.mannequin.MannequinEntity;
+import com.github.standobyte.jojo.network.s2c.StandSkinSoundPacket;
+import com.github.standobyte.jojo.network.s2c.TrNonEntityStandSummonPacket;
+import com.github.standobyte.jojo.powersystem.standpower.client_screens.StandInfoScreen;
+import com.github.standobyte.jojo.powersystem.standpower.entity.EntityStandType;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.LivingEntity;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.joml.Quaternionf;
 
 import com.github.standobyte.jojo.client.standskin.StandSkin;
@@ -27,10 +37,47 @@ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.monster.Zombie;
 
-public class HermitPurpleType extends StandType {
+public class HermitPurpleType extends EntityStandType {
     public HermitPurpleType(StandStats stats, MovesetBuilder moveset, ResourceLocation id) {
         super(stats, moveset, id);
     }
+
+	public boolean summon(LivingEntity user, StandPower standPower){
+		if (!standPower.isSummoned() && standPower.canUsePower()) {
+			SummonedStand summonedStand = makeSummonedStand();
+			if (summonedStand == null) return false;
+
+			standPower.setSummonedStand(summonedStand);
+			if (user != null && !user.level().isClientSide()) {
+				PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, new TrNonEntityStandSummonPacket(user.getId(), true));
+				if (playSummonSound) {
+					PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, StandSkinSoundPacket.play(
+							user.position(), ModSoundEvents.STAND_SUMMON,
+							standPower, user.getSoundSource(), 1, 1));
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+    public void unsummon(LivingEntity user, StandPower standPower) {
+		forceUnsummon(user, standPower);
+	}
+
+	public void forceUnsummon(LivingEntity user, StandPower standPower) {
+		if (standPower.isSummoned()) {
+			standPower.setSummonedStand(null);
+			if (user != null && !user.level().isClientSide()) {
+				PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, new TrNonEntityStandSummonPacket(user.getId(), false));
+				if (playUnsummonSound) {
+					PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, StandSkinSoundPacket.play(
+							user.position(), ModSoundEvents.STAND_UNSUMMON,
+							standPower, user.getSoundSource(), 1, 1));
+				}
+			}
+		}
+	}
 
 	
     @Override
@@ -76,6 +123,7 @@ public class HermitPurpleType extends StandType {
 		        gui.pose().popPose();
 		        Lighting.setupFor3DItems();
 			}
+
 
 		};
 	}
