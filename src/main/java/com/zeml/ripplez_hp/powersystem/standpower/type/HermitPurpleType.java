@@ -37,6 +37,8 @@ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.monster.Zombie;
 
+import static com.github.standobyte.jojo.client.standskin.StandSkinsScreen.renderStandModel;
+
 public class HermitPurpleType extends EntityStandType {
     public HermitPurpleType(StandStats stats, MovesetBuilder moveset, ResourceLocation id) {
         super(stats, moveset, id);
@@ -85,7 +87,6 @@ public class HermitPurpleType extends EntityStandType {
 		return new StandSkinsScreen.SkinView(this, skin, screen, x, y, standY, row, column, isBottomRow) {
 
 
-
 			@Override
 			public void renderStand(GuiGraphics gui, int mouseX, int mouseY, float ticks, boolean isHovered, 
 					float posX, float posY, float scale, float scaleZoom, 
@@ -124,7 +125,26 @@ public class HermitPurpleType extends EntityStandType {
 		        Lighting.setupFor3DItems();
 			}
 
+			@Override
+			public void renderInStandInfo(GuiGraphics gui, int mouseX, int mouseY, float ticks, float windowX, float windowY, float scale) {
+				if (standType instanceof EntityStandType) {
+					PoseStack poseStack = gui.pose();
+//				float angle = (float) -Math.PI / 12;
+					float angle = 0;
 
+					windowY += StandInfoScreen.spHairTmpCrutch(standType);
+
+					poseStack.pushPose();
+					poseStack.translate(0, 0, -100);
+					renderStandModel(gui, windowX + 45, windowY + 150, scale, 1,
+							(float) Math.PI + angle, 0, 0, 0,
+							(EntityStandType) standType, skin,
+							(renderer, renderState) -> renderer.extractSkinMenuRenderState(renderState, skin, standType.getId(), 0,  0xFFFFFFFF, StandEntityRenderer.MenuType.STAND_INFO));
+
+					poseStack.popPose();
+
+				}
+			}
 		};
 	}
 
