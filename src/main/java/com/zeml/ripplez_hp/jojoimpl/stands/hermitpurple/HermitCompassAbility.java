@@ -57,18 +57,21 @@ public class HermitCompassAbility extends HermitAction{
         return super.replaceWithSubAbility(context, abilities);
     }
 
+
     @Override
-    public ConditionCheck checkConditions(Power<?> context) {
+    public ConditionCheck checkSpecificConditions(Power<?> context) {
         ItemStack stack = context.getUser().getItemInHand(InteractionHand.OFF_HAND);
         ItemStack main = context.getUser().getMainHandItem();
         if(context.getUser() != null && stack.is(Items.COMPASS)){
             if((main.isEmpty() && stack.getCount()>1)||(stack.getCount()==1)){
-                return super.checkConditions(context);
+                return ConditionCheck.POSITIVE;
 
             }
         }
         return ConditionCheck.NEGATIVE;
     }
+
+
 
 
     @Override

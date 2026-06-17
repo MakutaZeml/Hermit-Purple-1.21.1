@@ -16,6 +16,8 @@ public class AddonSoundEvents {
 	public static final DeferredHolder<SoundEvent, SoundEvent> HP_VINE_THROW = SOUNDS.register("vine_throw", SoundEvent::createVariableRangeEvent);
 	public static final DeferredHolder<SoundEvent, SoundEvent> HP_VINE_SWING = SOUNDS.register("vine_swing", SoundEvent::createVariableRangeEvent);
 	public static final DeferredHolder<SoundEvent, SoundEvent> HP_VINE_CATCH = SOUNDS.register("hp_grapple", SoundEvent::createVariableRangeEvent);
+	public static final DeferredHolder<SoundEvent, SoundEvent> HP_TENSION = SOUNDS.register("hp_tension", SoundEvent::createVariableRangeEvent);
+
 	public static final DeferredHolder<SoundEvent, SoundEvent> EMP_SHOT = SOUNDS.register("emp_shot", SoundEvent::createVariableRangeEvent);
 
 

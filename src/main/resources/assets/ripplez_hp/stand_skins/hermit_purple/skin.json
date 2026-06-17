@@ -1,5 +1,11 @@
 {  
 	"stand_type": "ripplez_hp:hermit_purple",
-	"color" : "#F070D0",
+	"color" : {
+		"primary": "#F070D0",
+		"secondary": "#9E69CB",
+		"text": "#F070D0",
+		"text_white_bg": "#c70fef",
+		"aura": "#c70fef"
+	},
 	"story_part": "jojo_ripples:p3"
 }

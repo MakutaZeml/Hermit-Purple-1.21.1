@@ -8,8 +8,7 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 
 public class HermitPurpleVinesModel extends HumanoidModel {
-    public final ModelPart vines;
-    public final ModelPart grab_vine;
+
     public final ModelPart main_vine;
     public final ModelPart main_vine2;
     public final ModelPart main_vine3;
@@ -17,11 +16,9 @@ public class HermitPurpleVinesModel extends HumanoidModel {
     public HermitPurpleVinesModel(ModelPart root) {
         super(HumanoidPlayerModel.addMissingBoneDefinitions(root));
         
-        this.vines = ((Model_1_21_2plus) this).jojo_ripples$getAnyDescendantWithName("vines").orElse(null);
-        this.grab_vine = ((Model_1_21_2plus) this).jojo_ripples$getAnyDescendantWithName("hidden#grab_vine").orElse(null);
-        this.main_vine = ((Model_1_21_2plus) this).jojo_ripples$getAnyDescendantWithName("hidden#main_vine").orElse(null);
-        this.main_vine2 = ((Model_1_21_2plus) this).jojo_ripples$getAnyDescendantWithName("hidden#main_vine2").orElse(null);
-        this.main_vine3 = ((Model_1_21_2plus) this).jojo_ripples$getAnyDescendantWithName("hidden#main_vine3").orElse(null);
+        this.main_vine = ((Model_1_21_2plus) this).jojo_ripples$getAnyDescendantWithName("hidden.main_vine").orElse(null);
+        this.main_vine2 = ((Model_1_21_2plus) this).jojo_ripples$getAnyDescendantWithName("hidden.second_vine").orElse(null);
+        this.main_vine3 = ((Model_1_21_2plus) this).jojo_ripples$getAnyDescendantWithName("hidden.third_vine").orElse(null);
 
 
         HiddenModelPartsUtil.initHiddenParts(this);

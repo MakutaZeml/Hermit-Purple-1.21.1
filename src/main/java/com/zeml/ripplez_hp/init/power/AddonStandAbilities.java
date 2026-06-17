@@ -1,11 +1,14 @@
 package com.zeml.ripplez_hp.init.power;
 
 import static com.github.standobyte.jojo.core.JojoRegistries.ABILITY_TYPES;
+import static com.github.standobyte.jojo.init.power.ModStandAbilities.STAND_EFFECT_TYPES;
 
+import com.github.standobyte.jojo.entityattachment.custom_effect.EntityCustomEffectType;
 import com.github.standobyte.jojo.powersystem.ability.AbilityType;
 
 import com.zeml.ripplez_hp.jojoimpl.stands.emperor.*;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.*;
+import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.WeakBlockEffect;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 public final class AddonStandAbilities {
@@ -40,6 +43,11 @@ public final class AddonStandAbilities {
 			"hp_select", key -> new AbilityType<>(key, OpenTargetAbility::new)
 	);
 
+	public static final DeferredHolder<AbilityType<?>, AbilityType<WeakBlockAbiliy>> WEAK_BLOCK = ABILITY_TYPES.register(
+			"hp_weak", key -> new AbilityType<>(key, WeakBlockAbiliy::new)
+	);
+	public static final DeferredHolder<EntityCustomEffectType<?>, EntityCustomEffectType<WeakBlockEffect>> WEAK_BLOCK_EFFECT = STAND_EFFECT_TYPES.register(
+			"hp_weak_block", key -> new EntityCustomEffectType<>(key, WeakBlockEffect::new));
 	public static final DeferredHolder<AbilityType<?>, AbilityType<TargetSelectAbility>> EMP_TARGET = ABILITY_TYPES.register(
 			"emp_target", key -> new AbilityType<>(key, TargetSelectAbility::new)
 	);
