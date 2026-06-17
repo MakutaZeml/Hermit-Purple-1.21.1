@@ -10,6 +10,8 @@ import com.github.standobyte.jojo.client.firstperson.FirstPersonModelLayer;
 import com.github.standobyte.jojo.client.standskin.StandSkin;
 import com.github.standobyte.jojo.client.standskin.StandSkinsLoader;
 import com.github.standobyte.jojo.mechanics.clothes.mannequin.MannequinEntity;
+import com.github.standobyte.jojo.powersystem.entityaction.ActionOBB;
+import com.github.standobyte.jojo.powersystem.entityaction.LivingComponentAction;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.github.standobyte.v1_21_4_stuff.renderstate.EntityRenderState;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -20,12 +22,10 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 
 public class HermitPurpleVinesLayer <T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M> {
@@ -42,6 +42,7 @@ public class HermitPurpleVinesLayer <T extends LivingEntity, M extends HumanoidM
         if(!ClientGlobals.canSeeStands || (t.isInvisible() && !(t instanceof MannequinEntity))){
             return;
         }
+
         StandPower standData = StandPower.get(t);
         if(standData != null && standData.getPowerType() == AddonStands.HERMIT_PURPLE.get() && standData.isSummoned()){
             StandSkin standSkin = StandSkinsLoader.getInstance().getSkin(standData);
@@ -49,16 +50,17 @@ public class HermitPurpleVinesLayer <T extends LivingEntity, M extends HumanoidM
             M parentModel = getParentModel();
 
             HermitPurpleVinesModel purpleModel = this.purpleModel.getModel(standSkin);
-            
+
             purpleModel.setAllVisible(true);
             parentModel.copyPropertiesTo(purpleModel);
-            
+
             EntityRenderState.resetPose(purpleModel);
+
             if (((IHumanoidAnimModel) parentModel).jojo_rippes$isPlayingAnimation()) {
                 AnimFramePose curPlayerPose = AnimFramePose.reused;
+                HermitPurpleAddon.getLogger().debug("Is this working {}", curPlayerPose);
                 RotpAnimDefinition.animate(purpleModel, curPlayerPose);
             }
-            
             VertexConsumer ivertexbuilder = buffer.getBuffer(RenderType.entityCutoutNoCull(texture));
             purpleModel.renderToBuffer(poseStack,ivertexbuilder,packedLight, OverlayTexture.NO_OVERLAY);
 

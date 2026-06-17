@@ -28,7 +28,10 @@
     "subtitle": "ripplez_hp.subtitle.grapple",
     "sounds": [ "ripplez_hp:hermit_purple/hp_grapple_1","ripplez_hp:hermit_purple/hp_grapple_2","ripplez_hp:hermit_purple/hp_grapple_3" ]
   },
-
+  "hp_tension": {
+    "subtitle": "ripplez_hp.subtitle.grapple",
+    "sounds": [ "ripplez_hp:hermit_purple/hp_grapple_1","ripplez_hp:hermit_purple/hp_grapple_2" ]
+  },
   "emp_shot": {
     "subtitle": "ripplez_hp.subtitle.emp_shot",
     "sounds": ["ripplez_hp:emperor/shot_1","ripplez_hp:emperor/shot_2"]

@@ -17,6 +17,7 @@ import com.github.standobyte.jojo.subsystems.hitboxes.OBBCollisionUtil;
 import com.github.standobyte.jojo.subsystems.hitboxes.OrientedBoundingBox;
 import com.github.standobyte.jojo.util.functions.DamageUtil;
 import com.github.standobyte.jojo.util.functions.MathUtil;
+import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -71,11 +72,10 @@ public class HermitHeavyVineWhip extends HermitAction{
 
         @Override
         public void onActionSet(@Nullable EntityActionInstance prevAction) {
-            setStandOffset(0, 1.5, StandOffsetFromUser.Rotations.HEAD_XY, true);
-            OrientedBoundingBox obb = new OrientedBoundingBox(new Vec3(0, 1.35, 0), 1d, 1d, 1d, getPerformer().getYRot(), getPerformer().getXRot());
-            this.vines = new ExtendableOBB(obb, .8F, phasesLength.get(ActionPhase.PERFORM).intValue()+phasesLength.get(ActionPhase.RECOVERY).intValue(),
-                    phasesLength.get(ActionPhase.PERFORM).intValue()+phasesLength.get(ActionPhase.RECOVERY).intValue()-5,
-                    new Vec3(0, 1.35, 0));
+                OrientedBoundingBox obb = new OrientedBoundingBox(new Vec3(0, 1.35, 0), 1d, 1d, 1d, getPerformer().getYRot(), getPerformer().getXRot());
+                this.vines = new ExtendableOBB(obb, .8F, phasesLength.get(ActionPhase.PERFORM).intValue()+phasesLength.get(ActionPhase.RECOVERY).intValue(),
+                        phasesLength.get(ActionPhase.PERFORM).intValue()+phasesLength.get(ActionPhase.RECOVERY).intValue()-5,
+                        new Vec3(0, 1.35, 0));
         }
 
         @Override
@@ -94,7 +94,6 @@ public class HermitHeavyVineWhip extends HermitAction{
 
         @Override
         public void actionTick() {
-            performer.setYBodyRot(performer.yHeadRot);
             if (getPhase() == ActionPhase.PERFORM && extendableOBB() != null){
                 Vec3 pos = getPerformer().position();
                 Vec3 offset = new Vec3(0.0, 1.5, 0.2)
@@ -117,14 +116,20 @@ public class HermitHeavyVineWhip extends HermitAction{
                                     if(!mainHand.isEmpty()){
                                         cloned = mainHand.copyAndClear();
                                         ItemEntity itemEntity = new ItemEntity(this.level(),livingEntity.getX(),livingEntity.getY(),livingEntity.getZ(),cloned);
+                                        itemEntity.copyPosition(livingEntity);
                                         itemEntity.setPickUpDelay(100);
                                         level().addFreshEntity(itemEntity);
-
+                                        itemEntity.setDeltaMovement(new Vec3(0,1,0));
+                                        HermitPurpleAddon.getLogger().debug("Pos {} {}", itemEntity.position(),livingEntity.position());
                                     }else if(!offHand.isEmpty()){
                                         cloned = offHand.copyAndClear();
                                         ItemEntity itemEntity = new ItemEntity(this.level(),livingEntity.getX(),livingEntity.getY(),livingEntity.getZ(),cloned);
+                                        itemEntity.copyPosition(livingEntity);
                                         itemEntity.setPickUpDelay(100);
+                                        itemEntity.copyPosition(livingEntity);
                                         level().addFreshEntity(itemEntity);
+                                        itemEntity.setDeltaMovement(new Vec3(0,1,0));
+                                        HermitPurpleAddon.getLogger().debug("Pos {} {}", itemEntity.position(),livingEntity.position());
                                     }
                                 }
                             }
@@ -140,7 +145,6 @@ public class HermitHeavyVineWhip extends HermitAction{
                     if (result instanceof BlockHitResult blockHitResult){
                         BlockState blockCollision = OBBCollisionUtil.getCollidingBlock(level(), blockHitResult.getBlockPos());
                         if (blockCollision != null){
-                            // TODO Add button, lever and other interactions
                             HermitPurpleBlock.blockInteraction(level(),blockHitResult.getBlockPos());
                             this.extendableOBB().forceRetract(level(), getPerformer(), this.id);
                         }

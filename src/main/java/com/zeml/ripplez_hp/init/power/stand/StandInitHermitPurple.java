@@ -34,6 +34,7 @@ public class StandInitHermitPurple {
                         .addAbility("hp_compass",AddonStandAbilities.COMPASS_DIVINATION, compass -> compass.isSubAbility = true)
                         .addAbility("hp_block", AddonStandAbilities.THORNS)
                         .addAbility("cringe", AddonStandAbilities.CRINGE)
+                        .addAbility("hp_weak",AddonStandAbilities.WEAK_BLOCK)
 
 
                         .makeControlScheme("hotbar")
@@ -46,6 +47,7 @@ public class StandInitHermitPurple {
                         .addToHotbar("hp_doxx",0,InputMethod.CLICK)
                         .addToHotbar("hp_block",0,InputMethod.HOLD)
                         .addToHotbar("cringe",0,InputMethod.CLICK)
+                        .addToHotbar("hp_weak",0,InputMethod.HOLD)
 
                         .finalizeControlScheme()
 
@@ -56,8 +58,9 @@ public class StandInitHermitPurple {
                         .addSkill(StandUnlockableSkill.startingAbility("hp_target"))
                         .addSkill(StandUnlockableSkill.unlockableAbility("hp_block",50))
                         .addSkill(StandUnlockableSkill.unlockableAbility("cringe",20))
+                        .addSkill(StandUnlockableSkill.unlockableAbility("hp_weak",25))
                 ,id
-        );
+        ).init(stand -> stand.discStoryPartPriority = 1);
     }
 
 }

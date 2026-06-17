@@ -59,10 +59,7 @@ public class MapDoxingAbility extends HermitAction {
         setDefaultPhaseLength(ActionPhase.WINDUP,20);
     }
 
-    @Override
-    public ConditionCheck checkConditions(Power<?> context) {
-        return super.checkConditions(context);
-    }
+
 
     @Override
     public ConditionCheck checkSpecificConditions(Power<?> context) {

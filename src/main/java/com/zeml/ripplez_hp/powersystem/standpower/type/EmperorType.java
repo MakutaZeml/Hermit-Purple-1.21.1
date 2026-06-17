@@ -21,6 +21,7 @@ import com.zeml.ripplez_hp.init.power.AddonStands;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -42,25 +43,40 @@ public class EmperorType extends EntityStandType {
         super(stats, moveset, id);
     }
 
+	@Override
+	public void onUserSummonCommand(LivingEntity user, StandPower standPower) {
+		if (!standPower.isSummoned() && onTrySummon(user, standPower)) {
+			summon(user, standPower);
+		}
+		else {
+			unsummon(user, standPower);
+		}
+	}
+
     @Override
     public boolean summon(LivingEntity user, StandPower standPower) {
         EmperorUtil.giveEmperor(user,standPower);
 		if (!standPower.isSummoned() && standPower.canUsePower()) {
-			SummonedStand summonedStand = makeSummonedStand();
-			if (summonedStand == null) return false;
-
-			standPower.setSummonedStand(summonedStand);
-			if (user != null && !user.level().isClientSide()) {
-				PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, new TrNonEntityStandSummonPacket(user.getId(), true));
-				if (playSummonSound) {
-					PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, StandSkinSoundPacket.play(
-							user.position(), ModSoundEvents.STAND_SUMMON,
-							standPower, user.getSoundSource(), 1, 1));
+			SummonedStand summonedStand = this.makeSummonedStand();
+			if (summonedStand == null) {
+				return false;
+			} else {
+				standPower.setSummonedStand(summonedStand);
+				if (!user.level().isClientSide()) {
+					PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, new TrNonEntityStandSummonPacket(user.getId(), true), new CustomPacketPayload[0]);
+					if (this.playSummonSound) {
+						StandSkinSoundPacket soundPacket = StandSkinSoundPacket.play(user.position(), ModSoundEvents.STAND_SUMMON, standPower, user.getSoundSource(), 1.0F, 1.0F);
+						if (soundPacket != null) {
+							PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, soundPacket, new CustomPacketPayload[0]);
+						}
+					}
 				}
+
+				return true;
 			}
-			return true;
+		} else {
+			return false;
 		}
-		return false;
     }
 
 	public void unsummon(LivingEntity user, StandPower standPower) {
@@ -71,17 +87,21 @@ public class EmperorType extends EntityStandType {
 		if (standPower.isSummoned()) {
 			standPower.setSummonedStand(null);
 			if (user != null && !user.level().isClientSide()) {
-				PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, new TrNonEntityStandSummonPacket(user.getId(), false));
-				if (playUnsummonSound) {
-					PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, StandSkinSoundPacket.play(
-							user.position(), ModSoundEvents.STAND_UNSUMMON,
-							standPower, user.getSoundSource(), 1, 1));
+				PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, new TrNonEntityStandSummonPacket(user.getId(), false), new CustomPacketPayload[0]);
+				if (this.playUnsummonSound) {
+					StandSkinSoundPacket soundPacket = StandSkinSoundPacket.play(user.position(), ModSoundEvents.STAND_UNSUMMON, standPower, user.getSoundSource(), 1.0F, 1.0F);
+					if (soundPacket != null) {
+						PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, soundPacket, new CustomPacketPayload[0]);
+					}
 				}
 			}
 		}
 	}
 
 
+	public boolean showHUD(StandPower standPower) {
+		return standPower.isSummoned();
+	}
 
 	@EventBusSubscriber
     public static class EmperorGive{

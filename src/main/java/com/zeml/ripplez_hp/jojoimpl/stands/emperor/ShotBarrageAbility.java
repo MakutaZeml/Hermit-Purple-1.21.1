@@ -33,7 +33,7 @@ public class ShotBarrageAbility extends EntityActionAbility {
     }
 
     @Override
-    public ConditionCheck checkConditions(Power<?> context) {
+    public ConditionCheck checkSpecificConditions(Power<?> context) {
         LivingEntity user = context.getUser();
         if(user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem emperorItem){
             if(user instanceof Player player && player.getCooldowns().isOnCooldown(emperorItem)){
