@@ -31,7 +31,7 @@ public class StandInitEmperor {
                         .addAbility("emp_d_target",AddonStandAbilities.EMP_D_TARGET)
                         .addAbility("emp_stand_target",AddonStandAbilities.EMP_STAND_TARGET)
                         .addAbility("emp_delete_target",AddonStandAbilities.EMP_DELETE_TARGET)
-
+                        .addAbility("test",AddonStandAbilities.TEST)
 
                         .makeControlScheme("hotbar")
                         .bind("emp_shot",InputMethod.CLICK,InputKey.RMB)
@@ -42,6 +42,7 @@ public class StandInitEmperor {
                         .addHotbarSlotVariation("emp_d_target","emp_target", InputKey.Modifier.CONTROL,InputMethod.CLICK)
                         .addToHotbar("emp_stand_target",0,InputMethod.CLICK)
                         .addToHotbar("emp_delete_target",0,InputMethod.CLICK)
+                        .addToHotbar("test",0,InputMethod.CLICK)
 
                         .finalizeControlScheme()
 

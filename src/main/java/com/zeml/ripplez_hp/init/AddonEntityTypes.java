@@ -1,6 +1,7 @@
 package com.zeml.ripplez_hp.init;
 
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
+import com.zeml.ripplez_hp.jojoimpl.stands.emperor.entity.BulletPilot;
 import com.zeml.ripplez_hp.jojoimpl.stands.emperor.entity.EmperorBulletEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -18,15 +19,20 @@ public final class AddonEntityTypes {
 	
 	@SubscribeEvent
 	public static void registerAttributes(EntityAttributeCreationEvent event) {
-//		event.put(EXAMPLE.get(), ArmorStand.createAttributes().build());
+		event.put(EMPEROR_RIDER.get(),BulletPilot.createAttributes().build());
 	}
 
 	public static final DeferredHolder<EntityType<?>, EntityType<EmperorBulletEntity>> EMPEROR_BULLET = ENTITY_TYPES.register("emperor_bullet", key ->
 			EntityType.Builder.<EmperorBulletEntity>of(EmperorBulletEntity::new, MobCategory.MISC)
 			.sized(0.0625F, 0.0625F)
-			.clientTrackingRange(10)
+			.clientTrackingRange(20)
 			.build(createIDFor(key)));
 
+	public static final DeferredHolder<EntityType<?>, EntityType<BulletPilot>> EMPEROR_RIDER = ENTITY_TYPES.register("emperor_rider", key ->
+			EntityType.Builder.<BulletPilot>of(BulletPilot::new, MobCategory.MISC)
+					.sized(0F, 0F)
+					.clientTrackingRange(30)
+					.build(createIDFor(key)));
 
 	
 	public static String createIDFor(ResourceLocation key) {

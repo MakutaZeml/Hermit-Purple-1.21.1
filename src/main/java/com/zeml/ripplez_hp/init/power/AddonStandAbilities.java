@@ -73,6 +73,11 @@ public final class AddonStandAbilities {
 			"emp_shot_barrage", key -> new AbilityType<>(key, ShotBarrageAbility::new)
 	);
 
+	public static final DeferredHolder<AbilityType<?>, AbilityType<TestingAbility>> TEST = ABILITY_TYPES.register(
+			"test", key -> new AbilityType<>(key, TestingAbility::new)
+	);
 
+	public static final DeferredHolder<EntityCustomEffectType<?>, EntityCustomEffectType<GuidedBulletEffect>> GUIDED_BULLET = STAND_EFFECT_TYPES.register(
+			"emp_guided_bullet", key -> new EntityCustomEffectType<>(key, GuidedBulletEffect::new));
 
 }
