@@ -17,5 +17,7 @@ public final class AddonDataAttachmentTypes {
 			()-> AttachmentType.builder(HermitTargetData::new).build()
 			);
 
+	public static final Supplier<AttachmentType<Boolean>> GUIDED = ATTACHMENT_TYPES.register("guided",
+			()-> AttachmentType.builder(()->false).build());
 
 }

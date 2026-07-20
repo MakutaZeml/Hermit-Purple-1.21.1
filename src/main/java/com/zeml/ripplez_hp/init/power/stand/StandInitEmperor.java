@@ -31,18 +31,19 @@ public class StandInitEmperor {
                         .addAbility("emp_d_target",AddonStandAbilities.EMP_D_TARGET)
                         .addAbility("emp_stand_target",AddonStandAbilities.EMP_STAND_TARGET)
                         .addAbility("emp_delete_target",AddonStandAbilities.EMP_DELETE_TARGET)
-                        .addAbility("test",AddonStandAbilities.TEST)
+                        .addAbility("guide_emp",AddonStandAbilities.EMP_GUIDE)
+                        .addAbility("emp_mode",AddonStandAbilities.EMP_MODE)
 
                         .makeControlScheme("hotbar")
                         .bind("emp_shot",InputMethod.CLICK,InputKey.RMB)
                         .bind("emp_shot_barrage", InputMethod.HOLD, InputKey.RMB)
+                        .bind("emp_mode",InputMethod.CLICK,InputKey.MMB)
 
                         .makeHotbar(0, ModStands.USE_SPECIAL, ModStands.SWITCH_SPECIAL)
                         .addToHotbar("emp_target",0,InputMethod.CLICK)
                         .addHotbarSlotVariation("emp_d_target","emp_target", InputKey.Modifier.CONTROL,InputMethod.CLICK)
                         .addToHotbar("emp_stand_target",0,InputMethod.CLICK)
                         .addToHotbar("emp_delete_target",0,InputMethod.CLICK)
-                        .addToHotbar("test",0,InputMethod.CLICK)
 
                         .finalizeControlScheme()
 
@@ -50,8 +51,8 @@ public class StandInitEmperor {
                         .addSkill(StandUnlockableSkill.startingAbility("emp_shot_barrage"))
                         .addSkill(StandUnlockableSkill.startingAbility("emp_target"))
                         .addSkill(StandUnlockableSkill.unlockableAbility("emp_stand_target",50))
-                        .addSkill(StandUnlockableSkill.tiedToMainSkill("emp_delete_target","emp_stand_target"))
-
+                        .addSkill(StandUnlockableSkill.unlockableAbility("emp_delete_target",0).prerequisiteSkill("emp_stand_target"))
+                        .addSkill(StandUnlockableSkill.unlockableAbility("guide_emp",100).prerequisiteSkill("emp_stand_target"))
                 ,id);
     }
 }

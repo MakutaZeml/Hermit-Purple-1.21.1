@@ -1,5 +1,6 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple;
 
+import com.github.standobyte.jojo.mechanics.voiceline.VoiceLineServerSide;
 import com.github.standobyte.jojo.powersystem.Power;
 import com.github.standobyte.jojo.powersystem.PowerClass;
 import com.github.standobyte.jojo.powersystem.ability.Ability;
@@ -185,9 +186,8 @@ public class HermitCompassAbility extends HermitAction{
                         }else {
                             this.brujula = user.getItemInHand(InteractionHand.OFF_HAND);
                         }
-                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(user,
-                                new StandSoundPacket(user.getId(), AddonSoundEvents.USER_HP,false,1,1));
-                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(user,
+                        VoiceLineServerSide.play(user,AddonSoundEvents.DIVINATION,0,false);
+                       PacketDistributor.sendToPlayersTrackingEntityAndSelf(user,
                                 new StandSoundPacket(user.getId(),AddonSoundEvents.SUMMON_HP,true,1,1));
 
                     }

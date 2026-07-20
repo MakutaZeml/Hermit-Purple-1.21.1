@@ -4,6 +4,7 @@ import com.github.standobyte.jojo.init.ModStatusEffects;
 import com.github.standobyte.jojo.powersystem.Power;
 import com.github.standobyte.jojo.powersystem.ability.AbilityId;
 import com.github.standobyte.jojo.powersystem.ability.AbilityType;
+import com.github.standobyte.jojo.powersystem.ability.AbilityUsageGroup;
 import com.github.standobyte.jojo.powersystem.ability.EntityActionAbility;
 import com.github.standobyte.jojo.powersystem.ability.condition.ConditionCheck;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionAnimIdentifier;
@@ -27,6 +28,7 @@ public class ShotBarrageAbility extends EntityActionAbility {
 
     public ShotBarrageAbility(AbilityType<?> abilityType, AbilityId abilityId) {
         super(abilityType, abilityId, EmperorBarrage::new);
+        usageGroup = AbilityUsageGroup.COMBAT;
         setDefaultPhaseLength(ActionPhase.WINDUP,5);
         setDefaultPhaseLength(ActionPhase.PERFORM,10);
         setDefaultPhaseLength(ActionPhase.RECOVERY,2);

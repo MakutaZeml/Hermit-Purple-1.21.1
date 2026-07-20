@@ -10,6 +10,7 @@ import com.github.standobyte.jojo.client.entityrender.stand.StandEntityRenderSta
 import com.github.standobyte.jojo.client.entityrender.stand.StandEntityRenderer;
 import com.github.standobyte.jojo.init.ModSoundEvents;
 import com.github.standobyte.jojo.mechanics.clothes.mannequin.MannequinEntity;
+import com.github.standobyte.jojo.mechanics.voiceline.VoiceLineServerSide;
 import com.github.standobyte.jojo.network.s2c.StandSkinSoundPacket;
 import com.github.standobyte.jojo.network.s2c.TrNonEntityStandSummonPacket;
 import com.github.standobyte.jojo.powersystem.standpower.client_screens.StandInfoScreen;
@@ -69,6 +70,9 @@ public class HermitPurpleType extends EntityStandType {
 						if (soundPacket != null) {
 							PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, soundPacket, new CustomPacketPayload[0]);
 						}
+					}
+					if (!user.isShiftKeyDown()) {
+						VoiceLineServerSide.play(user, ModSoundEvents.VOICELINE_STAND_SUMMON);
 					}
 				}
 

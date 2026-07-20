@@ -1,9 +1,12 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.emperor;
 
 import com.github.standobyte.jojo.powersystem.Power;
+import com.github.standobyte.jojo.powersystem.PowerClass;
+import com.github.standobyte.jojo.powersystem.ability.Ability;
 import com.github.standobyte.jojo.powersystem.ability.AbilityId;
 import com.github.standobyte.jojo.powersystem.ability.AbilityType;
 import com.github.standobyte.jojo.powersystem.ability.EntityActionAbility;
+import com.github.standobyte.jojo.powersystem.ability.condition.AvailableAbilities;
 import com.github.standobyte.jojo.powersystem.ability.condition.ConditionCheck;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionAnimIdentifier;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionPhase;
@@ -11,27 +14,36 @@ import com.github.standobyte.jojo.powersystem.entityaction.EntityActionInstance;
 import com.github.standobyte.jojo.powersystem.entityaction.type.EntityActionType;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
+import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import com.zeml.ripplez_hp.init.power.AddonStandAbilities;
 import com.zeml.ripplez_hp.jojoimpl.stands.emperor.entity.BulletPilot;
 import com.zeml.ripplez_hp.jojoimpl.stands.emperor.entity.EmperorBulletEntity;
 import com.zeml.ripplez_hp.mc.item.EmperorItem;
-import com.zeml.ripplez_hp.mc.item.component.EmperorGunData;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Optional;
+public class GuideBulletAbility extends EntityActionAbility {
 
-public class TestingAbility extends EntityActionAbility {
-
-    public TestingAbility(AbilityType<?> abilityType, AbilityId abilityId) {
-        super(abilityType, abilityId, Test::new);
+    public GuideBulletAbility(AbilityType<?> abilityType, AbilityId abilityId) {
+        super(abilityType, abilityId, Guided::new);
         setDefaultPhaseLength(ActionPhase.WINDUP,5);
+    }
+
+    @Nullable
+    @Override
+    public Ability replaceWithSubAbility(Power<?> context, AvailableAbilities abilities) {
+        StandPower standPower = PowerClass.STAND.cast(context);
+        if(context.getUser() != null && context.getUser().getData(AddonDataAttachmentTypes.GUIDED)
+                && standPower != null){
+            abilities.replaceOtherAbilityWith(context,"emp_shot",this);
+        }
+        return super.replaceWithSubAbility(context, abilities);
     }
 
     @Override
@@ -53,8 +65,8 @@ public class TestingAbility extends EntityActionAbility {
     }
 
 
-    public static class Test extends EntityActionInstance {
-        public Test(EntityActionType ability) {
+    public static class Guided extends EntityActionInstance {
+        public Guided(EntityActionType ability) {
             super(ability);
         }
 
@@ -77,21 +89,11 @@ public class TestingAbility extends EntityActionAbility {
                 level().addFreshEntity(bulletPilot);
                 GuidedBulletEffect effect = AddonStandAbilities.GUIDED_BULLET.get().create(level());
                 power.userStandEffects.addEffect(effect.withTarget(bulletPilot));
+                if(level().isClientSide){
+                    power.userStandEffects.addEffect(effect.withTarget(bulletPilot));
+                }
             }
 
-
-            /*
-            if(performer != null){
-                List<Entity> list = level().getEntities(performer,performer.getBoundingBox().inflate(10),entity -> entity.isAlive() && entity != performer);
-                Entity entity = list.getFirst();
-                if(entity instanceof LivingEntity living){
-                    GuidedBulletEffect effect = AddonStandAbilities.GUIDED_BULLET.get().create(level());
-                    StandPower standPower = StandPower.get(performer);
-                    if(standPower != null){
-                        standPower.userStandEffects.addEffect(effect.withTarget(living));
-                    }
-                }
-            }*/
         }
     }
 

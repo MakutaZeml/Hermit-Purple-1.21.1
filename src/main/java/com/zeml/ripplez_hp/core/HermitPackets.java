@@ -2,6 +2,7 @@ package com.zeml.ripplez_hp.core;
 
 import com.zeml.ripplez_hp.core.packets.client.SetColorPacket;
 import com.zeml.ripplez_hp.core.packets.client.SetTargetPacket;
+import com.zeml.ripplez_hp.core.packets.server.GuidedPacket;
 import com.zeml.ripplez_hp.core.packets.server.HermitTargetDataPacket;
 import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -20,6 +21,7 @@ public class HermitPackets {
         registerPacket(registrar,PayloadRegistrar::playToServer, new SetColorPacket.Handler(HermitPurpleAddon.resLoc("color")));
         registerPacket(registrar,PayloadRegistrar::playToClient, new HermitTargetDataPacket.Handler(HermitPurpleAddon.resLoc("hermit_data")));
         registerPacket(registrar,PayloadRegistrar::playToClient, new StandSoundPacket.Handler(HermitPurpleAddon.resLoc("stand_sound")));
+        registerPacket(registrar,PayloadRegistrar::playToClient, new GuidedPacket.Handler(HermitPurpleAddon.resLoc("guided")));
 
     }
 
