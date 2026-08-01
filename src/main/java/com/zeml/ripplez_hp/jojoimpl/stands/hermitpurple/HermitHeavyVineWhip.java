@@ -1,6 +1,7 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple;
 
 import com.github.standobyte.jojo.init.ModDamageTypes;
+import com.github.standobyte.jojo.mechanics.voiceline.VoiceLineServerSide;
 import com.github.standobyte.jojo.powersystem.ability.AbilityId;
 import com.github.standobyte.jojo.powersystem.ability.AbilityType;
 import com.github.standobyte.jojo.powersystem.ability.AbilityUsageGroup;
@@ -87,6 +88,9 @@ public class HermitHeavyVineWhip extends HermitAction{
                 if(!standPower.isSummoned() && standPower.getPowerType() != null){
                     standPower.getPowerType().summon(user,standPower);
                 }
+            }
+            if(!level().isClientSide){
+                VoiceLineServerSide.play(performer, AddonSoundEvents.ATTACK,0,false);
             }
 
 

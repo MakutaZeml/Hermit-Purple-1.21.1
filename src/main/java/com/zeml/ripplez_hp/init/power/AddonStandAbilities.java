@@ -73,6 +73,15 @@ public final class AddonStandAbilities {
 			"emp_shot_barrage", key -> new AbilityType<>(key, ShotBarrageAbility::new)
 	);
 
+	public static final DeferredHolder<AbilityType<?>, AbilityType<GuideBulletAbility>> EMP_GUIDE = ABILITY_TYPES.register(
+			"emp_guide", key -> new AbilityType<>(key, GuideBulletAbility::new)
+	);
 
+	public static final DeferredHolder<AbilityType<?>, AbilityType<ChangeMode>> EMP_MODE = ABILITY_TYPES.register(
+			"emp_mode", key -> new AbilityType<>(key, ChangeMode::new)
+	);
+
+	public static final DeferredHolder<EntityCustomEffectType<?>, EntityCustomEffectType<GuidedBulletEffect>> GUIDED_BULLET = STAND_EFFECT_TYPES.register(
+			"emp_guided_bullet", key -> new EntityCustomEffectType<>(key, GuidedBulletEffect::new));
 
 }

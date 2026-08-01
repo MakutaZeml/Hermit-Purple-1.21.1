@@ -35,13 +35,13 @@ public class EmperorBulletRenderer extends SimpleEntityRenderer<EmperorBulletEnt
 
     @Override
     public ResourceLocation getTextureLocation(EmperorBulletEntity entity) {
-        if (this.texFromStandSkin) {
-            StandSkin standSkin = this.getStandSkin(entity);
+        if (getStandSkin(entity) != null) {
+            StandSkin standSkin = getStandSkin(entity);
             if (standSkin != null) {
-                return standSkin.getTexture(this.texPath);
+                return standSkin.getTexture(texPath);
             }
         }
-        return this.texPath;
+        return texPath;
     }
 
     @Override

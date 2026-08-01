@@ -2,6 +2,7 @@ package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple;
 
 import com.github.standobyte.jojo.init.ModDamageTypes;
 import com.github.standobyte.jojo.mechanics.resolve.ResolveModeEffect;
+import com.github.standobyte.jojo.mechanics.voiceline.VoiceLineServerSide;
 import com.github.standobyte.jojo.powersystem.Moveset;
 import com.github.standobyte.jojo.powersystem.Power;
 import com.github.standobyte.jojo.powersystem.PowerClass;
@@ -151,8 +152,9 @@ public class HermitVineWhip extends HermitAction{
                                 standPower.addExp(.05F);
                             }
                         }
-                        // TODO Add hamon interaction when implemented and Block Interaction
+                        // TODO Add hamon interaction when implemented
                     });
+                    VoiceLineServerSide.play(performer, AddonSoundEvents.ATTACK,0,false);
                 }
                 this.extendableOBB().tick();
 

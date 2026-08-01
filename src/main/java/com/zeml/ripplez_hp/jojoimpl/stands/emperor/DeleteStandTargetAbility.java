@@ -3,6 +3,7 @@ package com.zeml.ripplez_hp.jojoimpl.stands.emperor;
 import com.github.standobyte.jojo.powersystem.Power;
 import com.github.standobyte.jojo.powersystem.ability.AbilityId;
 import com.github.standobyte.jojo.powersystem.ability.AbilityType;
+import com.github.standobyte.jojo.powersystem.ability.AbilityUsageGroup;
 import com.github.standobyte.jojo.powersystem.ability.EntityActionAbility;
 import com.github.standobyte.jojo.powersystem.ability.condition.ConditionCheck;
 import com.github.standobyte.jojo.powersystem.ability.controls.InputMethod;
@@ -22,6 +23,7 @@ import java.util.Optional;
 public class DeleteStandTargetAbility extends EntityActionAbility {
     public DeleteStandTargetAbility(AbilityType<?> abilityType, AbilityId abilityId) {
         super(abilityType, abilityId);
+        usageGroup = AbilityUsageGroup.SPECIAL;
     }
 
     @Override

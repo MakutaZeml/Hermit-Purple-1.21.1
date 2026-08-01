@@ -1,0 +1,12 @@
+{
+  "vl_divination":{
+    "stand_type": "ripplez_hp:hermit_purple",
+    "subtitle": "ripplez_hp.vl_subtitle.hermit_purple",
+    "sounds": ["ripplez_hp:user/joseph_hp_1","ripplez_hp:user/joseph_hp_2"]
+  },
+  "vl_vine":{
+    "stand_type": "ripplez_hp:hermit_purple",
+    "subtitle": "ripplez_hp.vl_subtitle.hermit_purple",
+    "sounds": ["ripplez_hp:user/joseph_at_1","ripplez_hp:user/joseph_at_2","ripplez_hp:user/joseph_at_3"]
+  }
+}

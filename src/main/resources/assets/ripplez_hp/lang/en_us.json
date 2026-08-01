@@ -63,6 +63,10 @@
   "jojo_ripples.ability.emp_delete_target": "Delete Particular Target",
   "jojo_ripples.skill.emp_delete_target.desc": "Delete the Emperor's target entity",
   "jojo_ripples.skill.emp_delete_target.controls": "Click to delete the target",
+  "jojo_ripples.skill.guide_emp": "Shot Guided Bullet",
+  "jojo_ripples.ability.guide_emp": "Shot Guided Bullet",
+  "jojo_ripples.skill.guide_emp.desc": "Shot a single emperor that you can fully control",
+  "jojo_ripples.skill.guide_emp.controls": "",
 
   "filled_map.divination": "Spirit divination of %s",
 
@@ -76,8 +80,9 @@
   "gui.hermitpurpletarget.search_empty": "Couldn't find any target with that name",
 
   "ripplez_hp.subtitle.joseph_cringe": "\"OH NO CRINGE\"",
-  "ripplez_hp.subtitle.user_hp": "\"Hermito Purple\" ",
   "ripplez_hp.subtitle.emp_shot": "Emperor Shot",
+  "ripplez_hp.vl_subtitle.hermit_purple": "\"Hermit Purple\" ",
+  "ripplez_hp.subtitle.swing_vine": "Swing vine",
 
   "commands.hermit.target.failed": "Unable to set the target",
   "commands.hermit.target.succes": "%s was set as %s target",

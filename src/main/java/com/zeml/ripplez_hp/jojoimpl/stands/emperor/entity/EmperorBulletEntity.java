@@ -55,7 +55,18 @@ public class EmperorBulletEntity extends ModdedProjectileEntity {
     protected void moveProjectile() {
         super.moveProjectile();
         Entity target = this.homingTarget.getEntity(level());
-        if (target != null) {
+        if(!this.getPassengers().isEmpty()){
+            Entity entity = this.getPassengers().get(0);
+            double f = this.getDeltaMovement().length();
+            float xRot = entity.getViewXRot(1);
+            float yRot = entity.getViewYRot(1);
+            f = Math.max(f,.75);
+            double dX = Math.cos(-xRot*(float) Math.PI/180 ) *(Math.sin(-yRot * ((float)Math.PI / 180F)) * f);
+            double dY = f* Math.sin(-xRot*(float) Math.PI/180 );
+            double dZ = Math.cos(-xRot*(float) Math.PI/180 ) *(Math.cos(-yRot * ((float)Math.PI / 180F)) * f);
+            this.setDeltaMovement(dX,dY,dZ);
+
+        }else if (target != null) {
             if (!target.isAlive()) {
                 this.homingTarget.setEntity(null);
             }

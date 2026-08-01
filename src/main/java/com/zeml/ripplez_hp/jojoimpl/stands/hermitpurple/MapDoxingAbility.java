@@ -1,56 +1,36 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple;
 
-import com.github.standobyte.jojo.client.ClientGlobals;
-import com.github.standobyte.jojo.client.sound.ClientsideSoundsHelper;
-import com.github.standobyte.jojo.client.sound.sounds.EntityLingeringSoundInstance;
 import com.github.standobyte.jojo.client.standskin.StandSkin;
 import com.github.standobyte.jojo.client.standskin.StandSkinsLoader;
+import com.github.standobyte.jojo.mechanics.voiceline.VoiceLineServerSide;
 import com.github.standobyte.jojo.powersystem.Power;
-import com.github.standobyte.jojo.powersystem.PowerClass;
 import com.github.standobyte.jojo.powersystem.ability.*;
-import com.github.standobyte.jojo.powersystem.ability.condition.AvailableAbilities;
 import com.github.standobyte.jojo.powersystem.ability.condition.ConditionCheck;
-import com.github.standobyte.jojo.powersystem.ability.controls.InputMethod;
-import com.github.standobyte.jojo.powersystem.ability.input.ActionInputBuffer;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionAnimIdentifier;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionPhase;
 import com.github.standobyte.jojo.powersystem.entityaction.EntityActionInstance;
-import com.github.standobyte.jojo.powersystem.entityaction.HeldInput;
 import com.github.standobyte.jojo.powersystem.entityaction.type.EntityActionType;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
-import com.github.standobyte.jojo.powersystem.standpower.entity.StandEntityAbility;
-import com.mojang.datafixers.util.Pair;
-import com.zeml.ripplez_hp.core.HermitPackets;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.core.packets.client.SetColorPacket;
 import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
-import com.zeml.ripplez_hp.init.power.AddonStandAbilities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.MapItem;
 import net.minecraft.world.item.component.MapItemColor;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.neoforged.neoforge.network.PacketDistributor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class MapDoxingAbility extends HermitAction {
     public MapDoxingAbility(AbilityType<?> abilityType, AbilityId abilityId) {
@@ -148,10 +128,8 @@ public class MapDoxingAbility extends HermitAction {
                         if(standPower != null){
                             standPower.addExp(.2F);
                         }
-
-                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer,
-                                new StandSoundPacket(performer.getId(),AddonSoundEvents.USER_HP,false,1,1));
-                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer,
+                        VoiceLineServerSide.play(performer,AddonSoundEvents.DIVINATION,0,false);
+                       PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer,
                                 new StandSoundPacket(performer.getId(),AddonSoundEvents.SUMMON_HP,true,1,1));
                     }
                 }

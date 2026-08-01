@@ -3,6 +3,7 @@ package com.zeml.ripplez_hp.jojoimpl.stands.emperor;
 import com.github.standobyte.jojo.powersystem.Power;
 import com.github.standobyte.jojo.powersystem.ability.AbilityId;
 import com.github.standobyte.jojo.powersystem.ability.AbilityType;
+import com.github.standobyte.jojo.powersystem.ability.AbilityUsageGroup;
 import com.github.standobyte.jojo.powersystem.ability.EntityActionAbility;
 import com.github.standobyte.jojo.powersystem.ability.condition.ConditionCheck;
 import com.github.standobyte.jojo.powersystem.ability.controls.InputMethod;
@@ -23,6 +24,7 @@ public class TargetSelectAbility extends EntityActionAbility {
 
     public TargetSelectAbility(AbilityType<?> abilityType, AbilityId abilityId) {
         super(abilityType, abilityId);
+        usageGroup = AbilityUsageGroup.SPECIAL;
         this.nameLess = Component.translatable("jojo_ripples.skill.emp_target");
         this.random = Component.translatable("ripplez_hp.type.random");
         this.players = Component.translatable("ripplez_hp.type.players");
