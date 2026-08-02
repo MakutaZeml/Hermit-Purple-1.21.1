@@ -13,6 +13,7 @@ import com.github.standobyte.jojo.powersystem.entityaction.ActionPhase;
 import com.github.standobyte.jojo.powersystem.entityaction.EntityActionInstance;
 import com.github.standobyte.jojo.powersystem.entityaction.type.EntityActionType;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
+import com.zeml.ripplez_hp.core.packets.server.AnotherGuidedPacket;
 import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
@@ -20,6 +21,7 @@ import com.zeml.ripplez_hp.init.power.AddonStandAbilities;
 import com.zeml.ripplez_hp.jojoimpl.stands.emperor.entity.BulletPilot;
 import com.zeml.ripplez_hp.jojoimpl.stands.emperor.entity.EmperorBulletEntity;
 import com.zeml.ripplez_hp.mc.item.EmperorItem;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
@@ -41,7 +43,9 @@ public class GuideBulletAbility extends EntityActionAbility {
         StandPower standPower = PowerClass.STAND.cast(context);
         if(context.getUser() != null && context.getUser().getData(AddonDataAttachmentTypes.GUIDED)
                 && standPower != null){
-            abilities.replaceOtherAbilityWith(context,"emp_shot",this);
+            if(standPower.userStandEffects.getEffectsOfType(AddonStandAbilities.GUIDED_BULLET.get()).findAny().isEmpty()){
+                abilities.replaceOtherAbilityWith(context,"emp_shot",this);
+            }
         }
         return super.replaceWithSubAbility(context, abilities);
     }
@@ -88,9 +92,11 @@ public class GuideBulletAbility extends EntityActionAbility {
                 bulletPilot.copyPosition(emperorBullet);
                 level().addFreshEntity(bulletPilot);
                 GuidedBulletEffect effect = AddonStandAbilities.GUIDED_BULLET.get().create(level());
-                power.userStandEffects.addEffect(effect.withTarget(bulletPilot));
-                if(level().isClientSide){
+                if(!level().isClientSide){
                     power.userStandEffects.addEffect(effect.withTarget(bulletPilot));
+                    if(performer instanceof ServerPlayer player){
+                        PacketDistributor.sendToPlayer(player,new AnotherGuidedPacket(player.getId(), bulletPilot.getId()));
+                    }
                 }
             }
 

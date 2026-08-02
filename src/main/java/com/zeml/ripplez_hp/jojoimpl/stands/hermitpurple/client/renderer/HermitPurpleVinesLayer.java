@@ -58,7 +58,6 @@ public class HermitPurpleVinesLayer <T extends LivingEntity, M extends HumanoidM
 
             if (((IHumanoidAnimModel) parentModel).jojo_rippes$isPlayingAnimation()) {
                 AnimFramePose curPlayerPose = AnimFramePose.reused;
-                HermitPurpleAddon.getLogger().debug("Is this working {}", curPlayerPose);
                 RotpAnimDefinition.animate(purpleModel, curPlayerPose);
             }
             VertexConsumer ivertexbuilder = buffer.getBuffer(RenderType.entityCutoutNoCull(texture));

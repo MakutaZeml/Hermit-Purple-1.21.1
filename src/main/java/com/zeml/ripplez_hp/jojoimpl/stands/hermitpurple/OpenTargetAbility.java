@@ -13,6 +13,7 @@ import com.zeml.ripplez_hp.core.packets.server.HermitTargetDataPacket;
 import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.client.HermitTargetScreen;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,7 +37,7 @@ public class OpenTargetAbility extends EntityActionAbility {
             HermitPurpleAddon.getLogger().debug("keyPress {}", level.registryAccess().registryOrThrow(Registries.STRUCTURE).keySet());
             PacketDistributor.sendToPlayer((ServerPlayer) user, new HermitTargetDataPacket(user.getId(), data.mode, data.target, data.color,level.registryAccess().registryOrThrow(Registries.STRUCTURE).keySet()));
         }
-        if(level.isClientSide){
+        if(level.isClientSide && user == Minecraft.getInstance().player){
             ClientProxy.openScreen(new HermitTargetScreen());
         }
         return super.onKeyPress(level, user, extraClientInput, inputMethod, clickHoldResolveTime, bufferingState);

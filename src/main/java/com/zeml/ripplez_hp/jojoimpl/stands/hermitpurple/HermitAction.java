@@ -25,9 +25,5 @@ public class HermitAction extends EntityActionAbility {
 
     }
 
-    @Override
-    public ResourceLocation getEntityAnimSet(LivingEntity user) {
-        StandPower power = StandPower.get(user);
-        return power != null && power.hasPower() ? power.getPowerType().getId() : null;
-    }
+
 }

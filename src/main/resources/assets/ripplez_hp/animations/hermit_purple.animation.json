@@ -1520,6 +1520,84 @@
 				"0.5": "phase = PERFORM;",
 				"0.75": "phase = RECOVERY;"
 			}
+		},
+		"stand_info": {
+			"loop": "hold_on_last_frame",
+			"bones": {
+				"body": {
+					"rotation": [0, 30, 0]
+				},
+				"left_arm": {
+					"rotation": [0, 0, -30]
+				},
+				"left_arm_bend": {
+					"rotation": [0, 0, 62.5]
+				},
+				"right_arm": {
+					"rotation": [-33.7584, -70.7119, -123.6475],
+					"position": [0, -3, -5]
+				},
+				"right_arm_bend": {
+					"rotation": [0, 0, 0]
+				},
+				"left_leg": {
+					"rotation": [-5, 0, -10]
+				},
+				"left_leg_bend": {
+					"rotation": [4.9575, -0.6518, 7.4718]
+				},
+				"right_leg": {
+					"rotation": [0, 0, 12.5]
+				},
+				"right_leg_bend": {
+					"rotation": [0, 0, -10]
+				},
+				"hidden.third_vine": {
+					"rotation": [10, 0, -17.5]
+				},
+				"third_vine2": {
+					"rotation": [54.8957, -20.8812, 14.0659]
+				},
+				"third_vine3": {
+					"rotation": [67.2042, 28.0243, -11.1701]
+				},
+				"third_vine4": {
+					"rotation": [45, 0, 0]
+				},
+				"third_vine5": {
+					"rotation": [38.4344, 19.7426, -23.0578]
+				},
+				"hidden.main_vine": {
+					"rotation": [48.8084, -21.6317, 43.3835]
+				},
+				"main_vine2": {
+					"rotation": [0, 0, 62.5]
+				},
+				"main_vine3": {
+					"rotation": [35, 0, 77.5]
+				},
+				"main_vine4": {
+					"rotation": [0, 0, 32.5]
+				},
+				"main_vine5": {
+					"rotation": [0, 0, 40]
+				},
+				"hidden.second_vine": {
+					"rotation": [42.5, 0, 0]
+				},
+				"second_vine2": {
+					"rotation": [30, 0, 0]
+				},
+				"second_vine3": {
+					"rotation": [65.8514, 20.7047, -9.007]
+				},
+				"second_vine4": {
+					"rotation": [27.5, 0, 0]
+				},
+				"second_vine5": {
+					"rotation": [50, 0, 0]
+				}
+			}
 		}
 	}
 }
