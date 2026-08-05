@@ -50,8 +50,17 @@ public class HermitPurpleType extends StandType {
         super(stats, moveset, id);
     }
 
+	@Override
+	public boolean summon(LivingEntity user, StandPower standPower) {
+		if(!user.level().isClientSide){
+			if (!user.isShiftKeyDown()) {
+				VoiceLineServerSide.play(user, ModSoundEvents.VOICELINE_STAND_SUMMON);
+			}
+		}
+		return super.summon(user, standPower);
+	}
 
-    @Override
+	@Override
 	public StandSkinsScreen.SkinView makeSkinUIElement(StandSkin skin, StandSkinsScreen screen, int x, int y, int standY, int row, int column, boolean isBottomRow) {
 		return new StandSkinsScreen.SkinView(this, skin, screen, x, y, standY, row, column, isBottomRow) {
 

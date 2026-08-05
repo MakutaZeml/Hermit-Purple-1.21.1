@@ -46,8 +46,6 @@ public class MapDoxingAbility extends HermitAction {
         LivingEntity user = context.getUser();
         if(user != null && user.getItemInHand(InteractionHand.OFF_HAND).is(Items.MAP) &&
                 user.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()){
-            HermitPurpleAddon.getLogger().debug("This is shit{}",user.getItemInHand(InteractionHand.OFF_HAND).is(Items.MAP) &&
-                    user.getItemInHand(InteractionHand.MAIN_HAND).isEmpty());
             return ConditionCheck.POSITIVE;
         }
         return ConditionCheck.NEGATIVE;

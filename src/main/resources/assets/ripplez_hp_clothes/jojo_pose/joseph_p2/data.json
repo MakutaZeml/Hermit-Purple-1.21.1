@@ -1,0 +1,24 @@
+{
+  "character":"ripplez_hp:joseph",
+  "story_part": [ "jojo_ripples:p2" ],
+  "anim_specific":{
+    "god": {
+      "voice_line": [
+        {
+          "subtitle": "ripplez_hp.vl_subtitle.oh_no",
+          "sounds": [
+            "ripplez_hp:user/y_joseph_ohn_1",
+            "ripplez_hp:user/y_joseph_ohn_2"
+
+          ]
+        },
+        {
+          "subtitle": "ripplez_hp.vl_subtitle.oh_god",
+          "sounds": [
+            "ripplez_hp:user/y_joseph_ohg_1"
+          ]
+        }
+      ]
+    }
+  }
+}

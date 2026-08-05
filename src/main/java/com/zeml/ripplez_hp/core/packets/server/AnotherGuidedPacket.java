@@ -3,7 +3,6 @@ package com.zeml.ripplez_hp.core.packets.server;
 import com.github.standobyte.jojo.client.ClientProxy;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.zeml.ripplez_hp.core.HermitPackets;
-import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
 import com.zeml.ripplez_hp.init.power.AddonStandAbilities;
 import com.zeml.ripplez_hp.jojoimpl.stands.emperor.GuidedBulletEffect;
 import net.minecraft.network.RegistryFriendlyByteBuf;

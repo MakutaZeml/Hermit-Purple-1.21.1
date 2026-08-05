@@ -83,6 +83,7 @@
   "ripplez_hp.subtitle.emp_shot": "Emperor Shot",
   "ripplez_hp.vl_subtitle.hermit_purple": "\"Hermit Purple\" ",
   "ripplez_hp.subtitle.swing_vine": "Swing vine",
+  "ripplez_hp.vl_subtitle.oh_no": "OH NOOO",
 
   "commands.hermit.target.failed": "Unable to set the target",
   "commands.hermit.target.succes": "%s was set as %s target",
