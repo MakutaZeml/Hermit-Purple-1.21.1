@@ -97,7 +97,7 @@ configurations {
 
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
-    implementation "standobyte.jojo:RipplesOfThePast-NeoForge:${main_mod_version}"
+    implementation(files("jars/ROTP-closed-beta-NeoForge-1.21.1-0.4-260731-a.jar"))
     compileOnly 'team.unnamed:mocha:3.0.1'
 }
 
