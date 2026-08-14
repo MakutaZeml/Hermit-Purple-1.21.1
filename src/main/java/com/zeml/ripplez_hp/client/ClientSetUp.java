@@ -1,11 +1,13 @@
 package com.zeml.ripplez_hp.client;
 
-import com.github.standobyte.jojo.client.ModMarkers;
-import com.github.standobyte.jojo.client.itemrender.ModItemModelOverrides;
-import com.github.standobyte.jojo.core.JojoMod;
-import com.github.standobyte.jojo.subsystems.entity_puppetcontrol.client.stand.StandHudElements;
+import com.github.standobyte.jojo.client.standskin.StandSkinsScreen;
 import com.zeml.ripplez_hp.client.gui.AddonMarkers;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
+import com.zeml.ripplez_hp.init.power.stand.StandInitEmperor;
+import com.zeml.ripplez_hp.init.power.stand.StandInitHermitPurple;
+import com.zeml.ripplez_hp.jojoimpl.stands.emperor.client.EmperorSkinView;
+import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.client.HermitSkinView;
+
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
@@ -25,6 +27,9 @@ public class ClientSetUp {
     public static void onClientSetup(FMLClientSetupEvent event) {
         Minecraft mc = Minecraft.getInstance();
         AddonMarkers.registerMarkers(mc);
+
+		StandSkinsScreen.skinViewTypes.put(StandInitHermitPurple.SKIN_VIEW_TYPE, HermitSkinView::new);
+		StandSkinsScreen.skinViewTypes.put(StandInitEmperor.SKIN_VIEW_TYPE, EmperorSkinView::new);
     }
 
 }
