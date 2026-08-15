@@ -84,6 +84,9 @@
   "ripplez_hp.vl_subtitle.hermit_purple": "\"Hermit Purple\" ",
   "ripplez_hp.subtitle.swing_vine": "Swing vine",
   "ripplez_hp.vl_subtitle.oh_no": "OH NOOO",
+  "ripplez_hp.vl_subtitle.oh_god": "OH MY GOD",
+  "ripplez_hp.vl_subtitle.dua": "Duaaa",
+  "ripplez_hp.vl_subtitle.grapple": "Tightening vine",
 
   "commands.hermit.target.failed": "Unable to set the target",
   "commands.hermit.target.succes": "%s was set as %s target",

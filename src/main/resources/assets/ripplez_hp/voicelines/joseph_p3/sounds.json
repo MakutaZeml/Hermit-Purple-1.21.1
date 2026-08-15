@@ -6,7 +6,7 @@
   },
   "vl_vine":{
     "stand_type": "ripplez_hp:hermit_purple",
-    "subtitle": "ripplez_hp.vl_subtitle.hermit_purple",
+    "subtitle": "ripplez_hp.vl_subtitle.dua",
     "sounds": ["ripplez_hp:user/joseph_at_1","ripplez_hp:user/joseph_at_2","ripplez_hp:user/joseph_at_3"]
   }
 }
