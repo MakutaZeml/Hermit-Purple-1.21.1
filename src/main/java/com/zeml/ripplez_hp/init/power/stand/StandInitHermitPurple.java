@@ -6,12 +6,14 @@ import com.github.standobyte.jojo.powersystem.ability.controls.InputKey;
 import com.github.standobyte.jojo.powersystem.ability.controls.InputMethod;
 import com.github.standobyte.jojo.powersystem.standpower.StandStats;
 import com.github.standobyte.jojo.powersystem.standpower.StandUnlockableSkill;
+import com.github.standobyte.jojo.powersystem.standpower.type.SummonedStand;
 import com.zeml.ripplez_hp.init.power.AddonStandAbilities;
 import com.zeml.ripplez_hp.powersystem.standpower.type.HermitPurpleType;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
 
 public class StandInitHermitPurple {
+	public static final String SKIN_VIEW_TYPE = "zhermit";
 
     @ApiStatus.Internal
     public static HermitPurpleType create(ResourceLocation id){
@@ -60,7 +62,11 @@ public class StandInitHermitPurple {
                         .addSkill(StandUnlockableSkill.unlockableAbility("cringe",20))
                         .addSkill(StandUnlockableSkill.unlockableAbility("hp_weak",25))
                 ,id
-        ).init(stand -> stand.discStoryPartPriority = 1);
+        ).init(stand -> {
+        	stand.discStoryPartPriority = 1;
+        	stand.makeSummonedStandObj = SummonedStand.SyncableSummonedStand::new;
+        	stand.skinUIType = SKIN_VIEW_TYPE;
+        });
     }
 
 }

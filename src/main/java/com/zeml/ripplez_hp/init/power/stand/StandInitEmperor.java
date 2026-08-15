@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
 
 public class StandInitEmperor {
+	public static final String SKIN_VIEW_TYPE = "zemperor";
 
     @ApiStatus.Internal
     public static EmperorType create(ResourceLocation id){
@@ -53,6 +54,7 @@ public class StandInitEmperor {
                         .addSkill(StandUnlockableSkill.unlockableAbility("emp_stand_target",50))
                         .addSkill(StandUnlockableSkill.unlockableAbility("emp_delete_target",0).prerequisiteSkill("emp_stand_target"))
                         .addSkill(StandUnlockableSkill.unlockableAbility("guide_emp",100).prerequisiteSkill("emp_stand_target"))
-                ,id);
+                ,id)
+        		.init(stand -> stand.skinUIType = SKIN_VIEW_TYPE);
     }
 }
