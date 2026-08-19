@@ -30,6 +30,7 @@ import net.minecraft.Util;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -142,7 +143,8 @@ public class HermitVineWhip extends HermitAction{
                 }
                 if (!level().isClientSide()) {
                     StandPower standPower = StandPower.get(performer);
-                    OBBCollisionUtil.getEntitiesInOBB(level(), this.extendableOBB().rotatableHitbox(), entity -> entity != getPerformer() && entity != getPowerUser() && performer.getVehicle() != entity).forEach(entity -> {
+                    OBBCollisionUtil.getEntitiesInOBB(level(), this.extendableOBB().rotatableHitbox(), entity -> entity != getPerformer() && entity != getPowerUser()
+                            && performer.getVehicle() != entity && !(entity instanceof ItemEntity)).forEach(entity -> {
                         var damageType = DamageUtil.type(level(), ModDamageTypes.STAND_ATTACK);
                         DamageSource dmgSource = new DamageSource(damageType, performer);
                         float dmgAmount = StandStatFormulas.getLightAttackDamage(StandPower.get(performer).getPowerType().getStandStats().power());

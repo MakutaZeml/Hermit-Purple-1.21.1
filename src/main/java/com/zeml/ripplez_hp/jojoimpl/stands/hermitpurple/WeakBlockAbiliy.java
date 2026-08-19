@@ -93,7 +93,7 @@ public class WeakBlockAbiliy extends HermitAction{
                     case PERFORM -> {
                         userWalkSpeed = 0;
                         if(blockPos != null){
-                            //performer.lookAt(EntityAnchorArgument.Anchor.EYES,blockPos.getCenter());
+                            performer.lookAt(EntityAnchorArgument.Anchor.EYES,blockPos.getCenter());
                         }
                     }
                     case RECOVERY -> {

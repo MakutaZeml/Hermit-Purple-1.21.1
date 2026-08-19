@@ -14,6 +14,7 @@ import com.github.standobyte.v1_21_4_stuff.missingmethods.ARGB;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
+import com.zeml.ripplez_hp.init.power.AddonStandAbilities;
 import com.zeml.ripplez_hp.init.power.AddonStands;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -61,10 +62,11 @@ public class HermitPurpleLayer<T extends LivingEntity, M extends HumanoidModel<T
             VertexConsumer ivertexbuilder = buffer.getBuffer(RenderType.entityTranslucent(texture));
             purpleModel.renderToBuffer(poseStack,ivertexbuilder,packedLight, OverlayTexture.NO_OVERLAY, color);
 
-            ResourceLocation thorns_texture = standSkin.getTexture(THORNS);
-            VertexConsumer thorns_vertex = buffer.getBuffer(RenderType.entityTranslucent(thorns_texture));
-            purpleModel.renderToBuffer(poseStack,thorns_vertex,packedLight, OverlayTexture.NO_OVERLAY, color);
-
+            if(standData.userStandEffects.getEffectsOfType(AddonStandAbilities.HERMIT_THORNS_EFFECT.get()).findAny().isPresent()){
+                ResourceLocation thorns_texture = standSkin.getTexture(THORNS);
+                VertexConsumer thorns_vertex = buffer.getBuffer(RenderType.entityTranslucent(thorns_texture));
+                purpleModel.renderToBuffer(poseStack,thorns_vertex,packedLight, OverlayTexture.NO_OVERLAY, color);
+            }
         }
     }
 

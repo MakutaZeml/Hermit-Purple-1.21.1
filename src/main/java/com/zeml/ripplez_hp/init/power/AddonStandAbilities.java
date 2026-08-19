@@ -36,7 +36,7 @@ public final class AddonStandAbilities {
 			"hp_compass", key ->new AbilityType<>(key, HermitCompassAbility::new)
 	);
 	public static final DeferredHolder<AbilityType<?>, AbilityType<HermitAction>> THORNS = ABILITY_TYPES.register(
-			"hp_thorns", key ->new AbilityType<>(key, HermitAction::new)
+			"hp_thorn", key -> new AbilityType<>(key, HermitThornsAbility::new)
 	);
 
 	public static final DeferredHolder<AbilityType<?>, AbilityType<OpenTargetAbility>> SELECT_TARGET = ABILITY_TYPES.register(
@@ -48,6 +48,10 @@ public final class AddonStandAbilities {
 	);
 	public static final DeferredHolder<EntityCustomEffectType<?>, EntityCustomEffectType<WeakBlockEffect>> WEAK_BLOCK_EFFECT = STAND_EFFECT_TYPES.register(
 			"hp_weak_block", key -> new EntityCustomEffectType<>(key, WeakBlockEffect::new));
+
+	public static final DeferredHolder<EntityCustomEffectType<?>, EntityCustomEffectType<HermitThornsEffect>> HERMIT_THORNS_EFFECT = STAND_EFFECT_TYPES.register(
+			"hp_thorns", key -> new EntityCustomEffectType<>(key, HermitThornsEffect::new));
+
 	public static final DeferredHolder<AbilityType<?>, AbilityType<TargetSelectAbility>> EMP_TARGET = ABILITY_TYPES.register(
 			"emp_target", key -> new AbilityType<>(key, TargetSelectAbility::new)
 	);

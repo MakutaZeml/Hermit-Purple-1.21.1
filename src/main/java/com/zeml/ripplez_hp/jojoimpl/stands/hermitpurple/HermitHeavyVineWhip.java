@@ -105,7 +105,7 @@ public class HermitHeavyVineWhip extends HermitAction{
                 this.extendableOBB().updatePosition(level(), pos, offset, getPerformer().getXRot(), getPerformer().getYRot());
                 if (!level().isClientSide()){
                     Vec3 endPos = this.extendableOBB().rotatableHitbox().center.add(getPerformer().getLookAngle().scale(extendableOBB().rotatableHitbox().extent.length()));
-                    OBBCollisionUtil.getEntitiesInOBB(level(), this.extendableOBB().rotatableHitbox(), entity -> entity != getPerformer() && entity != getPowerUser() && !entities.contains(entity)).forEach(entity -> {
+                    OBBCollisionUtil.getEntitiesInOBB(level(), this.extendableOBB().rotatableHitbox(), entity -> entity != getPerformer() && entity != getPowerUser() && !entities.contains(entity) && !(entity instanceof ItemEntity)).forEach(entity -> {
                         var damageType = DamageUtil.type(level(), ModDamageTypes.STAND_ATTACK);
                         DamageSource dmgSource = new DamageSource(damageType, performer);
                         float dmgAmount = (float) StandPower.get(performer).getPowerType().getStandStats().power();
@@ -123,8 +123,6 @@ public class HermitHeavyVineWhip extends HermitAction{
                                         itemEntity.copyPosition(livingEntity);
                                         itemEntity.setPickUpDelay(100);
                                         level().addFreshEntity(itemEntity);
-                                        itemEntity.setDeltaMovement(new Vec3(0,1,0));
-                                        HermitPurpleAddon.getLogger().debug("Pos {} {}", itemEntity.position(),livingEntity.position());
                                     }else if(!offHand.isEmpty()){
                                         cloned = offHand.copyAndClear();
                                         ItemEntity itemEntity = new ItemEntity(this.level(),livingEntity.getX(),livingEntity.getY(),livingEntity.getZ(),cloned);
@@ -132,8 +130,6 @@ public class HermitHeavyVineWhip extends HermitAction{
                                         itemEntity.setPickUpDelay(100);
                                         itemEntity.copyPosition(livingEntity);
                                         level().addFreshEntity(itemEntity);
-                                        itemEntity.setDeltaMovement(new Vec3(0,1,0));
-                                        HermitPurpleAddon.getLogger().debug("Pos {} {}", itemEntity.position(),livingEntity.position());
                                     }
                                 }
                             }
