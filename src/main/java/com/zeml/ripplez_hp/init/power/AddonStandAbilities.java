@@ -35,6 +35,10 @@ public final class AddonStandAbilities {
 	public static final DeferredHolder<AbilityType<?>, AbilityType<HermitCompassAbility>> COMPASS_DIVINATION = ABILITY_TYPES.register(
 			"hp_compass", key ->new AbilityType<>(key, HermitCompassAbility::new)
 	);
+
+	public static final DeferredHolder<AbilityType<?>, AbilityType<CameraDoxAbility>> CAMERA_DIVINATION = ABILITY_TYPES.register(
+			"hp_camera", key ->new AbilityType<>(key, CameraDoxAbility::new)
+	);
 	public static final DeferredHolder<AbilityType<?>, AbilityType<HermitAction>> THORNS = ABILITY_TYPES.register(
 			"hp_thorn", key -> new AbilityType<>(key, HermitThornsAbility::new)
 	);

@@ -34,6 +34,7 @@ public class StandInitHermitPurple {
                         .addAbility("hp_target", AddonStandAbilities.SELECT_TARGET)
                         .addAbility("hp_doxx", AddonStandAbilities.MAP_DIVINATION)
                         .addAbility("hp_compass",AddonStandAbilities.COMPASS_DIVINATION, compass -> compass.isSubAbility = true)
+                        .addAbility("hp_camera",AddonStandAbilities.CAMERA_DIVINATION, camera ->camera.isSubAbility = true)
                         .addAbility("hp_block", AddonStandAbilities.THORNS)
                         .addAbility("hp_weak",AddonStandAbilities.WEAK_BLOCK)
 
