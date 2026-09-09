@@ -85,6 +85,9 @@ public final class AddonStandAbilities {
 			"emp_guide", key -> new AbilityType<>(key, GuideBulletAbility::new)
 	);
 
+	public static final DeferredHolder<AbilityType<?>, AbilityType<GuidedBarrageAbility>> EMP_BARRAGE_GUIDE = ABILITY_TYPES.register(
+			"emp_barrage_guide", key -> new AbilityType<>(key, GuidedBarrageAbility::new)
+	);
 	public static final DeferredHolder<AbilityType<?>, AbilityType<ChangeMode>> EMP_MODE = ABILITY_TYPES.register(
 			"emp_mode", key -> new AbilityType<>(key, ChangeMode::new)
 	);

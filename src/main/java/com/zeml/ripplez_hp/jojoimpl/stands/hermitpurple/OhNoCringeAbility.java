@@ -27,21 +27,7 @@ public class OhNoCringeAbility extends HermitAction {
     }
 
 
-    @Override
-    public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime) {
-        if(level.isClientSide){
-            HermitPurpleAddon.getLogger().debug("Sex");
-            /*
-            EntityLingeringSoundInstance sound = new EntityLingeringSoundInstance(ClientsideSoundsHelper
-                    .withStandSkin(AddonSoundEvents.OH_NO_CRINGE.get(), StandPower.get(user)),user.getSoundSource(),1,1f,user,level);
-            ClientsideSoundsHelper.playNonVanillaClassSound(sound);
 
-             */
-
-        }
-        return super.onKeyPress(level, user, extraClientInput, inputMethod, clickHoldResolveTime);
-
-    }
 
    
 }

@@ -1,6 +1,7 @@
 package com.zeml.ripplez_hp.core.util;
 
 import com.github.standobyte.jojo.init.ModItemDataComponents;
+import com.github.standobyte.jojo.mechanics.clothes.mannequin.MannequinEntity;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.init.AddonItems;
@@ -8,6 +9,7 @@ import com.zeml.ripplez_hp.init.HermitDataComponents;
 import com.zeml.ripplez_hp.mc.item.component.EmperorGunData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -23,17 +25,21 @@ public class EmperorUtil {
     public static void giveEmperor(LivingEntity user, StandPower standPower){
         ItemStack emperor = new ItemStack(AddonItems.EMPEROR.asItem());
         emperor.set(HermitDataComponents.EMPEROR.get(), new EmperorGunData(Optional.of(user.getUUID()), Optional.empty(),0));
-        if(!user.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()){
-            if(user.getItemInHand(InteractionHand.OFF_HAND).isEmpty()){
-                user.setItemInHand(InteractionHand.OFF_HAND,emperor);
+        if(user instanceof MannequinEntity){
+            user.setItemSlot(EquipmentSlot.HEAD,emperor);
+        }else {
+            if(!user.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()){
+                if(user.getItemInHand(InteractionHand.OFF_HAND).isEmpty()){
+                    user.setItemInHand(InteractionHand.OFF_HAND,emperor);
+                }else {
+                    ItemStack itemStack = user.getItemInHand(InteractionHand.MAIN_HAND);
+                    ItemEntity item = new ItemEntity(user.level(),user.getX(),user.getY(),user.getZ(),itemStack);
+                    user.level().addFreshEntity(item);
+                    user.setItemInHand(InteractionHand.MAIN_HAND,emperor);
+                }
             }else {
-                ItemStack itemStack = user.getItemInHand(InteractionHand.MAIN_HAND);
-                ItemEntity item = new ItemEntity(user.level(),user.getX(),user.getY(),user.getZ(),itemStack);
-                user.level().addFreshEntity(item);
                 user.setItemInHand(InteractionHand.MAIN_HAND,emperor);
             }
-        }else {
-            user.setItemInHand(InteractionHand.MAIN_HAND,emperor);
         }
     }
 

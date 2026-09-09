@@ -55,18 +55,11 @@ public class WeakBlockAbiliy extends HermitAction{
 
         @Override
         public void actionTick() {
-            HermitPurpleAddon.getLogger().debug("Shit {} {}", phase, curPhaseTick);
             if(extendableOBB() != null){
                 Vec3 pos = getPerformer().position();
                 Vec3 offset = new Vec3(0.0, 1.5, 0).yRot(-getPerformer().yBodyRot * MathUtil.DEG_TO_RAD);
                 this.extendableOBB().updatePosition(level(), pos, offset, getPerformer().getXRot(), getPerformer().getYRot());
                 Vec3 endPos = this.extendableOBB().rotatableHitbox().center.add(getPerformer().getLookAngle().scale(extendableOBB().rotatableHitbox().extent.length()));
-                if(level().isClientSide){
-                    HermitPurpleAddon.getLogger().debug("tambien se estira grr {} {} {}", extendableOBB().getAnimLength(phasePartialTick), extendableOBB().getLength(), endPos.distanceTo(performer.getEyePosition()));
-                }else {
-                    HermitPurpleAddon.getLogger().debug("tambien se estira {} {} {}", extendableOBB().getAnimLength(phasePartialTick), extendableOBB().getLength(), endPos.distanceTo(performer.getEyePosition()));
-
-                }
                 this.extendableOBB().tick();
                 switch (getPhase()){
                     case WINDUP -> {

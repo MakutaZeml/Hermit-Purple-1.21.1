@@ -5,6 +5,7 @@ import com.github.standobyte.jojo.customobjects.entity_projectile.ModdedProjecti
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.github.standobyte.jojo.util.objects_mc.EntityResolver;
 import com.zeml.ripplez_hp.init.AddonEntityTypes;
+import com.zeml.ripplez_hp.init.power.AddonStandAbilities;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
@@ -21,6 +22,7 @@ public class EmperorBulletEntity extends ModdedProjectileEntity {
     private EntityResolver homingTarget = new EntityResolver();
     private float standPower = 12;
     private float standRange = 12;
+    private boolean controlled = false;
     public final List<Vec3> tracePos = new LinkedList<>();
 
     public EmperorBulletEntity(EntityType<? extends EmperorBulletEntity> type, Level level) {
@@ -35,9 +37,9 @@ public class EmperorBulletEntity extends ModdedProjectileEntity {
     @Override
     public void tick() {
         super.tick();
-        if(!this.level().isClientSide){
+        if (!this.level().isClientSide) {
 
-        }else {
+        } else {
             Vec3 pos = this.position();
 
             boolean addPos = true;
@@ -55,23 +57,23 @@ public class EmperorBulletEntity extends ModdedProjectileEntity {
     protected void moveProjectile() {
         super.moveProjectile();
         Entity target = this.homingTarget.getEntity(level());
-        if(!this.getPassengers().isEmpty()){
+        if (!this.getPassengers().isEmpty()) {
             Entity entity = this.getPassengers().get(0);
             double f = this.getDeltaMovement().length();
             float xRot = entity.getViewXRot(1);
             float yRot = entity.getViewYRot(1);
-            f = Math.max(f,.75);
-            double dX = Math.cos(-xRot*(float) Math.PI/180 ) *(Math.sin(-yRot * ((float)Math.PI / 180F)) * f);
-            double dY = f* Math.sin(-xRot*(float) Math.PI/180 );
-            double dZ = Math.cos(-xRot*(float) Math.PI/180 ) *(Math.cos(-yRot * ((float)Math.PI / 180F)) * f);
-            this.setDeltaMovement(dX,dY,dZ);
+            f = Math.max(f, .75);
+            double dX = Math.cos(-xRot * (float) Math.PI / 180) * (Math.sin(-yRot * ((float) Math.PI / 180F)) * f);
+            double dY = f * Math.sin(-xRot * (float) Math.PI / 180);
+            double dZ = Math.cos(-xRot * (float) Math.PI / 180) * (Math.cos(-yRot * ((float) Math.PI / 180F)) * f);
+            this.setDeltaMovement(dX, dY, dZ);
 
-        }else if (target != null) {
+        } else if (target != null) {
             if (!target.isAlive()) {
                 this.homingTarget.setEntity(null);
-            }
-            else if (tickCount >= 3) {
-                if((this.getOwner() != null && distanceTo(this.getOwner())<=this.standRange)|| this.getOwner() == null){
+            } else if (tickCount >= 3) {
+                if ((this.getOwner() != null && (distanceTo(this.getOwner()) <= this.standRange || controlled))
+                        || this.getOwner() == null) {
                     Vec3 targetPos = target.getBoundingBox().getCenter();
                     Vec3 vecToTarget = targetPos.subtract(this.position());
                     setDeltaMovement(vecToTarget.normalize().scale(this.getDeltaMovement().length()));
@@ -98,10 +100,14 @@ public class EmperorBulletEntity extends ModdedProjectileEntity {
 
     @Override
     protected float getBaseDamage() {
-        if(this.getOwner() != null){
-            return Math.max(-(3*standPower/(2*standRange)*(distanceTo(this.getOwner())-standRange)),0);
+        if (this.getOwner() != null) {
+            return Math.max(-(3 * standPower / (2 * standRange) * (distanceTo(this.getOwner()) - standRange)), controlled ? 1.5f : 0);
         }
-        return standPower/2;
+        return standPower / 2;
+    }
+
+    public void setControlled(boolean controlled) {
+        this.controlled = controlled;
     }
 
     @Override
@@ -130,6 +136,7 @@ public class EmperorBulletEntity extends ModdedProjectileEntity {
     protected void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
         homingTarget.saveNbt(nbt, "HomingTarget");
+        nbt.putBoolean("controlled",controlled);
     }
 
     @Override
@@ -147,6 +154,7 @@ public class EmperorBulletEntity extends ModdedProjectileEntity {
     protected void readAdditionalSaveData(CompoundTag nbt) {
         super.readAdditionalSaveData(nbt);
         homingTarget.loadNbt(nbt, "HomingTarget");
+        controlled = nbt.getBoolean("controlled");
     }
 
     @Override

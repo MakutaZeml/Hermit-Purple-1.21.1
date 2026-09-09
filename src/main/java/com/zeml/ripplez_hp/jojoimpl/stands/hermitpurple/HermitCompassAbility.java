@@ -101,10 +101,8 @@ public class HermitCompassAbility extends HermitAction{
 
         @Override
         public void actionTick() {
-            HermitPurpleAddon.getLogger().debug("Compass {} {} {} {}", this.entity == null,this.brujula == null,phase,curPhaseTick);
             if(phase == ActionPhase.PERFORM){
                 if(!this.level().isClientSide && brujula != null && curPhaseTick % 20 == 1 && this.entity != null){
-                    HermitPurpleAddon.getLogger().debug("is this {} {}", curPhaseTick, entity);
                     GlobalPos globalPos = new GlobalPos(this.dimension, this.entity.getOnPos());
                     LodestoneTracker tracker = new LodestoneTracker(Optional.of(globalPos), false);
                     this.brujula.set(DataComponents.LODESTONE_TRACKER, tracker);

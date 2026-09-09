@@ -150,7 +150,6 @@ public class HermitThornsAbility extends HermitAction{
                     DamageSource newDmgSource = new DamageSource(damageType, user);
                     attacker.hurt(newDmgSource,1);
                     //TODO implement Hamon when it's done
-                    HermitPurpleAddon.getLogger().debug("sex? {} {}", reduced, attacker);
                     if (reduced< 1) {
                         if (reduced == 0) {
                             event.setCanceled(true);

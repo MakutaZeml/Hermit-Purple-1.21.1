@@ -1,5 +1,8 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.emperor;
 
+import com.github.standobyte.jojo.client.ui.hud_power.PowerHud;
+import com.github.standobyte.jojo.client.ui.utils.BlitFloat;
+import com.github.standobyte.jojo.client.util.functions.ClientUtil;
 import com.github.standobyte.jojo.powersystem.Power;
 import com.github.standobyte.jojo.powersystem.PowerClass;
 import com.github.standobyte.jojo.powersystem.ability.Ability;
@@ -13,6 +16,8 @@ import com.github.standobyte.jojo.powersystem.entityaction.ActionPhase;
 import com.github.standobyte.jojo.powersystem.entityaction.EntityActionInstance;
 import com.github.standobyte.jojo.powersystem.entityaction.type.EntityActionType;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.zeml.ripplez_hp.core.packets.server.AnotherGuidedPacket;
 import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
@@ -21,6 +26,8 @@ import com.zeml.ripplez_hp.init.power.AddonStandAbilities;
 import com.zeml.ripplez_hp.jojoimpl.stands.emperor.entity.BulletPilot;
 import com.zeml.ripplez_hp.jojoimpl.stands.emperor.entity.EmperorBulletEntity;
 import com.zeml.ripplez_hp.mc.item.EmperorItem;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
@@ -30,7 +37,7 @@ import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
-public class GuideBulletAbility extends EntityActionAbility {
+public class GuideBulletAbility extends EmperorAbility {
 
     public GuideBulletAbility(AbilityType<?> abilityType, AbilityId abilityId) {
         super(abilityType, abilityId, Guided::new);
@@ -51,23 +58,22 @@ public class GuideBulletAbility extends EntityActionAbility {
     }
 
     @Override
-    public ConditionCheck checkSpecificConditions(Power<?> context) {
-        LivingEntity user = context.getUser();
-        if(user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem emperorItem){
-            if(user instanceof Player player && player.getCooldowns().isOnCooldown(emperorItem)){
-                return ConditionCheck.NEGATIVE;
-            }
-            return ConditionCheck.POSITIVE;
+    public void renderAbilityIcon(Power<?> context, GuiGraphics guiGraphics, TextureAtlasSprite sprite, float x, float y, int color) {
+        StandPower standPower = PowerClass.STAND.cast(context);
+        if (standPower != null){
+            PoseStack poseStack = guiGraphics.pose();
+            guiGraphics.enableScissor((int) x, (int) y, (int) x + 16, (int) y + 16);
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            poseStack.pushPose();
+            poseStack.scale(0.5f, 0.5f, 1);
+            poseStack.translate(x, y, 0);
+            ClientUtil.renderEntityFace(poseStack, x + 16, y, context.getUser(), 0x80FFFFFF, false);
+            poseStack.popPose();
+            guiGraphics.disableScissor();
         }
-        if(user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem emperorItem){
-            if(user instanceof Player player && player.getCooldowns().isOnCooldown(emperorItem)){
-                return ConditionCheck.NEGATIVE;
-            }
-            return ConditionCheck.POSITIVE;
-        }
-        return ConditionCheck.NEGATIVE;
+        super.renderAbilityIcon(context, guiGraphics, sprite, x, y, color);
     }
-
 
     public static class Guided extends EntityActionInstance {
         public Guided(EntityActionType ability) {
@@ -83,6 +89,7 @@ public class GuideBulletAbility extends EntityActionAbility {
                 emperorBullet.setStandPower((float) power.getStandInstance().get().getStandType().getStandStats().power());
                 emperorBullet.setStandRange((float) power.getStandInstance().get().getStandType().getStandStats().rangeMax());
                 emperorBullet.shootFromRotation(performer,1F,1F);
+                emperorBullet.setControlled(true);
                 level().addFreshEntity(emperorBullet);
                 if(!level().isClientSide){
                     PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer, new StandSoundPacket(performer.getId(), AddonSoundEvents.EMP_SHOT,true,1,1));

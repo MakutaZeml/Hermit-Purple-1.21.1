@@ -39,8 +39,6 @@ public class GuidedBulletEffect extends StandEffectInstance {
     protected void tick() {
         if(getTargetLiving() == null){
             this.remove();
-        }else {
-            HermitPurpleAddon.getLogger().debug("effect {} {}", level.isClientSide,getTargetLiving().getVehicle()== null);
         }
 
     }

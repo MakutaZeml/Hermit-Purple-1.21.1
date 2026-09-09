@@ -6,6 +6,7 @@ import com.github.standobyte.jojo.powersystem.ability.controls.InputKey;
 import com.github.standobyte.jojo.powersystem.ability.controls.InputMethod;
 import com.github.standobyte.jojo.powersystem.standpower.StandStats;
 import com.github.standobyte.jojo.powersystem.standpower.StandUnlockableSkill;
+import com.github.standobyte.jojo.powersystem.standpower.type.SummonedStand;
 import com.zeml.ripplez_hp.init.power.AddonStandAbilities;
 import com.zeml.ripplez_hp.powersystem.standpower.type.EmperorType;
 import net.minecraft.resources.ResourceLocation;
@@ -33,6 +34,7 @@ public class StandInitEmperor {
                         .addAbility("emp_stand_target",AddonStandAbilities.EMP_STAND_TARGET)
                         .addAbility("emp_delete_target",AddonStandAbilities.EMP_DELETE_TARGET)
                         .addAbility("guide_emp",AddonStandAbilities.EMP_GUIDE)
+                        .addAbility("guide_barrage_emp",AddonStandAbilities.EMP_BARRAGE_GUIDE)
                         .addAbility("emp_mode",AddonStandAbilities.EMP_MODE)
 
                         .makeControlScheme("hotbar")
@@ -55,6 +57,9 @@ public class StandInitEmperor {
                         .addSkill(StandUnlockableSkill.unlockableAbility("emp_delete_target",0).prerequisiteSkill("emp_stand_target"))
                         .addSkill(StandUnlockableSkill.unlockableAbility("guide_emp",100).prerequisiteSkill("emp_stand_target"))
                 ,id)
-        		.init(stand -> stand.skinUIType = SKIN_VIEW_TYPE);
+        		.init(stand -> {
+                    stand.makeSummonedStandObj = SummonedStand.SyncableSummonedStand::new;
+                    stand.skinUIType = SKIN_VIEW_TYPE;
+                });
     }
 }

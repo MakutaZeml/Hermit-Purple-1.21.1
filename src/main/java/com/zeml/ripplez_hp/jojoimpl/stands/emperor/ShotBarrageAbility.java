@@ -24,33 +24,17 @@ import java.util.function.Function;
 
 import static com.zeml.ripplez_hp.jojoimpl.stands.emperor.ShotAbility.isRight;
 
-public class ShotBarrageAbility extends EntityActionAbility {
+public class ShotBarrageAbility extends EmperorAbility {
 
     public ShotBarrageAbility(AbilityType<?> abilityType, AbilityId abilityId) {
         super(abilityType, abilityId, EmperorBarrage::new);
         usageGroup = AbilityUsageGroup.COMBAT;
         setDefaultPhaseLength(ActionPhase.WINDUP,5);
-        setDefaultPhaseLength(ActionPhase.PERFORM,10);
+        setDefaultPhaseLength(ActionPhase.PERFORM,11);
         setDefaultPhaseLength(ActionPhase.RECOVERY,2);
     }
 
-    @Override
-    public ConditionCheck checkSpecificConditions(Power<?> context) {
-        LivingEntity user = context.getUser();
-        if(user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem emperorItem){
-            if(user instanceof Player player && player.getCooldowns().isOnCooldown(emperorItem)){
-                return ConditionCheck.NEGATIVE;
-            }
-            return ConditionCheck.POSITIVE;
-        }
-        if(user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem emperorItem){
-            if(user instanceof Player player && player.getCooldowns().isOnCooldown(emperorItem)){
-                return ConditionCheck.NEGATIVE;
-            }
-            return ConditionCheck.POSITIVE;
-        }
-        return ConditionCheck.NEGATIVE;
-    }
+
 
     @Override
     public ActionAnimIdentifier getEntityAnim(EntityActionInstance action) {
@@ -97,7 +81,6 @@ public class ShotBarrageAbility extends EntityActionAbility {
             }
             if(this.phase == ActionPhase.RECOVERY){
                 if(performer instanceof Player player){
-                    HermitPurpleAddon.getLogger().debug("IS this happening ?");
                     player.getCooldowns().addCooldown(AddonItems.EMPEROR.asItem(),65);
                 }
             }

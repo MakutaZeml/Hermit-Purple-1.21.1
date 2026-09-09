@@ -1,12 +1,14 @@
 package com.zeml.ripplez_hp.powersystem.standpower.type;
 
 import com.github.standobyte.jojo.init.ModSoundEvents;
+import com.github.standobyte.jojo.mechanics.voiceline.VoiceLineServerSide;
 import com.github.standobyte.jojo.network.s2c.StandSkinSoundPacket;
 import com.github.standobyte.jojo.network.s2c.TrNonEntityStandSummonPacket;
 import com.github.standobyte.jojo.powersystem.MovesetBuilder;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.github.standobyte.jojo.powersystem.standpower.StandStats;
 import com.github.standobyte.jojo.powersystem.standpower.entity.EntityStandType;
+import com.github.standobyte.jojo.powersystem.standpower.type.StandType;
 import com.github.standobyte.jojo.powersystem.standpower.type.SummonedStand;
 import com.zeml.ripplez_hp.core.util.EmperorUtil;
 import com.zeml.ripplez_hp.init.AddonItems;
@@ -25,70 +27,21 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 
-public class EmperorType extends EntityStandType {
+public class EmperorType extends StandType {
 
     public EmperorType(StandStats stats, MovesetBuilder moveset, ResourceLocation id) {
         super(stats, moveset, id);
     }
 
 	@Override
-	public void onUserSummonCommand(LivingEntity user, StandPower standPower) {
-		if (!standPower.isSummoned() && onTrySummon(user, standPower)) {
-			summon(user, standPower);
-		}
-		else {
-			unsummon(user, standPower);
-		}
-	}
-
-    @Override
-    public boolean summon(LivingEntity user, StandPower standPower) {
-        EmperorUtil.giveEmperor(user,standPower);
-		if (!standPower.isSummoned() && standPower.canUsePower()) {
-			SummonedStand summonedStand = this.makeSummonedStand();
-			if (summonedStand == null) {
-				return false;
-			} else {
-				standPower.setSummonedStand(summonedStand);
-				if (!user.level().isClientSide()) {
-					PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, new TrNonEntityStandSummonPacket(user.getId(), true), new CustomPacketPayload[0]);
-					if (this.playSummonSound) {
-						StandSkinSoundPacket soundPacket = StandSkinSoundPacket.play(user.position(), ModSoundEvents.STAND_SUMMON, standPower, user.getSoundSource(), 1.0F, 1.0F);
-						if (soundPacket != null) {
-							PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, soundPacket, new CustomPacketPayload[0]);
-						}
-					}
-				}
-
-				return true;
-			}
-		} else {
-			return false;
-		}
-    }
-
-	public void unsummon(LivingEntity user, StandPower standPower) {
-		forceUnsummon(user, standPower);
-	}
-
-	public void forceUnsummon(LivingEntity user, StandPower standPower) {
-		if (standPower.isSummoned()) {
-			standPower.setSummonedStand(null);
-			if (user != null && !user.level().isClientSide()) {
-				PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, new TrNonEntityStandSummonPacket(user.getId(), false), new CustomPacketPayload[0]);
-				if (this.playUnsummonSound) {
-					StandSkinSoundPacket soundPacket = StandSkinSoundPacket.play(user.position(), ModSoundEvents.STAND_UNSUMMON, standPower, user.getSoundSource(), 1.0F, 1.0F);
-					if (soundPacket != null) {
-						PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, soundPacket, new CustomPacketPayload[0]);
-					}
-				}
+	public boolean summon(LivingEntity user, StandPower standPower) {
+		EmperorUtil.giveEmperor(user,standPower);
+		if(!user.level().isClientSide){
+			if (!user.isShiftKeyDown()) {
+				VoiceLineServerSide.play(user, ModSoundEvents.VOICELINE_STAND_SUMMON);
 			}
 		}
-	}
-
-
-	public boolean showHUD(StandPower standPower) {
-		return standPower.isSummoned();
+		return super.summon(user, standPower);
 	}
 
 	@EventBusSubscriber

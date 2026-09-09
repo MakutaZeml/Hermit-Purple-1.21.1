@@ -23,30 +23,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
-public class ShotAbility extends EntityActionAbility {
+public class ShotAbility extends EmperorAbility {
 
     public ShotAbility(AbilityType<?> abilityType, AbilityId abilityId) {
         super(abilityType, abilityId);
         usageGroup = AbilityUsageGroup.COMBAT;
         setDefaultPhaseLength(ActionPhase.WINDUP,5);
-    }
-
-    @Override
-    public ConditionCheck checkSpecificConditions(Power<?> context) {
-        LivingEntity user = context.getUser();
-        if(user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem  emperorItem){
-            if(user instanceof Player player && player.getCooldowns().isOnCooldown(emperorItem)){
-                return ConditionCheck.NEGATIVE;
-            }
-            return ConditionCheck.POSITIVE;
-        }
-        if(user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem emperorItem){
-            if(user instanceof Player player && player.getCooldowns().isOnCooldown(emperorItem)){
-                return ConditionCheck.NEGATIVE;
-            }
-            return ConditionCheck.POSITIVE;
-        }
-        return ConditionCheck.NEGATIVE;
     }
 
 
@@ -96,5 +78,7 @@ public class ShotAbility extends EntityActionAbility {
 
         return false;
     }
+
+
 
 }
