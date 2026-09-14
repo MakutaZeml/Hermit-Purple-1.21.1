@@ -1,7 +1,27 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.client;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import com.github.standobyte.jojo.client.entityanim.IHumanoidAnimModel;
+import com.github.standobyte.jojo.client.entityanim.RotpAnimDefinition;
+import com.github.standobyte.jojo.client.entityrender.entities.HumanoidLikeModel;
+import com.github.standobyte.jojo.client.entityrender.stand.StandEntityRenderer;
+import com.github.standobyte.jojo.client.util.functions.ClientUtil;
+import com.github.standobyte.jojo.mixininterface.LivingRendererLayers;
+import com.github.standobyte.jojo.powersystem.entityaction.ActionAnimIdentifier;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
+import com.zeml.ripplez_hp.core.HermitPurpleAddon;
+import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.client.renderer.HermitPurpleLayer;
+import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.client.renderer.HermitPurpleVinesLayer;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
 import org.joml.Quaternionf;
 
 import com.github.standobyte.jojo.client.entityanim.pose.AnimFramePose;
@@ -26,68 +46,110 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 
 public class HermitSkinView extends StandSkinsScreen.SkinView {
-
+	public static final ActionAnimIdentifier POSE_ANIM_ID = ActionAnimIdentifier.getOrCreate("stand_info");
+	private final List<RenderLayer<?,?>> layers = new ArrayList<>();
+	private AnimFramePose pose;
 	public HermitSkinView(StandType standType, StandSkin skin, StandSkinsScreen screen, 
 			int x, int y, int standY, int row, int column, boolean isBottomRow) {
 		super(standType, skin, screen, x, y, standY, row, column, isBottomRow);
-	}
+		Minecraft mc = Minecraft.getInstance();
+		LivingEntityRenderer<?, ?> renderer = (LivingEntityRenderer<?, ?>) mc.getEntityRenderDispatcher().getRenderer(mc.player);
+		for (RenderLayer<?, ?> layer : ((LivingRendererLayers<?, ?>) renderer).jojo_ripples$allLayers()) {
+			if (layer instanceof HermitPurpleLayer || layer instanceof  HermitPurpleVinesLayer) {
+				this.layers.add(layer);
 
-	@Override
-	public void renderStand(GuiGraphics gui, int mouseX, int mouseY, float ticks, boolean isHovered,
-			float posX, float posY, float scale, float scaleZoom,
-			float yRot, float xRot, float xOffsetRatio, float yOffsetRatio) {
-		renderArmoredMannequin(gui, skin, posX-5, posY, scale, scaleZoom, yRot, xRot, xOffsetRatio, yOffsetRatio, ticks);
-	}
+				RotpAnimDefinition anim = skin.getStandAnimation(POSE_ANIM_ID);
+				if (anim != null) {
+					this.pose = anim.calcAnimPose(0, 1, null, null).deepCopy();
+				}
 
-	@Override
-	public void renderInStandInfo(GuiGraphics gui, int mouseX, int mouseY, float ticks, float windowX, float windowY, float scale) {
-		PoseStack poseStack = gui.pose();
-		poseStack.pushPose();
-		poseStack.translate(0, 0, -100);
-		renderArmoredMannequin(gui, skin, windowX + 45, windowY + 150, scale, 1, 0, 0, 0, 0, ticks);
-		poseStack.popPose();
-	}
 
-	//Thanks Weever
-	public static void renderArmoredMannequin(GuiGraphics gui, StandSkin skin, float posX, float posY,
-										float scale, float scaleZoom, float yRot, float xRot,
-										float xOffsetRatio, float yOffsetRatio, float ticks) {
-		Quaternionf rotation = new Quaternionf().rotateX(-xRot).rotateY(-yRot + .75F);
-		gui.pose().pushPose();
-		gui.pose().translate(posX, posY, 350.0);
-		gui.pose().translate(xOffsetRatio, yOffsetRatio, 0.0F);
-		gui.pose().scale(scale, -scale, scale);
-		gui.pose().translate(0.0, 1.25, 0.0);
-		gui.pose().scale(scaleZoom, scaleZoom, scaleZoom);
-		gui.pose().mulPose(rotation);
-		gui.pose().translate(0.0, -1.25, 0.0);
-		gui.flush();
-		Lighting.setupForEntityInInventory();
-		EntityRenderDispatcher renderManager = Minecraft.getInstance().getEntityRenderDispatcher();
-		renderManager.setRenderShadow(false);
-
-		MannequinEntity mannequin = new MannequinEntity(Minecraft.getInstance().level);
-		mannequin.setInvisible(true);
-		mannequin.setSlim(ModelUtil.isSlimModel(Minecraft.getInstance().player));
-		PowerClass.STAND.attachPower(mannequin);
-		StandPower standPower = StandPower.get(mannequin);
-		if (standPower != null) {
-			standPower.setStand(AddonStands.HERMIT_PURPLE.get());
-			standPower.setSummonedStand(standPower.getPowerType().makeSummonedStandObj.get());
-			((SyncableSummonedStand) standPower.getSummonedStand()).tickCount = 99999; // to disable fade-in
-			standPower.setSelectedSkin(Optional.of(skin.skinId));
+			}
 		}
-		HumanoidRenderState renderState = new HumanoidRenderState();
-		AnimFramePose pose = HermitPurplePose.armorPose(mannequin,0);
-		renderState.get().entityAction.pose = pose;
-		RenderStateCrutches.currentEntityRenderState = renderState;
-		RenderSystem.runAsFancy(() ->
-				renderManager.render(mannequin, 0.0, 0.0, 0.0, 0.0F, ticks, gui.pose(), gui.bufferSource(), 15728880));
-		RenderStateCrutches.currentEntityRenderState = null;
-		gui.flush();
-		renderManager.setRenderShadow(true);
-		gui.pose().popPose();
-		Lighting.setupFor3DItems();
+	}
+
+	@Override
+	public void renderStandModel(GuiGraphics gui, float posX, float posY,
+								 float scale, float scaleZoom, float yRot, float xRot, float xOffsetRatio, float yOffsetRatio,
+								 StandType standType, StandSkin standSkin,
+								 boolean extractRenderState, float ticks, int color, StandEntityRenderer.MenuType screen) {
+		HermitPurpleAddon.getLogger().debug("sex {}", layers);
+		for(RenderLayer<?,?> layer: layers){
+			if(layer instanceof HermitPurpleLayer<?,?> layer1){
+				HumanoidModel<?> model = layer1.purpleModel.getModel(skin);
+				ResourceLocation texture = skin.getTexture(HermitPurpleLayer.HERMIT);
+
+				Quaternionf rotation = new Quaternionf()
+						.rotateX(xRot)
+						.rotateY(yRot);
+
+				PoseStack poseStack = gui.pose();
+				poseStack.pushPose();
+
+				poseStack.translate(posX, posY, 350.0);
+
+				poseStack.translate(xOffsetRatio, yOffsetRatio, 0);
+				poseStack.scale(-scale, scale, scale);
+				poseStack.scale(scaleZoom, scaleZoom, scaleZoom);
+				poseStack.mulPose(rotation);
+				poseStack.translate(0, -1.35, 0);
+				poseStack.mulPose(Axis.YP.rotationDegrees(180));
+
+				Lighting.setupForEntityInInventory();
+
+				if (pose != null) {
+					((IHumanoidAnimModel) model).jojo_ripples$setupHumanoidPose(pose);
+				}
+
+				// FIXME doesn't get cropped by OpenGL's scissor
+				RenderSystem.runAsFancy(() -> {
+					MultiBufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+					VertexConsumer buffer = bufferSource.getBuffer(model.renderType(texture));
+					model.renderToBuffer(poseStack, buffer, ClientUtil.MAX_LIGHT, OverlayTexture.NO_OVERLAY, color);
+				});
+
+				poseStack.popPose();
+
+				Lighting.setupFor3DItems();
+			} else if (layer instanceof HermitPurpleVinesLayer<?,?> layer1) {
+				HumanoidModel<?> model = layer1.purpleModel.getModel(skin);
+				ResourceLocation texture = skin.getTexture(HermitPurpleVinesLayer.HERMIT);
+
+				Quaternionf rotation = new Quaternionf()
+						.rotateX(xRot)
+						.rotateY(yRot);
+
+				PoseStack poseStack = gui.pose();
+				poseStack.pushPose();
+
+				poseStack.translate(posX, posY, 350.0);
+
+				poseStack.translate(xOffsetRatio, yOffsetRatio, 0);
+				poseStack.scale(-scale, scale, scale);
+				poseStack.scale(scaleZoom, scaleZoom, scaleZoom);
+				poseStack.mulPose(rotation);
+				poseStack.translate(0, -1.35, 0);
+				poseStack.mulPose(Axis.YP.rotationDegrees(180));
+
+				Lighting.setupForEntityInInventory();
+
+				if (pose != null) {
+					((IHumanoidAnimModel) model).jojo_ripples$setupHumanoidPose(pose);
+				}
+
+				// FIXME doesn't get cropped by OpenGL's scissor
+				RenderSystem.runAsFancy(() -> {
+					MultiBufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+					VertexConsumer buffer = bufferSource.getBuffer(model.renderType(texture));
+					model.renderToBuffer(poseStack, buffer, ClientUtil.MAX_LIGHT, OverlayTexture.NO_OVERLAY, color);
+				});
+
+				poseStack.popPose();
+
+				Lighting.setupFor3DItems();
+			}
+		}
+
 	}
 
 }

@@ -1,0 +1,8 @@
+{
+ 
+  "vl_vine":{
+    "stand_type": "ripplez_hp:hermit_purple",
+    "subtitle": "ripplez_hp.vl_subtitle.dua",
+    "sounds": ["ripplez_hp:user/jonathan_at_3","ripplez_hp:user/jonathan_at_4","ripplez_hp:user/jonathan_at_5"]
+  }
+}

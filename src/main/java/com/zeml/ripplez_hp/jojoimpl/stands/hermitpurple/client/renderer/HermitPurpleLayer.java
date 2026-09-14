@@ -30,7 +30,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class HermitPurpleLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M> implements FirstPersonModelLayer {
     public final ResourceModelEntry purpleModel;
-    private final ResourceLocation HERMIT = ResourceLocation.tryBuild(HermitPurpleAddon.MOD_ID,"textures/entity/stand/hermito_purple.png");
+    public static final ResourceLocation HERMIT = ResourceLocation.tryBuild(HermitPurpleAddon.MOD_ID,"textures/entity/stand/hermito_purple.png");
     private final ResourceLocation THORNS = ResourceLocation.tryBuild(HermitPurpleAddon.MOD_ID,"textures/entity/stand/hermito_torns.png");
     public HermitPurpleLayer(RenderLayerParent<T, M> renderer) {
         super(renderer);

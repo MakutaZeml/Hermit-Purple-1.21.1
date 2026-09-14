@@ -37,8 +37,8 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 
 public class HermitPurpleVinesLayer <T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M> implements FirstPersonModelLayer {
-    ResourceModelEntry purpleModel;
-    private final ResourceLocation HERMIT = ResourceLocation.tryBuild(HermitPurpleAddon.MOD_ID,"textures/entity/stand/hp_vine.png");
+    public ResourceModelEntry purpleModel;
+    public static final ResourceLocation HERMIT = ResourceLocation.tryBuild(HermitPurpleAddon.MOD_ID,"textures/entity/stand/hp_vine.png");
     public HermitPurpleVinesLayer(RenderLayerParent<T, M> renderer) {
         super(renderer);
         this.purpleModel = RotpGeckoModelLoader.getInstance().getModelContainer(HermitPurpleAddon.resLoc("hermit_vines"));

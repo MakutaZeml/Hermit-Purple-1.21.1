@@ -120,6 +120,14 @@
   "clothes.ripplez_hp.joseph_p3_anime": "Stardust Crusaders (anime)",
   "clothes.ripplez_hp.joseph_p2_ny_anime": "New York (anime)",
   "clothes.ripplez_hp.joseph_p2_swi_anime": "Switzerland (anime)",
-  "clothes.ripplez_hp.joseph_p2_swi_tank": "Coliseum (anime)"
+  "clothes.ripplez_hp.joseph_p2_swi_tank": "Coliseum (anime)",
 
+  "character.ripplez_hp.jonathan": "Jonathan Joestar",
+  "character.ripplez_hp.jonathan.short": "Jonathan",
+  "clothes.ripplez_hp.jonathan_ldn": "London Jacket (anime)",
+
+  "item.ripplez_hp_clothes.jonathan_ldn_head": "Jonathan's Deerstalker Cap",
+  "item.ripplez_hp_clothes.jonathan_ldn_chest": "Jonathan's Padded Jacket",
+  "item.ripplez_hp_clothes.jonathan_ldn_legs": "Jonathan's Pants",
+  "item.ripplez_hp_clothes.jonathan_ldn_feet": "Jonathan's Boots"
 }

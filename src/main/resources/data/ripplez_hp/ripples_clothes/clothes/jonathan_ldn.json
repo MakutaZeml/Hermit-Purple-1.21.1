@@ -1,0 +1,45 @@
+{
+  "character": "ripplez_hp:jonathan",
+  "story_part": "jojo_ripples:p1",
+  "pieces": {
+    "head": {
+      "asset_id": "ripplez_hp_clothes:jonathan_ldn",
+      "texture_id": "ripplez_hp_clothes:jonathan_ldn",
+      "item_model": "ripplez_hp_clothes:jonathan_ldn_head",
+      "item_name": {
+        "translate": "item.ripplez_hp_clothes.jonathan_ldn_head"
+      },
+      "equip_sound": "item.armor.equip_generic"
+    },
+
+    "chest": {
+      "asset_id": "ripplez_hp_clothes:jonathan_ldn",
+      "texture_id": "ripplez_hp_clothes:jonathan_ldn",
+      "item_model": "ripplez_hp_clothes:jonathan_ldn_chest",
+      "item_name": {
+        "translate": "item.ripplez_hp_clothes.jonathan_ldn_chest"
+      },
+      "equip_sound": "item.armor.equip_generic"
+    },
+
+    "legs": {
+      "asset_id": "ripplez_hp_clothes:jonathan_ldn",
+      "texture_id": "ripplez_hp_clothes:jonathan_ldn",
+      "item_model": "ripplez_hp_clothes:jonathan_ldn_legs",
+      "item_name": {
+        "translate": "item.ripplez_hp_clothes.jonathan_ldn_legs"
+      },
+      "equip_sound": "item.armor.equip_generic"
+    },
+
+    "feet": {
+      "asset_id": "ripplez_hp_clothes:jonathan_ldn",
+      "texture_id": "ripplez_hp_clothes:jonathan_ldn",
+      "item_model": "ripplez_hp_clothes:jonathan_ldn_feet",
+      "item_name": {
+        "translate": "item.ripplez_hp_clothes.jonathan_ldn_feet"
+      },
+      "equip_sound": "item.armor.equip_generic"
+    }
+  }
+}
