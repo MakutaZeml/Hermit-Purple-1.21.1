@@ -73,7 +73,6 @@ public class HermitSkinView extends StandSkinsScreen.SkinView {
 								 float scale, float scaleZoom, float yRot, float xRot, float xOffsetRatio, float yOffsetRatio,
 								 StandType standType, StandSkin standSkin,
 								 boolean extractRenderState, float ticks, int color, StandEntityRenderer.MenuType screen) {
-		HermitPurpleAddon.getLogger().debug("sex {}", layers);
 		for(RenderLayer<?,?> layer: layers){
 			if(layer instanceof HermitPurpleLayer<?,?> layer1){
 				HumanoidModel<?> model = layer1.purpleModel.getModel(skin);
