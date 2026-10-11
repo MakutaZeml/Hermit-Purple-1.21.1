@@ -32,7 +32,7 @@ public class WeakBlockAbiliy extends HermitAction{
         super(abilityType, abilityId, TargetBlock::new);
         usageGroup = AbilityUsageGroup.SPECIAL;
         setDefaultPhaseLength(ActionPhase.WINDUP, 10);
-        setDefaultPhaseLength(ActionPhase.PERFORM, 30);
+        setDefaultPhaseLength(ActionPhase.PERFORM, 20);
         setDefaultPhaseLength(ActionPhase.RECOVERY, 15);
     }
 
