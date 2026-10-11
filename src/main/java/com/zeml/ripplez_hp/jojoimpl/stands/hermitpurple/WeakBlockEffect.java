@@ -44,7 +44,7 @@ public class WeakBlockEffect extends StandEffectInstance {
                 }
 
                 AABB aabb = new AABB(center.getX()-1,center.getY()-1,center.getZ()-1,center.getX()+2,center.getY()+2,center.getZ()+2);
-                List<Entity> entities = level.getEntities(null,aabb).stream().filter(entity1 -> entity1 instanceof LivingEntity && entity1 != getStandUser()).toList();
+                List<Entity> entities = level.getEntities(null,aabb).stream().filter(entity1 -> entity1 instanceof LivingEntity && entity1 != getStandUser() && entity1 != getStandUser().getVehicle()).toList();
                 if(!entities.isEmpty()){
                     for (Entity ent : entities) {
                         if (ent.mainSupportingBlockPos.map(affectedBlocks::contains).orElse(false)) {

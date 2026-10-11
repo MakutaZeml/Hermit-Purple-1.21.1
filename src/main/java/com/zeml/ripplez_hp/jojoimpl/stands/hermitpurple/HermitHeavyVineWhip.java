@@ -105,7 +105,7 @@ public class HermitHeavyVineWhip extends HermitAction{
                 this.extendableOBB().updatePosition(level(), pos, offset, getPerformer().getXRot(), getPerformer().getYRot());
                 if (!level().isClientSide()){
                     Vec3 endPos = this.extendableOBB().rotatableHitbox().center.add(getPerformer().getLookAngle().scale(extendableOBB().rotatableHitbox().extent.length()));
-                    OBBCollisionUtil.getEntitiesInOBB(level(), this.extendableOBB().rotatableHitbox(), entity -> entity != getPerformer() && entity != getPowerUser() && !entities.contains(entity) && !(entity instanceof ItemEntity)).forEach(entity -> {
+                    OBBCollisionUtil.getEntitiesInOBB(level(), this.extendableOBB().rotatableHitbox(), entity -> entity != getPerformer() && entity != getPowerUser() && !entities.contains(entity) && !(entity instanceof ItemEntity) && entity != performer.getVehicle()).forEach(entity -> {
                         var damageType = DamageUtil.type(level(), ModDamageTypes.STAND_ATTACK);
                         DamageSource dmgSource = new DamageSource(damageType, performer);
                         float dmgAmount = (float) StandPower.get(performer).getPowerType().getStandStats().power();
