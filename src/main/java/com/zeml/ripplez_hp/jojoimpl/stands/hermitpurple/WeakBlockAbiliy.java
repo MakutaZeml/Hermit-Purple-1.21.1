@@ -119,7 +119,7 @@ public class WeakBlockAbiliy extends HermitAction{
                         tier = StandStatFormulas.getStandHarvestLevel(power.getPowerType().getStandStats().power()*2);
                     }
                     if(tier.canMine(level().getBlockState(blockPos))){
-                        WeakBlockEffect blockEffect = AddonStandAbilities.WEAK_BLOCK_EFFECT.get().create(level()).setCenter(blockPos, tier);
+                        WeakBlockEffect blockEffect = AddonStandAbilities.WEAK_BLOCK_EFFECT.get().create(level()).setCenter(blockPos, tier, getPowerUser().getId());
                         power.userStandEffects.addEffect(blockEffect);
                         if(!level().isClientSide){
                             float pitch = (float) (.5+Math.random());
@@ -146,5 +146,6 @@ public class WeakBlockAbiliy extends HermitAction{
 
 
     }
+
 
 }

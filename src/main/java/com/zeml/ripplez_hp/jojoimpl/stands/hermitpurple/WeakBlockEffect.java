@@ -4,15 +4,17 @@ import com.github.standobyte.jojo.entityattachment.custom_effect.EntityCustomEff
 import com.github.standobyte.jojo.powersystem.standpower.effect.StandEffectInstance;
 import com.github.standobyte.jojo.powersystem.standpower.entity.StandStatFormulas;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
+import com.zeml.ripplez_hp.core.packets.server.WeakedBlockPacket;
+import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -33,21 +35,34 @@ public class WeakBlockEffect extends StandEffectInstance {
     @Override
     protected void tick() {
         if(center != null){
-            if(level.getBlockState(center).is(BlockTags.AIR)|| level.getBlockState(center).liquid()){
-                this.remove();
-            }
-            AABB aabb = new AABB(center.getX()-1,center.getY()-1,center.getZ()-1,center.getX()+2,center.getY()+2,center.getZ()+2);
-            List<Entity> entities = level.getEntities(null,aabb).stream().filter(entity1 -> entity1 instanceof LivingEntity && entity1 != getStandUser()).toList();
-            if(!entities.isEmpty()){
-                for (Entity ent: entities){
-                        if(ent.mainSupportingBlockPos.map(affectedBlocks::contains).orElse(false)){
-                            for (BlockPos pos : affectedBlocks) {
+            if(!affectedBlocks.isEmpty()){
+                for (BlockPos pos : new ArrayList<>(affectedBlocks)){
+                    if(level.getBlockState(pos).isAir() || level.getBlockState(pos).liquid()){
+                        affectedBlocks.remove(pos);
+                        level.getData(AddonDataAttachmentTypes.WEAK).removeWeakBlock(pos);
+                    }
+                }
+
+                AABB aabb = new AABB(center.getX()-1,center.getY()-1,center.getZ()-1,center.getX()+2,center.getY()+2,center.getZ()+2);
+                List<Entity> entities = level.getEntities(null,aabb).stream().filter(entity1 -> entity1 instanceof LivingEntity && entity1 != getStandUser()).toList();
+                if(!entities.isEmpty()){
+                    for (Entity ent : entities) {
+                        if (ent.mainSupportingBlockPos.map(affectedBlocks::contains).orElse(false)) {
+                            for (BlockPos pos : new ArrayList<>(affectedBlocks)) {
                                 level.destroyBlock(pos, true);
+                                affectedBlocks.remove(pos);
+                                if (!level.isClientSide) {
+                                    level.getData(AddonDataAttachmentTypes.WEAK).removeWeakBlock(pos);
+                                }
                             }
                             break;
                         }
+                    }
                 }
             }
+        }
+        if(affectedBlocks.isEmpty()){
+            this.remove();
         }
     }
 
@@ -59,13 +74,14 @@ public class WeakBlockEffect extends StandEffectInstance {
         return this.center;
     }
 
-    public WeakBlockEffect setCenter(BlockPos blockPos, StandStatFormulas.BlockMiningTier tier){
+    public WeakBlockEffect setCenter(BlockPos blockPos, StandStatFormulas.BlockMiningTier tier, int id){
         center = blockPos;
         Iterable<BlockPos> pos = BlockPos.betweenClosed(blockPos.offset(-1,-1,-1),blockPos.offset(1,1,1));
         pos.forEach(position ->{
             if(!level.getBlockState(position).isAir() && !level.getBlockState(position).liquid() &&
                     tier.canMine(level.getBlockState(position))){
                 affectedBlocks.add(position.immutable());
+                level.getData(AddonDataAttachmentTypes.WEAK).addWeakBlocks(position.immutable());
             }
         });
         return this;

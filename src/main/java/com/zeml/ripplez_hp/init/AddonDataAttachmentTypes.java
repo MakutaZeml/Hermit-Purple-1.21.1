@@ -3,6 +3,7 @@ package com.zeml.ripplez_hp.init;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.HermitTargetData;
+import com.zeml.ripplez_hp.mc.attachments.WeakenedBlockData;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -19,5 +20,11 @@ public final class AddonDataAttachmentTypes {
 
 	public static final Supplier<AttachmentType<Boolean>> GUIDED = ATTACHMENT_TYPES.register("guided",
 			()-> AttachmentType.builder(()->false).build());
+
+	//---------------------------------------------LEVEL--------------------------------------------------
+
+	public static final Supplier<AttachmentType<WeakenedBlockData>> WEAK = ATTACHMENT_TYPES.register("weak_block",
+			()->AttachmentType.builder(WeakenedBlockData::new).serialize(WeakenedBlockData.CODEC).build());
+
 
 }

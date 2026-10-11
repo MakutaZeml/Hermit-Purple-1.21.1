@@ -2,10 +2,7 @@ package com.zeml.ripplez_hp.core;
 
 import com.zeml.ripplez_hp.core.packets.client.SetColorPacket;
 import com.zeml.ripplez_hp.core.packets.client.SetTargetPacket;
-import com.zeml.ripplez_hp.core.packets.server.AnotherGuidedPacket;
-import com.zeml.ripplez_hp.core.packets.server.GuidedPacket;
-import com.zeml.ripplez_hp.core.packets.server.HermitTargetDataPacket;
-import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
+import com.zeml.ripplez_hp.core.packets.server.*;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -24,6 +21,7 @@ public class HermitPackets {
         registerPacket(registrar,PayloadRegistrar::playToClient, new StandSoundPacket.Handler(HermitPurpleAddon.resLoc("stand_sound")));
         registerPacket(registrar,PayloadRegistrar::playToClient, new GuidedPacket.Handler(HermitPurpleAddon.resLoc("guided")));
         registerPacket(registrar,PayloadRegistrar::playToClient, new AnotherGuidedPacket.Handler(HermitPurpleAddon.resLoc("another_guided")));
+        registerPacket(registrar,PayloadRegistrar::playToClient, new WeakedBlockPacket.Handler(HermitPurpleAddon.resLoc("weak_block")));
 
     }
 
