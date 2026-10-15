@@ -31,6 +31,7 @@ public class StandInitHermitPurple {
                         .addAbility("hp_vine2",AddonStandAbilities.VINE, vine->vine.isSubAbility = true)
                         .addAbility("hp_grab",AddonStandAbilities.VINE_GRAB)
                         .addAbility("hp_vine_heavy",AddonStandAbilities.VINE_HEAVY)
+                        .addAbility("hp_grapple_block",AddonStandAbilities.GRAPPLING_BLOCK)
                         .addAbility("hp_target", AddonStandAbilities.SELECT_TARGET)
                         .addAbility("hp_doxx", AddonStandAbilities.MAP_DIVINATION)
                         .addAbility("hp_compass",AddonStandAbilities.COMPASS_DIVINATION, compass -> compass.isSubAbility = true)
@@ -41,8 +42,10 @@ public class StandInitHermitPurple {
 
                         .makeControlScheme("hotbar")
                         .bind("hp_vine", InputMethod.CLICK,InputKey.LMB)
-                        //.bind("hp_grab",InputMethod.HOLD,InputKey.LMB)
+                        .bind("hp_grab",InputMethod.HOLD,InputKey.LMB)
                         .bind("hp_vine_heavy",InputMethod.CLICK,InputKey.RMB)
+                        .bind("hp_grapple_block",InputMethod.HOLD,InputKey.RMB)
+
 
                         .makeHotbar(0, ModStands.USE_SPECIAL, ModStands.SWITCH_SPECIAL)
                         .addToHotbar("hp_target",0,InputMethod.CLICK)

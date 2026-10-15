@@ -19,7 +19,7 @@ public class AddonSoundEvents {
 
 	public static final DeferredHolder<SoundEvent, SoundEvent> DIVINATION = SOUNDS.register("vl_divination", SoundEvent::createVariableRangeEvent);
 	public static final DeferredHolder<SoundEvent, SoundEvent> ATTACK = SOUNDS.register("vl_vine", SoundEvent::createVariableRangeEvent);
-
+	public static final DeferredHolder<SoundEvent, SoundEvent> THE_CAR = SOUNDS.register("vl_the_car", SoundEvent::createVariableRangeEvent);
 
 	public static final DeferredHolder<SoundEvent, SoundEvent> EMP_SHOT = SOUNDS.register("emp_shot", SoundEvent::createVariableRangeEvent);
 

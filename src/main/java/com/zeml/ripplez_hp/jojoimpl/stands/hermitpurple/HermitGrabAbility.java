@@ -115,7 +115,6 @@ public class HermitGrabAbility extends HermitAction{
                         Vec3 endPos = this.extendableOBB().rotatableHitbox().center.add(getPerformer().getLookAngle().scale(extendableOBB().rotatableHitbox().extent.length()));
                         if(!entities.isEmpty()){
                             entities.forEach(entity -> {
-                                //Maker sure the entities don't get to close
                                 retainPos = this.extendableOBB().rotatableHitbox().center.add(performer.getLookAngle().scale(2.3));
                                 if(phase == ActionPhase.WINDUP || (phase == ActionPhase.PERFORM && this.extendableOBB().rotatableHitbox().extent.length() > 2.3)
                                 ){
@@ -141,6 +140,12 @@ public class HermitGrabAbility extends HermitAction{
             if(getPhase() == ActionPhase.RECOVERY && getPhaseTicksLeft()<=1){
                 HermitPurpleAddon.getLogger().debug("tru end");
             }
+
+        }
+
+        private void dragQueenEntity(Entity entity, Vec3 retainPos){
+            entity = entity.getRootVehicle();
+
         }
 
         @Override
