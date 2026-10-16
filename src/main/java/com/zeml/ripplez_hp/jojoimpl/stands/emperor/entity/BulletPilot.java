@@ -1,6 +1,12 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.emperor.entity;
 
+import com.github.standobyte.jojo.customobjects.entity_projectile.ModdedProjectileEntity;
+import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.init.AddonEntityTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -17,10 +23,19 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 public class BulletPilot extends TamableAnimal {
+    protected static final EntityDataAccessor<Boolean> IS_VISUAL = SynchedEntityData.defineId(BulletPilot.class, EntityDataSerializers.BOOLEAN);
+
     public BulletPilot(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
     }
 
+    public BulletPilot(Level level,LivingEntity owner, boolean visual){
+        super(AddonEntityTypes.EMPEROR_RIDER.get(), level);
+        if(owner != null){
+            setOwnerUUID(owner.getUUID());
+        }
+        setIsVisual(visual);
+    }
 
     public BulletPilot(Level level,LivingEntity owner){
         super(AddonEntityTypes.EMPEROR_RIDER.get(), level);
@@ -33,7 +48,8 @@ public class BulletPilot extends TamableAnimal {
     @Override
     public void tick() {
         super.tick();
-        if(this.getVehicle() == null){
+        HermitPurpleAddon.getLogger().debug("does pilot exist? {}", getIsVisual());
+        if(this.getVehicle() == null && !getIsVisual()){
             this.remove(RemovalReason.DISCARDED);
         }
     }
@@ -84,5 +100,32 @@ public class BulletPilot extends TamableAnimal {
     @Override
     public boolean shouldTryTeleportToOwner() {
         return false;
+    }
+
+
+    public boolean getIsVisual() {
+        return entityData.get(IS_VISUAL);
+    }
+
+    public void setIsVisual(boolean visual){
+        entityData.set(IS_VISUAL,visual);
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(IS_VISUAL,false);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        entityData.set(IS_VISUAL,compound.getBoolean("is_visual"));
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putBoolean("is_visual",entityData.get(IS_VISUAL));
     }
 }

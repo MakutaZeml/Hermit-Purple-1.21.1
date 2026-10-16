@@ -58,6 +58,7 @@ public class StandInitHermitPurple {
                         .addSkill(StandUnlockableSkill.startingAbility("hp_vine"))
                         .addSkill(StandUnlockableSkill.unlockableAbility("hp_grab",50))
                         .addSkill(StandUnlockableSkill.startingAbility("hp_vine_heavy"))
+                        .addSkill(StandUnlockableSkill.unlockableAbility("hp_grapple_block",75))
                         .addSkill(StandUnlockableSkill.startingAbility("hp_doxx"))
                         .addSkill(StandUnlockableSkill.startingAbility("hp_target"))
                         .addSkill(StandUnlockableSkill.unlockableAbility("hp_block",50))

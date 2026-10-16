@@ -1,5 +1,6 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple;
 
+import com.github.standobyte.jojo.client.sound.ClientsideSoundsHelper;
 import com.github.standobyte.jojo.mechanics.voiceline.VoiceLineServerSide;
 import com.github.standobyte.jojo.powersystem.ability.AbilityId;
 import com.github.standobyte.jojo.powersystem.ability.AbilityType;
@@ -17,8 +18,7 @@ import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.HermitAction;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -50,6 +50,7 @@ public class GrappleBlockAbility extends HermitAction {
 
 
 
+
         public GrapplingBlock(EntityActionType ability) {
             super(ability);
         }
@@ -61,7 +62,6 @@ public class GrappleBlockAbility extends HermitAction {
             this.vines = new ExtendableOBB(obb, 1.0F, (int) lifespan, 0, new Vec3(0, 1.35, 0));
         }
 
-        //TODO go to RECOVERY AFTER THE BLOCK IN endPos gets destroyed
         @Override
         public void actionTick() {
             switch (getPhase()){
@@ -77,24 +77,46 @@ public class GrappleBlockAbility extends HermitAction {
                         BlockState blockCollision = OBBCollisionUtil.getCollidingBlock(level(), result.getBlockPos());
                         HermitPurpleAddon.getLogger().debug("WTF?! {} {} {}", curPhaseTick,endPos, blockCollision != null);
                         if (blockCollision != null){
+                            if(level().isClientSide){
+                                if(endPos != null){
+                                    StandPower power = StandPower.get(performer);
+                                    if(power != null){
+                                        SoundEvent event = ClientsideSoundsHelper.withStandSkin(AddonSoundEvents.HP_TENSION.get(),power);
+                                        level().playLocalSound(endPos.x,endPos.y,endPos.z,event,performer.getSoundSource(),1,1,true);
+                                    }
+                                }
+                            }
                             setPhase(ActionPhase.PERFORM,0);
                             syncPhaseChanges();
                         } else if (curPhaseTick > 20) {
                             setPhase(ActionPhase.RECOVERY,0);
                             syncPhaseChanges();
                         }
-                        if(!level().isClientSide && level() instanceof ServerLevel serverLevel){
-                            float f = (float)level().getRandom().nextInt(4) / 24.0F;
-                            serverLevel.sendParticles(ParticleTypes.NOTE, endPos.x, endPos.y, endPos.z, 0, f, 0.0, 0.0, 1.0);
-                        }
+
 
                     }
                 }
                 case PERFORM -> {
+                    vines = null;
                     if(endPos != null){
+                        BlockPos blockPos = BlockPos.containing(endPos);
+                        if(!level().isClientSide){
+                            if((level().getBlockState(blockPos).isAir() || level().getBlockState(blockPos).liquid()) && curPhaseTick>5){
+                                setPhase(ActionPhase.RECOVERY,0);
+                                syncPhaseChanges();
+                            }
+                        }
+
+
+                        performer.resetFallDistance();
+
                         Vec3 vecTo = endPos.subtract(performer.position().add(0,1.5,0));
                         if(vecTo.length() > 1){
                             dragTarget(performer,vecTo.normalize());
+                            StandPower power = StandPower.get(performer);
+                            if(power != null){
+                                power.addExp(.01f);
+                            }
                         }else {
                             dragTarget(performer,Vec3.ZERO);
                         }
@@ -115,29 +137,34 @@ public class GrappleBlockAbility extends HermitAction {
                 case WINDUP -> {
                     StandPower power = StandPower.get(performer);
                     if(power != null && !level().isClientSide){
-                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer,new StandSoundPacket(performer.getId(), AddonSoundEvents.HP_VINE_SWING,true,1, 1));
+                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer,new StandSoundPacket(performer.getId(), AddonSoundEvents.HP_VINE_THROW,true,1, 1));
                     }
-                }
-                case PERFORM -> {
                     BlockPos pos = performer.blockPosition();
-                    boolean fence = false;
+                    boolean thisIsntTheCar = false;
                     for(int i =0; i<3;i++){
                         if(level().getBlockState(pos).is(BlockTags.FENCES) || level().getBlockState(pos).getBlock() instanceof IronBarsBlock){
-                            fence = true;
+                            thisIsntTheCar = true;
                             break;
                         }
                         pos = pos.below();
                     }
-                    if(fence){
+
+
+                    if(thisIsntTheCar && !performer.onGround() && !level().isClientSide()){
                         VoiceLineServerSide.play(performer, AddonSoundEvents.THE_CAR,0,false);
                     }
-
+                }
+                case PERFORM -> {
 
 
                 }
             }
 
+        }
 
+        @Override
+        public void actionPerformEnd() {
+            performer.fallDistance = 0;
         }
 
         @Override

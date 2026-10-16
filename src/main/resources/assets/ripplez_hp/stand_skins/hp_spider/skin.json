@@ -2,7 +2,7 @@
 	"stand_type": "ripplez_hp:hermit_purple",
 	"color" : {
 		"primary": "#0055BF",
-		"secondary": "#C91A09",
+		"secondary": "#bcbcbc",
 		"text": "#0055BF",
 		"text_white_bg": "#C91A09",
 		"aura": "#0055BF"
