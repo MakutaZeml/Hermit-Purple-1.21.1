@@ -11,6 +11,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple.GrappleBlockAbility;
+import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple.SingleGrappleAction;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
@@ -42,12 +43,13 @@ public abstract class RenderHermitLeash<T extends Entity>  {
     private void onRender(T p_entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CallbackInfo callbackInfo){
         if(p_entity instanceof LivingEntity livingEntity){
             LivingComponentAction action = LivingComponentAction.getComponent(livingEntity);
-            if(action.getAction() instanceof GrappleBlockAbility.GrapplingBlock grapplingBlock && grapplingBlock.getEndPos() != null && grapplingBlock.getPhase() != ActionPhase.RECOVERY){
-                if(!ClientGlobals.canSeeStands){
+            if(action.getAction() instanceof SingleGrappleAction grapplingBlock && grapplingBlock.getEndPos() != null && action.getAction().getPhase() != ActionPhase.RECOVERY){
+                if(!ClientGlobals.canSeeStands || livingEntity.isInvisible()){
                     return;
                 }
                 StandPower standPower = StandPower.get(livingEntity);
                 StandSkin standSkin = StandSkinsLoader.getInstance().getSkin(standPower);
+                if(standSkin == null)return;
 
                 poseStack.pushPose();
                 double d0 = (double)(p_entity.getPreciseBodyRotation(partialTick) * 0.017453292F) + 1.5707963267948966;
@@ -90,6 +92,7 @@ public abstract class RenderHermitLeash<T extends Entity>  {
         }
     }
 
+    @Unique
     private int getBlockLightL(Level level, BlockPos pos){
         return level.getBrightness(LightLayer.BLOCK, pos);
     }
@@ -97,8 +100,10 @@ public abstract class RenderHermitLeash<T extends Entity>  {
     //The Only reason I'm using Entity Render and not Living Render
     @Shadow protected abstract int getBlockLightLevel(T entity,BlockPos blockPos);
 
-
-    private static void addVertexPair(VertexConsumer buffer, Matrix4f pose, float startX, float startY, float startZ, int entityBlockLight, int holderBlockLight, int entitySkyLight, int holderSkyLight, float yOffset, float dy, float dx, float dz, int index, boolean reverse, int color) {
+    @Unique
+    private static void addVertexPair(VertexConsumer buffer, Matrix4f pose, float startX, float startY, float startZ,
+                                      int entityBlockLight, int holderBlockLight, int entitySkyLight, int holderSkyLight,
+                                      float yOffset, float dy, float dx, float dz, int index, boolean reverse, int color) {
         float f = (float)index / 24.0F;
         int i = (int)Mth.lerp(f, (float)entityBlockLight, (float)holderBlockLight);
         int j = (int)Mth.lerp(f, (float)entitySkyLight, (float)holderSkyLight);

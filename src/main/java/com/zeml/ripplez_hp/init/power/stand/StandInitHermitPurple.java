@@ -38,6 +38,7 @@ public class StandInitHermitPurple {
                         .addAbility("hp_camera",AddonStandAbilities.CAMERA_DIVINATION, camera ->camera.isSubAbility = true)
                         .addAbility("hp_block", AddonStandAbilities.THORNS)
                         .addAbility("hp_weak",AddonStandAbilities.WEAK_BLOCK)
+                        .addAbility("hp_grapple_weak",AddonStandAbilities.WEAK_BLOCK_INPUT)
 
 
                         .makeControlScheme("hotbar")
@@ -63,6 +64,7 @@ public class StandInitHermitPurple {
                         .addSkill(StandUnlockableSkill.startingAbility("hp_target"))
                         .addSkill(StandUnlockableSkill.unlockableAbility("hp_block",50))
                         .addSkill(StandUnlockableSkill.unlockableAbility("hp_weak",25))
+                        .addSkill(StandUnlockableSkill.unlockableAbility("hp_grapple_weak",20).setIncomplete().prerequisiteSkill("hp_weak","hp_grapple_block"))
                 ,id
         ).init(stand -> {
         	stand.discStoryPartPriority = 1;

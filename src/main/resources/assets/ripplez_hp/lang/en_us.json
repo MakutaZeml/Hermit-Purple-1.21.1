@@ -39,8 +39,12 @@
   "jojo_ripples.skill.hp_block.controls": "Special ability",
   "jojo_ripples.skill.hp_weak": "Weaken Blocks",
   "jojo_ripples.ability.hp_weak": "Weaken Blocks",
-  "jojo_ripples.skill.hp_weak.desc": "Use your hermit purple to weaken an 3x3 block area from their inside",
+  "jojo_ripples.skill.hp_weak.desc": "Use your hermit purple to weaken an 3x3x3 block volume from their inside",
   "jojo_ripples.skill.hp_weak.controls": "Special ability",
+  "jojo_ripples.skill.hp_grapple_weak": "Weaken Grapple Blocks",
+  "jojo_ripples.ability.hp_grapple_weak": "Weaken Grapple Blocks",
+  "jojo_ripples.skill.hp_grapple_weak.desc": "Use your hermit purple attached to the the block to weaken its surrounding blocks from their inside",
+  "jojo_ripples.skill.hp_grapple_weak.controls": "Special ability",
 
   "jojo_ripples.skill.emp_shot": "Emperor Shot",
   "jojo_ripples.ability.emp_shot": "Emperor Shot",

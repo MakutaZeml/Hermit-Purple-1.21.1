@@ -29,7 +29,9 @@ public class WeakBlockEffect extends StandEffectInstance {
 
     @Override
     protected void start() {
-
+        if(userPower != null){
+            userPower.addExp(0.1f);
+        }
     }
 
     @Override
