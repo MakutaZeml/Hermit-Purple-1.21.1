@@ -38,7 +38,7 @@ import java.util.Objects;
 public class GrappleBlockAbility extends HermitAction {
     public GrappleBlockAbility(AbilityType<?> abilityType, AbilityId abilityId) {
         super(abilityType, abilityId,GrapplingBlock::new);
-        setDefaultPhaseLength(ActionPhase.BUTTON_CHARGE,10);
+        setDefaultPhaseLength(ActionPhase.BUTTON_CHARGE,5);
         setDefaultPhaseLength(ActionPhase.WINDUP,30);
         setDefaultPhaseLength(ActionPhase.PERFORM,Integer.MAX_VALUE);
         setDefaultPhaseLength(ActionPhase.RECOVERY,10);
@@ -49,7 +49,6 @@ public class GrappleBlockAbility extends HermitAction {
     public static class GrapplingBlock extends EntityActionInstance implements SingleGrappleAction {
         private ExtendableOBB vines;
         private Vec3 endPos;
-
 
 
 
@@ -75,7 +74,7 @@ public class GrappleBlockAbility extends HermitAction {
                                 .yRot(-getPerformer().yBodyRot * MathUtil.DEG_TO_RAD);
                         this.vines.updatePosition(level(), pos, offset, getPerformer().getXRot(), getPerformer().getYRot());
                         endPos = this.vines.rotatableHitbox().center.add(getPerformer().getLookAngle().scale(vines.rotatableHitbox().extent.length()));
-                        BlockHitResult result = level().clip(new ClipContext(vines.rotatableHitbox().center, endPos, ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, CollisionContext.empty()));
+                        BlockHitResult result = level().clip(new ClipContext(vines.rotatableHitbox().center, endPos, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, CollisionContext.empty()));
                         BlockState blockCollision = OBBCollisionUtil.getCollidingBlock(level(), result.getBlockPos());
                         if (blockCollision != null){
                             if(level().isClientSide){
@@ -102,7 +101,7 @@ public class GrappleBlockAbility extends HermitAction {
                     if(endPos != null){
                         BlockPos blockPos = BlockPos.containing(endPos);
                         if(!level().isClientSide){
-                            if((level().getBlockState(blockPos).isAir() || level().getBlockState(blockPos).liquid()) && curPhaseTick>5){
+                            if((level().getBlockState(blockPos).isAir()) && curPhaseTick>5){
                                 setPhase(ActionPhase.RECOVERY,0);
                                 syncPhaseChanges();
                             }
@@ -118,6 +117,11 @@ public class GrappleBlockAbility extends HermitAction {
                         }else {
                             dragTarget(performer,Vec3.ZERO);
                         }
+                    }
+                    StandPower power = StandPower.get(performer);
+                    if(power == null || !power.isSummoned()){
+                        setPhase(ActionPhase.RECOVERY,15);
+                        syncPhaseChanges();
                     }
 
                 }
@@ -148,7 +152,6 @@ public class GrappleBlockAbility extends HermitAction {
                     }
                     pos = pos.below();
                 }
-
 
                 if (thisIsntTheCar && !performer.onGround() && !level().isClientSide()) {
                     VoiceLineServerSide.play(performer, AddonSoundEvents.THE_CAR, 0, false);

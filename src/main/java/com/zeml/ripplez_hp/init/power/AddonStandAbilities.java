@@ -10,6 +10,7 @@ import com.zeml.ripplez_hp.jojoimpl.stands.emperor.*;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.*;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.WeakBlockEffect;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple.GrappleBlockAbility;
+import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple.GrappleEntityAbility;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple.WeakGrappleBlockInput;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
@@ -23,8 +24,8 @@ public final class AddonStandAbilities {
 	public static final DeferredHolder<AbilityType<?>,AbilityType<HermitHeavyVineWhip>> VINE_HEAVY = ABILITY_TYPES.register(
 			"vine_heavy",key ->new AbilityType<>(key,HermitHeavyVineWhip::new));
 
-	public static final DeferredHolder<AbilityType<?>,AbilityType<HermitGrabAbility>> VINE_GRAB = ABILITY_TYPES.register(
-			"vine_grab",key ->new AbilityType<>(key, HermitGrabAbility::new));
+	public static final DeferredHolder<AbilityType<?>,AbilityType<GrappleEntityAbility>> VINE_GRAB = ABILITY_TYPES.register(
+			"vine_grab",key ->new AbilityType<>(key, GrappleEntityAbility::new));
 
 
 	public static final DeferredHolder<AbilityType<?>, AbilityType<OhNoCringeAbility>> CRINGE = ABILITY_TYPES.register(

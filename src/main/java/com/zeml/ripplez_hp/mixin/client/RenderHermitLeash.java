@@ -17,6 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
@@ -26,6 +27,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
@@ -35,9 +37,11 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = EntityRenderer.class)
-public abstract class RenderHermitLeash<T extends Entity>  {
+public abstract class RenderHermitLeash<T extends Entity> {
+
 
     @Inject(method = "render",at = @At("TAIL"))
     private void onRender(T p_entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CallbackInfo callbackInfo){
@@ -121,6 +125,18 @@ public abstract class RenderHermitLeash<T extends Entity>  {
 
 
 
+    @Inject(method = "Lnet/minecraft/client/renderer/entity/EntityRenderer;shouldRender(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/client/renderer/culling/Frustum;DDD)Z"
+            , at = @At("RETURN"), cancellable = true
+    )
+    private void onShouldRender(T livingEntity, Frustum camera, double camX, double camY, double camZ, CallbackInfoReturnable<Boolean> ci){
+        if(livingEntity instanceof  LivingEntity user){
+            LivingComponentAction action = LivingComponentAction.getComponent(user);
+            if(action.getAction() instanceof SingleGrappleAction grapplingBlock && grapplingBlock.getEndPos() != null && action.getAction().getPhase() != ActionPhase.RECOVERY){
+                AABB aabb = livingEntity.getBoundingBoxForCulling().inflate(grapplingBlock.getEndPos().distanceTo(user.position())*1.2);
+                ci.setReturnValue(camera.isVisible(aabb));
+            }
+        }
+    }
 
 
 }

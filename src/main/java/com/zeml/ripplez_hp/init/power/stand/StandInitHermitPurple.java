@@ -38,7 +38,7 @@ public class StandInitHermitPurple {
                         .addAbility("hp_camera",AddonStandAbilities.CAMERA_DIVINATION, camera ->camera.isSubAbility = true)
                         .addAbility("hp_block", AddonStandAbilities.THORNS)
                         .addAbility("hp_weak",AddonStandAbilities.WEAK_BLOCK)
-                        .addAbility("hp_grapple_weak",AddonStandAbilities.WEAK_BLOCK_INPUT)
+                        .addAbility("hp_grapple_weak",AddonStandAbilities.WEAK_BLOCK_INPUT,weak->weak.isSubAbility= true)
 
 
                         .makeControlScheme("hotbar")

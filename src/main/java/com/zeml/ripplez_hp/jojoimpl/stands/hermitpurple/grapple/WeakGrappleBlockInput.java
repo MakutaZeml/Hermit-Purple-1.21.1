@@ -8,8 +8,11 @@ import com.github.standobyte.jojo.powersystem.ability.Ability;
 import com.github.standobyte.jojo.powersystem.ability.AbilityId;
 import com.github.standobyte.jojo.powersystem.ability.AbilityType;
 import com.github.standobyte.jojo.powersystem.ability.condition.AvailableAbilities;
+import com.github.standobyte.jojo.powersystem.ability.controls.InputMethod;
+import com.github.standobyte.jojo.powersystem.ability.input.ActionInputBuffer;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionPhase;
 import com.github.standobyte.jojo.powersystem.entityaction.EntityActionInstance;
+import com.github.standobyte.jojo.powersystem.entityaction.HeldInput;
 import com.github.standobyte.jojo.powersystem.entityaction.LivingComponentAction;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.github.standobyte.jojo.powersystem.standpower.entity.StandEntity;
@@ -26,6 +29,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
 
 public class WeakGrappleBlockInput extends Ability {
     public WeakGrappleBlockInput(AbilityType<?> abilityType, AbilityId abilityId) {
@@ -48,29 +52,28 @@ public class WeakGrappleBlockInput extends Ability {
         return super.replaceWithSubAbility(context, abilities);
     }
 
+
     @Override
     public void onClick(Level level, LivingEntity user, FriendlyByteBuf extraClientInput) {
-        if (!level.isClientSide()) {
-            StandPower standPower = StandPower.get(user);				if (standPower == null) return;
-            LivingComponentAction action = LivingComponentAction.getComponent(user);
-            if(action.getAction() instanceof GrappleBlockAbility.GrapplingBlock grapplingBlock){
-                if(grapplingBlock.getPhase() == ActionPhase.PERFORM && grapplingBlock.getEndPos() != null
-                        && grapplingBlock.getEndPos().distanceTo(user.position())<1){
-                    StandStatFormulas.BlockMiningTier tier = StandStatFormulas.getStandHarvestLevel(6);
-                    if(standPower.getPowerType() != null && standPower.getPowerType().getStandStats() != null){
-                        tier = StandStatFormulas.getStandHarvestLevel(standPower.getPowerType().getStandStats().power()*2);
-                    }
-                    HermitPurpleAddon.getLogger().debug("pressed");
-                    WeakBlockEffect effect = AddonStandAbilities.WEAK_BLOCK_EFFECT.get().create(level).setCenter(BlockPos.containing(grapplingBlock.getEndPos()), tier, user.getId());
-                    standPower.userStandEffects.addEffect(effect);
-                    if(!level.isClientSide){
-                        float pitch = (float) (.5+Math.random());
-                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(user,new StandSoundPacket(user.getId(), AddonSoundEvents.HP_TENSION,true,1, pitch));
-                    }
+        StandPower standPower = StandPower.get(user);
+        if (standPower == null)return;
+        LivingComponentAction action = LivingComponentAction.getComponent(user);
+        if(action.getAction() instanceof GrappleBlockAbility.GrapplingBlock grapplingBlock){
+            if(grapplingBlock.getPhase() == ActionPhase.PERFORM && grapplingBlock.getEndPos() != null
+                    && grapplingBlock.getEndPos().distanceTo(user.position())<1){
+                StandStatFormulas.BlockMiningTier tier = StandStatFormulas.getStandHarvestLevel(6);
+                if(standPower.getPowerType() != null && standPower.getPowerType().getStandStats() != null){
+                    tier = StandStatFormulas.getStandHarvestLevel(standPower.getPowerType().getStandStats().power()*2);
+                }
+                HermitPurpleAddon.getLogger().debug("pressed");
+                WeakBlockEffect effect = AddonStandAbilities.WEAK_BLOCK_EFFECT.get().create(level).setCenter(BlockPos.containing(grapplingBlock.getEndPos()), tier, user.getId());
+                standPower.userStandEffects.addEffect(effect);
+                if(!level.isClientSide){
+                    float pitch = (float) (.5+Math.random());
+                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(user,new StandSoundPacket(user.getId(), AddonSoundEvents.HP_TENSION,true,1, pitch));
                 }
             }
-
         }
-    }
 
+    }
 }

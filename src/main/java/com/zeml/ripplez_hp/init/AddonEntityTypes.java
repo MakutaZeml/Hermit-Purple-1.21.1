@@ -34,6 +34,7 @@ public final class AddonEntityTypes {
 					.clientTrackingRange(30)
 					.build(createIDFor(key)));
 
+
 	
 	public static String createIDFor(ResourceLocation key) {
 		return key.toString();

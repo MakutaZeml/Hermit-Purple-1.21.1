@@ -42,6 +42,7 @@ public class HermitEntityRenderers {
     private static <T extends LivingEntity, M extends HumanoidModel<T>> void addHumanoidLayers(LivingEntityRenderer<T, M> renderer) {
         renderer.addLayer(new HermitPurpleLayer<>(renderer));
         renderer.addLayer(new HermitPurpleVinesLayer<>(renderer));
+
     }
 
 
