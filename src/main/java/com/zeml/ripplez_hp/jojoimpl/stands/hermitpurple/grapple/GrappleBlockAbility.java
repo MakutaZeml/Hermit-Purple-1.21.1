@@ -129,6 +129,8 @@ public class GrappleBlockAbility extends HermitAction {
                     performer.resetFallDistance();
                 }
             }
+            if(endPos != null){
+            }
         }
 
         @Override
@@ -145,7 +147,7 @@ public class GrappleBlockAbility extends HermitAction {
                 }
                 BlockPos pos = performer.blockPosition();
                 boolean thisIsntTheCar = false;
-                for (int i = 0; i < 3; i++) {
+                for (int i = 0; i < 5; i++) {
                     if (level().getBlockState(pos).is(BlockTags.FENCES) || level().getBlockState(pos).getBlock() instanceof IronBarsBlock) {
                         thisIsntTheCar = true;
                         break;
@@ -194,7 +196,7 @@ public class GrappleBlockAbility extends HermitAction {
         @Override
         public boolean canBeCancelledInto(@Nullable EntityActionType cancellingAbility) {
             if(cancellingAbility instanceof WeakGrappleBlockInput){
-                return true;
+                return false;
             }
             return super.canBeCancelledInto(cancellingAbility);
         }

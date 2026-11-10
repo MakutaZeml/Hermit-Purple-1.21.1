@@ -58,7 +58,7 @@ public abstract class RenderHermitLeash<T extends Entity> {
                 poseStack.pushPose();
                 double d0 = (double)(p_entity.getPreciseBodyRotation(partialTick) * 0.017453292F) + 1.5707963267948966;
                 Vec3 vec3 = grapplingBlock.getEndPos();
-                Vec3 vec31 = new Vec3(0,1.5,0);
+                Vec3 vec31 = new Vec3(0,livingEntity.getBbHeight()*3/4,0);
                 double d1 = Math.cos(d0) * vec31.z + Math.sin(d0) * vec31.x;
                 double d2 = Math.sin(d0) * vec31.z - Math.cos(d0) * vec31.x;
                 double d3 = Mth.lerp(partialTick, p_entity.xo, p_entity.getX()) + d1;
