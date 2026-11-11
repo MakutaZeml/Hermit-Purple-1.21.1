@@ -1,6 +1,7 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple;
 
 import com.github.standobyte.jojo.client.sound.ClientsideSoundsHelper;
+import com.github.standobyte.jojo.customobjects.entity_projectile.ThrownBlockEntity;
 import com.github.standobyte.jojo.powersystem.ability.AbilityId;
 import com.github.standobyte.jojo.powersystem.ability.AbilityType;
 import com.github.standobyte.jojo.powersystem.ability.AbilityUsageGroup;
@@ -90,6 +91,15 @@ public class GrappleEntityAbility extends HermitAction {
                         BlockHitResult result = level().clip(new ClipContext(vines.rotatableHitbox().center, endPos, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, CollisionContext.empty()));
                         BlockState blockCollision = OBBCollisionUtil.getCollidingBlock(level(), result.getBlockPos());
                         if (blockCollision != null){
+                            StandPower power = StandPower.get(performer);
+                            if(power != null && power.getCurTypeData() != null && power.getCurTypeData().isSkillUnlocked("block_toss") && grapple == null){
+                               /*
+                               //TODO Implement when isn't broken
+                                ThrownBlockEntity thrownBlockEntity = new ThrownBlockEntity(performer,level(),blockCollision,result.getBlockPos());
+                                level().addFreshEntity(thrownBlockEntity);
+                                level().destroyBlock(result.getBlockPos(),false);
+                                grapple = thrownBlockEntity;*/
+                            }
                             this.vines.forceRetract(level(),performer,this.id);
                         }
                         if(grapple != null){
@@ -110,17 +120,20 @@ public class GrappleEntityAbility extends HermitAction {
                     if(grapple == null){
                         setPhase(ActionPhase.RECOVERY, 0);
                         syncPhaseChanges();
-                        return;
                     }else {
                         grapple.resetFallDistance();
                         this.vines.updatePosition(level(), pos, offset, getPerformer().getXRot(), getPerformer().getYRot());
                         endPos = this.vines.rotatableHitbox().center.add(getPerformer().getLookAngle().scale(3));
                         Vec3 vecTo = endPos.subtract(grapple.position().add(0,1.5,0));
                         if(vecTo.length() > 1){
-                            double max = Math.min(vecTo.length()/2,1);
-                            dragTarget(grapple,vecTo.normalize().multiply(max,max,max));
+                            dragTarget(grapple,vecTo.normalize());
                         }else {
                             dragTarget(grapple,Vec3.ZERO);
+                        }
+                        StandPower standPower = StandPower.get(performer);
+                        if(standPower != null){
+                            standPower.addExp(.03f);
+                            standPower.consumeStamina(2);
                         }
                     }
                 }
@@ -176,8 +189,12 @@ public class GrappleEntityAbility extends HermitAction {
         }
 
         private void doDragEntity(Entity entity, Vec3 vec) {
-            entity.setDeltaMovement(vec);
-            if(!entity.level().isClientSide) JojoModUtil.forceSyncMotion(entity);
+            if(entity != null){
+                entity.setDeltaMovement(vec);
+                if(!entity.level().isClientSide) JojoModUtil.forceSyncMotion(entity);
+            }
+
         }
     }
+
 }

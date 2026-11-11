@@ -9,9 +9,7 @@ import com.github.standobyte.jojo.powersystem.ability.AbilityType;
 import com.zeml.ripplez_hp.jojoimpl.stands.emperor.*;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.*;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.WeakBlockEffect;
-import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple.GrappleBlockAbility;
-import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple.GrappleEntityAbility;
-import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple.WeakGrappleBlockInput;
+import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple.*;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 public final class AddonStandAbilities {
@@ -27,9 +25,6 @@ public final class AddonStandAbilities {
 	public static final DeferredHolder<AbilityType<?>,AbilityType<GrappleEntityAbility>> VINE_GRAB = ABILITY_TYPES.register(
 			"vine_grab",key ->new AbilityType<>(key, GrappleEntityAbility::new));
 
-
-	public static final DeferredHolder<AbilityType<?>, AbilityType<OhNoCringeAbility>> CRINGE = ABILITY_TYPES.register(
-			"cringe", key -> new AbilityType<>(key, OhNoCringeAbility::new));
 
 	public static final DeferredHolder<AbilityType<?>, AbilityType<MapDoxingAbility>> MAP_DIVINATION = ABILITY_TYPES.register(
 			"hp_doxx", key ->new AbilityType<>(key, MapDoxingAbility::new)
@@ -61,12 +56,17 @@ public final class AddonStandAbilities {
 	public static final DeferredHolder<AbilityType<?>, AbilityType<GrappleBlockAbility>> GRAPPLING_BLOCK = ABILITY_TYPES.register(
 			"hp_grappling_block", key -> new AbilityType<>(key, GrappleBlockAbility::new)
 	);
-
+	public static final DeferredHolder<AbilityType<?>, AbilityType<SpiderManBlockAbility>> GRAPPLING_SPIDER_BLOCK = ABILITY_TYPES.register(
+			"hp_spider_grappling_block", key -> new AbilityType<>(key, SpiderManBlockAbility::new)
+	);
 	public static final DeferredHolder<EntityCustomEffectType<?>, EntityCustomEffectType<WeakBlockEffect>> WEAK_BLOCK_EFFECT = STAND_EFFECT_TYPES.register(
 			"hp_weak_block", key -> new EntityCustomEffectType<>(key, WeakBlockEffect::new));
 
 	public static final DeferredHolder<EntityCustomEffectType<?>, EntityCustomEffectType<HermitThornsAbility.HermitThornsEffect>> HERMIT_THORNS_EFFECT = STAND_EFFECT_TYPES.register(
 			"hp_thorns", key -> new EntityCustomEffectType<>(key, HermitThornsAbility.HermitThornsEffect::new));
+
+	public static final DeferredHolder<EntityCustomEffectType<?>, EntityCustomEffectType<GrappleControlEffect>> GRAPPLE_CONTROL = STAND_EFFECT_TYPES.register(
+			"hp_grapple", key -> new EntityCustomEffectType<>(key, GrappleControlEffect::new));
 
 	public static final DeferredHolder<AbilityType<?>, AbilityType<TargetSelectAbility>> EMP_TARGET = ABILITY_TYPES.register(
 			"emp_target", key -> new AbilityType<>(key, TargetSelectAbility::new)

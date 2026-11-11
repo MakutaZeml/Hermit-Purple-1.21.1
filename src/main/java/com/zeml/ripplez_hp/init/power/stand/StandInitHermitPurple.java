@@ -32,6 +32,7 @@ public class StandInitHermitPurple {
                         .addAbility("hp_grab",AddonStandAbilities.VINE_GRAB)
                         .addAbility("hp_vine_heavy",AddonStandAbilities.VINE_HEAVY)
                         .addAbility("hp_grapple_block",AddonStandAbilities.GRAPPLING_BLOCK)
+                        .addAbility("hp_spider_grapple_block",AddonStandAbilities.GRAPPLING_SPIDER_BLOCK)
                         .addAbility("hp_target", AddonStandAbilities.SELECT_TARGET)
                         .addAbility("hp_doxx", AddonStandAbilities.MAP_DIVINATION)
                         .addAbility("hp_compass",AddonStandAbilities.COMPASS_DIVINATION, compass -> compass.isSubAbility = true)
@@ -46,7 +47,7 @@ public class StandInitHermitPurple {
                         .bind("hp_grab",InputMethod.HOLD,InputKey.LMB)
                         .bind("hp_vine_heavy",InputMethod.CLICK,InputKey.RMB)
                         .bind("hp_grapple_block",InputMethod.HOLD,InputKey.RMB)
-
+                        .bind("hp_spider_grapple_block",InputMethod.HOLD,InputKey.RMB.withModifier(InputKey.Modifier.CONTROL))
 
                         .makeHotbar(0, ModStands.USE_SPECIAL, ModStands.SWITCH_SPECIAL)
                         .addToHotbar("hp_target",0,InputMethod.CLICK)
@@ -59,12 +60,14 @@ public class StandInitHermitPurple {
                         .addSkill(StandUnlockableSkill.startingAbility("hp_vine"))
                         .addSkill(StandUnlockableSkill.unlockableAbility("hp_grab",50))
                         .addSkill(StandUnlockableSkill.startingAbility("hp_vine_heavy"))
-                        .addSkill(StandUnlockableSkill.unlockableAbility("hp_grapple_block",75))
+                        .addSkill(StandUnlockableSkill.unlockableAbility("hp_grapple_block",75).withAbility("hp_spider_grapple_block"))
                         .addSkill(StandUnlockableSkill.startingAbility("hp_doxx"))
                         .addSkill(StandUnlockableSkill.startingAbility("hp_target"))
                         .addSkill(StandUnlockableSkill.unlockableAbility("hp_block",50))
                         .addSkill(StandUnlockableSkill.unlockableAbility("hp_weak",25))
-                        .addSkill(StandUnlockableSkill.unlockableAbility("hp_grapple_weak",20).setIncomplete().prerequisiteSkill("hp_weak","hp_grapple_block"))
+                        .addSkill(StandUnlockableSkill.unlockableAbility("block_toss",50).setIncomplete().prerequisiteSkill("hp_weak"))
+                        .addSkill(StandUnlockableSkill.unlockableAbility("hp_grapple_weak",20).prerequisiteSkill("hp_weak","hp_grapple_block"))
+
                 ,id
         ).init(stand -> {
         	stand.discStoryPartPriority = 1;
