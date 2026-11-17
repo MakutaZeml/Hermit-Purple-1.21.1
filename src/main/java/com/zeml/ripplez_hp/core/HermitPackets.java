@@ -1,5 +1,6 @@
 package com.zeml.ripplez_hp.core;
 
+import com.zeml.ripplez_hp.core.packets.client.ClientSetNodes;
 import com.zeml.ripplez_hp.core.packets.client.SetColorPacket;
 import com.zeml.ripplez_hp.core.packets.client.SetTargetPacket;
 import com.zeml.ripplez_hp.core.packets.server.*;
@@ -17,11 +18,13 @@ public class HermitPackets {
         PayloadRegistrar registrar = event.registrar("1");
         registerPacket(registrar,PayloadRegistrar::playToServer, new SetTargetPacket.Handler(HermitPurpleAddon.resLoc("hermit")));
         registerPacket(registrar,PayloadRegistrar::playToServer, new SetColorPacket.Handler(HermitPurpleAddon.resLoc("color")));
+        registerPacket(registrar,PayloadRegistrar::playToServer, new ClientSetNodes.Handler(HermitPurpleAddon.resLoc("add_cl_nodes")));
         registerPacket(registrar,PayloadRegistrar::playToClient, new HermitTargetDataPacket.Handler(HermitPurpleAddon.resLoc("hermit_data")));
         registerPacket(registrar,PayloadRegistrar::playToClient, new StandSoundPacket.Handler(HermitPurpleAddon.resLoc("stand_sound")));
         registerPacket(registrar,PayloadRegistrar::playToClient, new GuidedPacket.Handler(HermitPurpleAddon.resLoc("guided")));
         registerPacket(registrar,PayloadRegistrar::playToClient, new AnotherGuidedPacket.Handler(HermitPurpleAddon.resLoc("another_guided")));
         registerPacket(registrar,PayloadRegistrar::playToClient, new WeakedBlockPacket.Handler(HermitPurpleAddon.resLoc("weak_block")));
+        registerPacket(registrar,PayloadRegistrar::playToClient, new SetNodes.Handler(HermitPurpleAddon.resLoc("add_nodes")));
 
     }
 

@@ -3,6 +3,7 @@ package com.zeml.ripplez_hp.init;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.jojoimpl.stands.emperor.entity.BulletPilot;
 import com.zeml.ripplez_hp.jojoimpl.stands.emperor.entity.EmperorBulletEntity;
+import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple.entity.NetNodeEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -34,7 +35,11 @@ public final class AddonEntityTypes {
 					.clientTrackingRange(30)
 					.build(createIDFor(key)));
 
-
+	public static final DeferredHolder<EntityType<?>, EntityType<NetNodeEntity>> HERMIT_NODE = ENTITY_TYPES.register("hermit_node", key ->
+			EntityType.Builder.<NetNodeEntity>of(NetNodeEntity::new, MobCategory.MISC)
+					.sized(0.5F, 0.5F)
+					.clientTrackingRange(20)
+					.build(createIDFor(key)));
 	
 	public static String createIDFor(ResourceLocation key) {
 		return key.toString();

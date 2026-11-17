@@ -39,7 +39,7 @@ public record WeakedBlockPacket(int sender, BlockPos pos, boolean added) impleme
 
         @Override
         public void encode(WeakedBlockPacket packet, RegistryFriendlyByteBuf buf) {
-            buf.writeInt(buf.readInt());
+            buf.writeInt(packet.sender);
             buf.writeBlockPos(packet.pos);
             buf.writeBoolean(packet.added);
         }

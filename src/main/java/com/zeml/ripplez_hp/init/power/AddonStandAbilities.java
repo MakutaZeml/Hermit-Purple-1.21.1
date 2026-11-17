@@ -59,14 +59,20 @@ public final class AddonStandAbilities {
 	public static final DeferredHolder<AbilityType<?>, AbilityType<SpiderManBlockAbility>> GRAPPLING_SPIDER_BLOCK = ABILITY_TYPES.register(
 			"hp_spider_grappling_block", key -> new AbilityType<>(key, SpiderManBlockAbility::new)
 	);
+	public static final DeferredHolder<AbilityType<?>, AbilityType<HermitNetAbility>> HERMIT_NET = ABILITY_TYPES.register(
+			"hp_net", key -> new AbilityType<>(key, HermitNetAbility::new)
+	);
+	public static final DeferredHolder<AbilityType<?>, AbilityType<HermitUnNetAbility>> HERMIT_UNNET = ABILITY_TYPES.register(
+			"hp_unnet", key -> new AbilityType<>(key, HermitUnNetAbility::new)
+	);
 	public static final DeferredHolder<EntityCustomEffectType<?>, EntityCustomEffectType<WeakBlockEffect>> WEAK_BLOCK_EFFECT = STAND_EFFECT_TYPES.register(
 			"hp_weak_block", key -> new EntityCustomEffectType<>(key, WeakBlockEffect::new));
 
 	public static final DeferredHolder<EntityCustomEffectType<?>, EntityCustomEffectType<HermitThornsAbility.HermitThornsEffect>> HERMIT_THORNS_EFFECT = STAND_EFFECT_TYPES.register(
 			"hp_thorns", key -> new EntityCustomEffectType<>(key, HermitThornsAbility.HermitThornsEffect::new));
 
-	public static final DeferredHolder<EntityCustomEffectType<?>, EntityCustomEffectType<GrappleControlEffect>> GRAPPLE_CONTROL = STAND_EFFECT_TYPES.register(
-			"hp_grapple", key -> new EntityCustomEffectType<>(key, GrappleControlEffect::new));
+	public static final DeferredHolder<EntityCustomEffectType<?>, EntityCustomEffectType<CountNodesEffect>> NODES_CONTROL = STAND_EFFECT_TYPES.register(
+			"hp_nodes", key -> new EntityCustomEffectType<>(key, CountNodesEffect::new));
 
 	public static final DeferredHolder<AbilityType<?>, AbilityType<TargetSelectAbility>> EMP_TARGET = ABILITY_TYPES.register(
 			"emp_target", key -> new AbilityType<>(key, TargetSelectAbility::new)

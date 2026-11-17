@@ -20,6 +20,7 @@ import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.HermitAction;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -27,12 +28,10 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.block.entity.JukeboxBlockEntity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -93,12 +92,12 @@ public class GrappleEntityAbility extends HermitAction {
                         if (blockCollision != null){
                             StandPower power = StandPower.get(performer);
                             if(power != null && power.getCurTypeData() != null && power.getCurTypeData().isSkillUnlocked("block_toss") && grapple == null){
-                               /*
-                               //TODO Implement when isn't broken
-                                ThrownBlockEntity thrownBlockEntity = new ThrownBlockEntity(performer,level(),blockCollision,result.getBlockPos());
-                                level().addFreshEntity(thrownBlockEntity);
-                                level().destroyBlock(result.getBlockPos(),false);
-                                grapple = thrownBlockEntity;*/
+                                if(isTheBlockLikeMe(result.getBlockPos().immutable(),level(),blockCollision)){
+                                    ThrownBlockEntity thrownBlockEntity = new ThrownBlockEntity(performer,level(),blockCollision,result.getBlockPos());
+                                    level().addFreshEntity(thrownBlockEntity);
+                                    level().destroyBlock(result.getBlockPos(),false);
+                                    grapple = thrownBlockEntity;
+                                }
                             }
                             this.vines.forceRetract(level(),performer,this.id);
                         }
@@ -191,9 +190,19 @@ public class GrappleEntityAbility extends HermitAction {
         private void doDragEntity(Entity entity, Vec3 vec) {
             if(entity != null){
                 entity.setDeltaMovement(vec);
-                if(!entity.level().isClientSide) JojoModUtil.forceSyncMotion(entity);
+                if(!entity.level().isClientSide && !(entity instanceof ThrownBlockEntity)) JojoModUtil.forceSyncMotion(entity);
             }
 
+        }
+
+        private boolean isTheBlockLikeMe(BlockPos pos, Level level, BlockState state){
+            boolean up = level.getBlockState(pos.above()).is(state.getBlock());
+            boolean down = level.getBlockState(pos.below()).is(state.getBlock());
+            boolean north = level.getBlockState(pos.north()).is(state.getBlock());
+            boolean park = level.getBlockState(pos.south()).is(state.getBlock());
+            boolean east = level.getBlockState(pos.east()).is(state.getBlock());
+            boolean wally = level.getBlockState(pos.west()).is(state.getBlock());
+            return !up && !down && !north && !park && !east && !wally;
         }
     }
 

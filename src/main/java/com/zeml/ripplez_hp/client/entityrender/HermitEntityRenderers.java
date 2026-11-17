@@ -6,6 +6,7 @@ import com.zeml.ripplez_hp.jojoimpl.stands.emperor.client.BulletRiderRenderer;
 import com.zeml.ripplez_hp.jojoimpl.stands.emperor.client.EmperorBulletRenderer;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.client.renderer.HermitPurpleVinesLayer;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.client.renderer.HermitPurpleLayer;
+import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.client.renderer.NetNodeRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -25,6 +26,7 @@ public class HermitEntityRenderers {
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event){
         event.registerEntityRenderer(AddonEntityTypes.EMPEROR_BULLET.get(), EmperorBulletRenderer::new);
         event.registerEntityRenderer(AddonEntityTypes.EMPEROR_RIDER.get(), BulletRiderRenderer::new);
+        event.registerEntityRenderer(AddonEntityTypes.HERMIT_NODE.get(), NetNodeRenderer::new);
     }
 
 

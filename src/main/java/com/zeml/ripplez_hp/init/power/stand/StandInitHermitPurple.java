@@ -40,7 +40,8 @@ public class StandInitHermitPurple {
                         .addAbility("hp_block", AddonStandAbilities.THORNS)
                         .addAbility("hp_weak",AddonStandAbilities.WEAK_BLOCK)
                         .addAbility("hp_grapple_weak",AddonStandAbilities.WEAK_BLOCK_INPUT,weak->weak.isSubAbility= true)
-
+                        .addAbility("hp_net",AddonStandAbilities.HERMIT_NET)
+                        .addAbility("up_unnet",AddonStandAbilities.HERMIT_UNNET)
 
                         .makeControlScheme("hotbar")
                         .bind("hp_vine", InputMethod.CLICK,InputKey.LMB)
@@ -54,6 +55,8 @@ public class StandInitHermitPurple {
                         .addToHotbar("hp_doxx",0,InputMethod.CLICK)
                         .addToHotbar("hp_block",0,InputMethod.HOLD)
                         .addToHotbar("hp_weak",0,InputMethod.HOLD)
+                        .addToHotbar("hp_net",0,InputMethod.CLICK)
+
 
                         .finalizeControlScheme()
 
@@ -67,6 +70,7 @@ public class StandInitHermitPurple {
                         .addSkill(StandUnlockableSkill.unlockableAbility("hp_weak",25))
                         .addSkill(StandUnlockableSkill.unlockableAbility("block_toss",50).setIncomplete().prerequisiteSkill("hp_weak"))
                         .addSkill(StandUnlockableSkill.unlockableAbility("hp_grapple_weak",20).prerequisiteSkill("hp_weak","hp_grapple_block"))
+                        .addSkill(StandUnlockableSkill.unlockableAbility("hp_net",30).withAbility("up_unnet").prerequisiteSkill("hp_grapple_block"))
 
                 ,id
         ).init(stand -> {
