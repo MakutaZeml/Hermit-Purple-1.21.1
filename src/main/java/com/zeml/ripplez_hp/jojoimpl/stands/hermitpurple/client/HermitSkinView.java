@@ -22,6 +22,8 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Quaternionf;
 
 import com.github.standobyte.jojo.client.entityanim.pose.AnimFramePose;
@@ -45,6 +47,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 
+@OnlyIn(Dist.CLIENT)
 public class HermitSkinView extends StandSkinsScreen.SkinView {
 	public static final ActionAnimIdentifier POSE_ANIM_ID = ActionAnimIdentifier.getOrCreate("stand_info");
 	private final List<RenderLayer<?,?>> layers = new ArrayList<>();

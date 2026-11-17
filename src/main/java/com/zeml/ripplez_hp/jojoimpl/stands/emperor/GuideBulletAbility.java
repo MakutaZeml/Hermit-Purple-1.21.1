@@ -34,6 +34,8 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,6 +59,7 @@ public class GuideBulletAbility extends EmperorAbility {
         return super.replaceWithSubAbility(context, abilities);
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void renderAbilityIcon(Power<?> context, GuiGraphics guiGraphics, TextureAtlasSprite sprite, float x, float y, int color) {
         StandPower standPower = PowerClass.STAND.cast(context);

@@ -3,11 +3,8 @@ package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple;
 import com.github.standobyte.jojo.entityattachment.custom_effect.EntityCustomEffectType;
 import com.github.standobyte.jojo.powersystem.standpower.effect.StandEffectInstance;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
-import com.zeml.ripplez_hp.core.packets.client.ClientSetNodes;
-import com.zeml.ripplez_hp.core.packets.server.SetNodes;
-import com.zeml.ripplez_hp.init.power.AddonStandAbilities;
+import com.zeml.ripplez_hp.core.packets.client.ClientRemoveNodes;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,9 +23,9 @@ public class CountNodesEffect extends StandEffectInstance {
     protected void tick() {
         if(userPower != null){
             if(!userPower.isSummoned()){
-                setNodes(0);
+                this.remove();
                 if(level.isClientSide){
-                    PacketDistributor.sendToServer(new ClientSetNodes(nodes));
+                    PacketDistributor.sendToServer(new ClientRemoveNodes());
                 }
             }
         }

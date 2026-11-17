@@ -28,7 +28,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.Tags;
@@ -42,7 +41,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@EventBusSubscriber(modid = HermitPurpleAddon.MOD_ID)
+
 public class HermitThornsAbility extends HermitAction{
 
 
@@ -125,67 +124,72 @@ public class HermitThornsAbility extends HermitAction{
 
     }
 
-    @SubscribeEvent(priority = EventPriority.LOW)
-    public static void onStartedStandTakesDamage(LivingIncomingDamageEvent event){
-        LivingEntity user = event.getEntity();
-        DamageContainer dmg = event.getContainer();
-        DamageSource dmgSource = dmg.getSource();
-        Entity attacker = event.getSource().getDirectEntity();
-        if(dmgSource.isDirect() && ( user!= attacker) && attacker != null && dmgSource.is(Tags.DamageTypes.IS_PHYSICAL)){
-            StandPower power = StandPower.get(user);
-            if(power != null){
-                power.userStandEffects.getEffectOfType(AddonStandAbilities.HERMIT_THORNS_EFFECT.get()).ifPresent(effect->{
-                    DamageSourceModified _dmgSource = (DamageSourceModified) dmgSource;
-                    if (!dmgSource.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
-                        @Nullable UUID attackerId = attacker.getUUID();
-                        if ((float) user.invulnerableTime > 10.0F || effect.blockedEntitiesTimers.containsKey(attackerId)) {
-                            event.setCanceled(true);
-                            return;
-                        } else {
-                            effect.blockedEntitiesTimers.put(attackerId, new MutableInt(10));
+    @EventBusSubscriber(modid = HermitPurpleAddon.MOD_ID)
+    public static class ThornsUtil{
+        @SubscribeEvent
+        public static void onStartedStandTakesDamage(LivingIncomingDamageEvent event){
+            LivingEntity user = event.getEntity();
+            DamageContainer dmg = event.getContainer();
+            DamageSource dmgSource = dmg.getSource();
+            Entity attacker = event.getSource().getDirectEntity();
+            if(dmgSource.isDirect() && ( user!= attacker) && attacker != null && dmgSource.is(Tags.DamageTypes.IS_PHYSICAL)){
+                StandPower power = StandPower.get(user);
+                if(power != null){
+                    power.userStandEffects.getEffectOfType(AddonStandAbilities.HERMIT_THORNS_EFFECT.get()).ifPresent(effect->{
+                        DamageSourceModified _dmgSource = (DamageSourceModified) dmgSource;
+                        if (!dmgSource.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
+                            @Nullable UUID attackerId = attacker.getUUID();
+                            if ((float) user.invulnerableTime > 10.0F || effect.blockedEntitiesTimers.containsKey(attackerId)) {
+                                event.setCanceled(true);
+                                return;
+                            } else {
+                                effect.blockedEntitiesTimers.put(attackerId, new MutableInt(10));
+                            }
                         }
-                    }
-                    float reduced = reducedAmount(event.getOriginalAmount(), power);
-                    var damageType = DamageUtil.type(user.level(), ModDamageTypes.STAND_ATTACK);
-                    DamageSource newDmgSource = new DamageSource(damageType, user);
-                    attacker.hurt(newDmgSource,1);
-                    //TODO implement Hamon when it's done
-                    if (reduced< 1) {
-                        if (reduced == 0) {
-                            event.setCanceled(true);
+                        float reduced = reducedAmount(event.getOriginalAmount(), power);
+                        var damageType = DamageUtil.type(user.level(), ModDamageTypes.STAND_ATTACK);
+                        DamageSource newDmgSource = new DamageSource(damageType, user);
+                        attacker.hurt(newDmgSource,1);
+                        //TODO implement Hamon when it's done
+                        if (reduced< 1) {
+                            if (reduced == 0) {
+                                event.setCanceled(true);
 
+                            }
+                            else {
+                                float dmgAmount = dmg.getNewDamage();
+                                float newDmg = dmgAmount * reduced;
+                                event.setAmount(newDmg);
+                            }
                         }
-                        else {
-                            float dmgAmount = dmg.getNewDamage();
-                            float newDmg = dmgAmount * reduced;
-                            event.setAmount(newDmg);
-                        }
-                    }
 
-                });
+                    });
+                }
             }
+        }
+
+
+        protected static float reducedAmount(float origDmgAmount, StandPower userPower){
+            float blockedRatio = 1;
+            if (userPower != null && userPower.usesStamina()) {
+                float staminaCost = StandStatFormulas.getGuardStaminaCost(origDmgAmount);
+                float stamina = userPower.getStamina();
+
+                if (!userPower.consumeStamina(staminaCost)) {
+                    blockedRatio *= stamina / staminaCost;
+                }
+            }
+            float dmgCoeff;
+            dmgCoeff = 1 - 0.4f * blockedRatio;
+            double furtherReductionCap = userPower.getPowerType().getStandStats().durability()/ 2;
+            if (origDmgAmount < furtherReductionCap) {
+                dmgCoeff *= (float) (origDmgAmount / furtherReductionCap);
+            }
+            return dmgCoeff;
         }
     }
 
 
-    protected static float reducedAmount(float origDmgAmount, StandPower userPower){
-        float blockedRatio = 1;
-        if (userPower != null && userPower.usesStamina()) {
-            float staminaCost = StandStatFormulas.getGuardStaminaCost(origDmgAmount);
-            float stamina = userPower.getStamina();
-
-            if (!userPower.consumeStamina(staminaCost)) {
-                blockedRatio *= stamina / staminaCost;
-            }
-        }
-        float dmgCoeff;
-        dmgCoeff = 1 - 0.4f * blockedRatio;
-        double furtherReductionCap = userPower.getPowerType().getStandStats().durability()/ 2;
-        if (origDmgAmount < furtherReductionCap) {
-            dmgCoeff *= (float) (origDmgAmount / furtherReductionCap);
-        }
-        return dmgCoeff;
-    }
 
 
 }

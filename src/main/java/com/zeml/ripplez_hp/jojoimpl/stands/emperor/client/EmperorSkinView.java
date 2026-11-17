@@ -12,6 +12,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.zeml.ripplez_hp.init.power.AddonStands;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.client.renderer.HermitPurplePose;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Quaternionf;
 
 import com.github.standobyte.jojo.client.standskin.StandSkin;
@@ -29,6 +31,7 @@ import net.minecraft.world.entity.monster.Zombie;
 
 import java.util.Optional;
 
+@OnlyIn(Dist.CLIENT)
 public class EmperorSkinView extends StandSkinsScreen.SkinView {
 
 	public EmperorSkinView(StandType standType, StandSkin skin, StandSkinsScreen screen, 
