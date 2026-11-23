@@ -12,7 +12,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
 
-public class CameraDoxAbility extends HermitAction{
+public class CameraDoxAbility extends HermitAction {
 
     public CameraDoxAbility(AbilityType<?> abilityType, AbilityId abilityId) {
         super(abilityType, abilityId);
@@ -23,9 +23,9 @@ public class CameraDoxAbility extends HermitAction{
     @Override
     public Ability replaceWithSubAbility(Power<?> context, AvailableAbilities abilities) {
         StandPower standPower = PowerClass.STAND.cast(context);
-        if(context.getUser() != null && context.getUser().getItemInHand(InteractionHand.OFF_HAND).is(HermitTags.Items.CAMERA)
-                && standPower != null){
-            abilities.replaceOtherAbilityWith(context,"hp_doxx",this);
+        if (context.getUser() != null && context.getUser().getItemInHand(InteractionHand.OFF_HAND).is(HermitTags.Items.CAMERA)
+                && standPower != null) {
+            abilities.replaceOtherAbilityWith(context, "hp_doxx", this);
         }
         return super.replaceWithSubAbility(context, abilities);
     }

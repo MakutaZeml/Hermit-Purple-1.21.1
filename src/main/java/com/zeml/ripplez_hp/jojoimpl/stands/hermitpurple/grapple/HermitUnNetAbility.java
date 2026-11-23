@@ -27,11 +27,11 @@ public class HermitUnNetAbility extends HermitAction {
     @Override
     public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime, ActionInputBuffer.BufferingState bufferingState) {
         StandPower power = StandPower.get(user);
-        if(power != null){
+        if (power != null) {
             power.userStandEffects.getEffectsOfType(AddonStandAbilities.NODES_CONTROL.get()).forEach(EntityCustomEffect::remove);
-            if(!level.isClientSide){
-                float pitch = (float) (.5+Math.random());
-                PacketDistributor.sendToPlayersTrackingEntityAndSelf(user,new StandSoundPacket(user.getId(), AddonSoundEvents.HP_UNDO,true,1, pitch));
+            if (!level.isClientSide) {
+                float pitch = (float) (.5 + Math.random());
+                PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, new StandSoundPacket(user.getId(), AddonSoundEvents.HP_UNDO, true, 1, pitch));
             }
         }
         return super.onKeyPress(level, user, extraClientInput, inputMethod, clickHoldResolveTime, bufferingState);

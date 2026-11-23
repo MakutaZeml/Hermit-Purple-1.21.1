@@ -36,62 +36,63 @@ public class NetNodeEntity extends DamagingEntity {
     protected static final EntityDataAccessor<Boolean> BROKEN = SynchedEntityData.defineId(NetNodeEntity.class, EntityDataSerializers.BOOLEAN);
 
     protected EntityResolver homingTarget = new EntityResolver();
-    private double RANGE= 30;
+    private double RANGE = 30;
     private ExtendableOBB vines;
+
     public NetNodeEntity(EntityType<? extends DamagingEntity> entityType, Level level) {
         super(entityType, level);
     }
 
-    public NetNodeEntity(Level level, LivingEntity owner, double range, Entity target){
-        this(level,owner);
+    public NetNodeEntity(Level level, LivingEntity owner, double range, Entity target) {
+        this(level, owner);
         setRange(range);
         setTarget(target);
     }
 
-    public NetNodeEntity(Level level, LivingEntity owner){
-        super(AddonEntityTypes.HERMIT_NODE.get(),owner,level);
+    public NetNodeEntity(Level level, LivingEntity owner) {
+        super(AddonEntityTypes.HERMIT_NODE.get(), owner, level);
         setNoGravity(true);
     }
 
     @Override
     public void tick() {
         super.tick();
-        if(getOwner() instanceof LivingEntity user){
+        if (getOwner() instanceof LivingEntity user) {
             StandPower power = StandPower.get(user);
-            if(power == null || !power.isSummoned() || this.distanceTo(user)>RANGE || !power.userStandEffects.getEffectOfType(AddonStandAbilities.NODES_CONTROL.get()).isPresent()){
+            if (power == null || !power.isSummoned() || this.distanceTo(user) > RANGE || !power.userStandEffects.getEffectOfType(AddonStandAbilities.NODES_CONTROL.get()).isPresent()) {
                 this.remove(RemovalReason.DISCARDED);
             }
-            if(homingTarget.getEntity(level()) instanceof  NetNodeEntity nodeEntity){
-                this.lookAt(EntityAnchorArgument.Anchor.EYES,nodeEntity.position());
-                if(!isBroken()){
-                    if(vines != null){
-                        if(vines.getLength() > distanceTo(nodeEntity)){
+            if (homingTarget.getEntity(level()) instanceof NetNodeEntity nodeEntity) {
+                this.lookAt(EntityAnchorArgument.Anchor.EYES, nodeEntity.position());
+                if (!isBroken()) {
+                    if (vines != null) {
+                        if (vines.getLength() > distanceTo(nodeEntity)) {
                             vines.setMovementSpeed(0);
                         }
                         vines.tick();
                         Vec3 offset = new Vec3(0.0, 0, 0)
                                 .yRot(-this.yRotO * MathUtil.DEG_TO_RAD);
                         this.vines.updatePosition(level(), position(), offset, this.getXRot(), this.getYRot());
-                        OBBCollisionUtil.getEntitiesInOBB(level(),vines.rotatableHitbox(),
+                        OBBCollisionUtil.getEntitiesInOBB(level(), vines.rotatableHitbox(),
                                 entity -> !entity.isAlliedTo(user) && entity.isAlive() && entity != user && entity instanceof LivingEntity).forEach(entity -> {
                             var damageType = DamageUtil.type(level(), ModDamageTypes.STAND_ATTACK);
                             DamageSource dmgSource = new DamageSource(damageType, user);
                             //TODO Add Hamon when is ready
                             float dmgAmount = StandStatFormulas.getLightAttackDamage(StandPower.get(user).getPowerType().getStandStats().power());
-                            entity.hurt(dmgSource,dmgAmount/2);
+                            entity.hurt(dmgSource, dmgAmount / 2);
                             itBroke();
                         });
                     }
-                    if(level().getBlockState(this.blockPosition()).isAir()){
+                    if (level().getBlockState(this.blockPosition()).isAir()) {
                         itBroke();
                     }
-                }else {
-                    if(nodeEntity.isBroken()){
+                } else {
+                    if (nodeEntity.isBroken()) {
                         nodeEntity.remove(RemovalReason.DISCARDED);
                     }
                 }
             }
-        }else {
+        } else {
             this.remove(RemovalReason.DISCARDED);
         }
 
@@ -111,8 +112,8 @@ public class NetNodeEntity extends DamagingEntity {
         this.vines = new ExtendableOBB(obb, distanceTo(target), ticksLifespan(), 1, new Vec3(0, 0, 0));
     }
 
-     @Nullable
-    public Entity getTarget(){
+    @Nullable
+    public Entity getTarget() {
         return this.homingTarget.getEntity(level());
     }
 
@@ -135,14 +136,14 @@ public class NetNodeEntity extends DamagingEntity {
     protected void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
         homingTarget.saveNbt(nbt, "HomingTarget");
-        nbt.putBoolean("broken",entityData.get(BROKEN));
+        nbt.putBoolean("broken", entityData.get(BROKEN));
     }
 
     @Override
     protected void readAdditionalSaveData(CompoundTag nbt) {
         super.readAdditionalSaveData(nbt);
         homingTarget.loadNbt(nbt, "HomingTarget");
-        entityData.set(BROKEN,nbt.getBoolean("broken"));
+        entityData.set(BROKEN, nbt.getBoolean("broken"));
     }
 
 
@@ -150,16 +151,16 @@ public class NetNodeEntity extends DamagingEntity {
         return entityData.get(BROKEN);
     }
 
-    public void setBroken(boolean broken){
-        entityData.set(BROKEN,broken);
+    public void setBroken(boolean broken) {
+        entityData.set(BROKEN, broken);
     }
 
-    public void itBroke(){
-        if(userStandPower.get() != null){
-            if(!isBroken()){
-                userStandPower.get().userStandEffects.getEffectOfType(AddonStandAbilities.NODES_CONTROL.get()).ifPresent(effect->effect.addNode(-1));
-                if(getOwner() instanceof ServerPlayer player){
-                    PacketDistributor.sendToPlayer(player,new SetNodes(player.getId(), userStandPower.get().userStandEffects.getEffectOfType(AddonStandAbilities.NODES_CONTROL.get()).map(CountNodesEffect::getNodes).orElse(0)));
+    public void itBroke() {
+        if (userStandPower.get() != null) {
+            if (!isBroken()) {
+                userStandPower.get().userStandEffects.getEffectOfType(AddonStandAbilities.NODES_CONTROL.get()).ifPresent(effect -> effect.addNode(-1));
+                if (getOwner() instanceof ServerPlayer player) {
+                    PacketDistributor.sendToPlayer(player, new SetNodes(player.getId(), userStandPower.get().userStandEffects.getEffectOfType(AddonStandAbilities.NODES_CONTROL.get()).map(CountNodesEffect::getNodes).orElse(0)));
                 }
             }
         }
@@ -170,7 +171,7 @@ public class NetNodeEntity extends DamagingEntity {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(BROKEN,false);
+        builder.define(BROKEN, false);
     }
 
 
@@ -209,6 +210,11 @@ public class NetNodeEntity extends DamagingEntity {
 
     @Override
     protected void onHitEntity(EntityHitResult entityRayTraceResult) {
+    }
+
+    @Nullable
+    public StandPower getStandPower(){
+        return userStandPower.get();
     }
 
     @Override

@@ -26,15 +26,14 @@ public class BlockBehaviourMixin extends StateHolder<Block, BlockState> {
 
     @Inject(method = "getDestroySpeed",
             at = @At(value = "RETURN"), cancellable = true)
-    private void onGetDestroySpeed(BlockGetter level, BlockPos pos, CallbackInfoReturnable<Float> cl){
-        if(level instanceof Level world){
-            if(world.getData(AddonDataAttachmentTypes.WEAK).hasBlock(pos) && cl.getReturnValue() > 0){
-                HermitPurpleAddon.getLogger().debug("sex {} {} {}",cl.getReturnValue() ,pos, cl.getReturnValue()/2);
-                cl.setReturnValue(cl.getReturnValue()/2);
+    private void onGetDestroySpeed(BlockGetter level, BlockPos pos, CallbackInfoReturnable<Float> cl) {
+        if (level instanceof Level world) {
+            if (world.getData(AddonDataAttachmentTypes.WEAK).hasBlock(pos) && cl.getReturnValue() > 0) {
+                HermitPurpleAddon.getLogger().debug("sex {} {} {}", cl.getReturnValue(), pos, cl.getReturnValue() / 2);
+                cl.setReturnValue(cl.getReturnValue() / 2);
             }
         }
     }
-
 
 
 }

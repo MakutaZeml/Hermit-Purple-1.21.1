@@ -9,7 +9,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 public class CountNodesEffect extends StandEffectInstance {
-    private int nodes =0;
+    private int nodes = 0;
+
     public CountNodesEffect(@NotNull EntityCustomEffectType<?> effectType) {
         super(effectType);
     }
@@ -21,10 +22,10 @@ public class CountNodesEffect extends StandEffectInstance {
 
     @Override
     protected void tick() {
-        if(userPower != null){
-            if(!userPower.isSummoned()){
+        if (userPower != null) {
+            if (!userPower.isSummoned()) {
                 this.remove();
-                if(level.isClientSide){
+                if (level.isClientSide) {
                     PacketDistributor.sendToServer(new ClientRemoveNodes());
                 }
             }
@@ -37,11 +38,11 @@ public class CountNodesEffect extends StandEffectInstance {
 
     }
 
-    public void addNode(int nodes){
+    public void addNode(int nodes) {
         this.nodes += nodes;
     }
 
-    public void setNodes(int nodes){
+    public void setNodes(int nodes) {
         this.nodes = nodes;
     }
 

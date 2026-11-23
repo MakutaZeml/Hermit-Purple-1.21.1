@@ -33,11 +33,11 @@ import org.jetbrains.annotations.Nullable;
 
 public class GrappleBlockAbility extends HermitAction {
     public GrappleBlockAbility(AbilityType<?> abilityType, AbilityId abilityId) {
-        super(abilityType, abilityId,GrapplingBlock::new);
-        setDefaultPhaseLength(ActionPhase.BUTTON_CHARGE,5);
-        setDefaultPhaseLength(ActionPhase.WINDUP,30);
-        setDefaultPhaseLength(ActionPhase.PERFORM,Integer.MAX_VALUE);
-        setDefaultPhaseLength(ActionPhase.RECOVERY,10);
+        super(abilityType, abilityId, GrapplingBlock::new);
+        setDefaultPhaseLength(ActionPhase.BUTTON_CHARGE, 5);
+        setDefaultPhaseLength(ActionPhase.WINDUP, 30);
+        setDefaultPhaseLength(ActionPhase.PERFORM, Integer.MAX_VALUE);
+        setDefaultPhaseLength(ActionPhase.RECOVERY, 10);
         usageGroup = AbilityUsageGroup.UTILITY;
     }
 
@@ -59,12 +59,12 @@ public class GrappleBlockAbility extends HermitAction {
 
         @Override
         public void actionTick() {
-            switch (getPhase()){
+            switch (getPhase()) {
                 case WINDUP -> {
                     windUpStuff();
                 }
                 case PERFORM -> {
-                   performStuff();
+                    performStuff();
                 }
                 case RECOVERY -> {
                     performer.resetFallDistance();
@@ -73,8 +73,8 @@ public class GrappleBlockAbility extends HermitAction {
 
         }
 
-        public void windUpStuff(){
-            if(vines != null){
+        public void windUpStuff() {
+            if (vines != null) {
                 this.vines.tick();
                 Vec3 pos = getPerformer().position();
                 Vec3 offset = new Vec3(0.0, 1.5, 0)
@@ -83,51 +83,51 @@ public class GrappleBlockAbility extends HermitAction {
                 endPos = this.vines.rotatableHitbox().center.add(getPerformer().getLookAngle().scale(vines.rotatableHitbox().extent.length()));
                 BlockHitResult result = level().clip(new ClipContext(vines.rotatableHitbox().center, endPos, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, CollisionContext.empty()));
                 BlockState blockCollision = OBBCollisionUtil.getCollidingBlock(level(), result.getBlockPos());
-                if (blockCollision != null){
-                    if(level().isClientSide){
-                        if(endPos != null){
+                if (blockCollision != null) {
+                    if (level().isClientSide) {
+                        if (endPos != null) {
                             StandPower power = StandPower.get(performer);
-                            if(power != null){
-                                SoundEvent event = ClientsideSoundsHelper.withStandSkin(AddonSoundEvents.HP_TENSION.get(),power);
-                                level().playLocalSound(endPos.x,endPos.y,endPos.z,event,performer.getSoundSource(),1,1,false);
+                            if (power != null) {
+                                SoundEvent event = ClientsideSoundsHelper.withStandSkin(AddonSoundEvents.HP_TENSION.get(), power);
+                                level().playLocalSound(endPos.x, endPos.y, endPos.z, event, performer.getSoundSource(), 1, 1, false);
                             }
                         }
                     }
-                    setPhase(ActionPhase.PERFORM,0);
+                    setPhase(ActionPhase.PERFORM, 0);
                     syncPhaseChanges();
                 } else if (curPhaseTick > 20) {
-                    setPhase(ActionPhase.RECOVERY,0);
+                    setPhase(ActionPhase.RECOVERY, 0);
                     syncPhaseChanges();
                 }
             }
         }
 
-        public void performStuff(){
+        public void performStuff() {
             vines = null;
             StandPower power = StandPower.get(performer);
-            if(endPos != null){
-                if(power != null){
+            if (endPos != null) {
+                if (power != null) {
                     BlockPos blockPos = BlockPos.containing(endPos);
-                    if(!level().isClientSide){
-                        if((level().getBlockState(blockPos).isAir()) && curPhaseTick>5){
-                            setPhase(ActionPhase.RECOVERY,0);
+                    if (!level().isClientSide) {
+                        if ((level().getBlockState(blockPos).isAir()) && curPhaseTick > 5) {
+                            setPhase(ActionPhase.RECOVERY, 0);
                             syncPhaseChanges();
                         }
                     }
                     performer.resetFallDistance();
-                    Vec3 vecTo = endPos.subtract(performer.position().add(0,1.5,0));
-                    if(vecTo.length() > 1){
-                        dragTarget(performer,vecTo.normalize().multiply(1.5,1.5,1.5));
+                    Vec3 vecTo = endPos.subtract(performer.position().add(0, 1.5, 0));
+                    if (vecTo.length() > 1) {
+                        dragTarget(performer, vecTo.normalize().multiply(1.5, 1.5, 1.5));
                         power.addExp(.01f);
                         power.consumeStamina(2);
-                    }else {
-                        dragTarget(performer,Vec3.ZERO);
+                    } else {
+                        dragTarget(performer, Vec3.ZERO);
                     }
                 }
 
             }
-            if(power == null || !power.isSummoned()){
-                setPhase(ActionPhase.RECOVERY,15);
+            if (power == null || !power.isSummoned()) {
+                setPhase(ActionPhase.RECOVERY, 15);
                 syncPhaseChanges();
             }
         }
@@ -139,7 +139,7 @@ public class GrappleBlockAbility extends HermitAction {
 
         @Override
         public void onSetPhase(ActionPhase newPhase) {
-            switch (newPhase){
+            switch (newPhase) {
                 case WINDUP -> {
                     StandPower power = StandPower.get(performer);
                     if (power != null && !level().isClientSide) {
@@ -166,7 +166,7 @@ public class GrappleBlockAbility extends HermitAction {
 
 
         public void performThis(double distance, Vec3 end) {
-           this.endPos = end;
+            this.endPos = end;
         }
 
         @Override
@@ -176,8 +176,8 @@ public class GrappleBlockAbility extends HermitAction {
 
         @Override
         public void onButtonStopHold() {
-            if(getPhase() != ActionPhase.RECOVERY){
-                setPhase(ActionPhase.RECOVERY,0);
+            if (getPhase() != ActionPhase.RECOVERY) {
+                setPhase(ActionPhase.RECOVERY, 0);
                 syncPhaseChanges();
             }
         }
@@ -200,7 +200,7 @@ public class GrappleBlockAbility extends HermitAction {
 
         @Override
         public boolean canBeCancelledInto(@Nullable EntityActionType cancellingAbility) {
-            if(cancellingAbility instanceof WeakGrappleBlockInput){
+            if (cancellingAbility instanceof WeakGrappleBlockInput) {
                 return false;
             }
             return super.canBeCancelledInto(cancellingAbility);

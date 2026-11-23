@@ -44,10 +44,10 @@ public class HermitNetAbility extends HermitAction {
         Vec3 endPos = startPos.add(lookVec.scale(DISTANCE));
         BlockHitResult result = user.level().clip(new ClipContext(user.getEyePosition(), endPos, ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, CollisionContext.empty()));
         BlockState blockCollision = OBBCollisionUtil.getCollidingBlock(user.level(), result.getBlockPos());
-        if (blockCollision != null && !blockCollision.isAir() && !blockCollision.liquid()){
+        if (blockCollision != null && !blockCollision.isAir() && !blockCollision.liquid()) {
             StandPower power = PowerClass.STAND.cast(context);
-            if(power != null){
-                if(power.userStandEffects.getEffectOfType(AddonStandAbilities.NODES_CONTROL.get()).map(CountNodesEffect::getNodes).orElse(0)<MAX){
+            if (power != null) {
+                if (power.userStandEffects.getEffectOfType(AddonStandAbilities.NODES_CONTROL.get()).map(CountNodesEffect::getNodes).orElse(0) < MAX) {
                     return super.checkSpecificConditions(context);
                 }
             }
@@ -58,37 +58,37 @@ public class HermitNetAbility extends HermitAction {
     @Override
     public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime, ActionInputBuffer.BufferingState bufferingState) {
         StandPower power = StandPower.get(user);
-        if(power != null){
+        if (power != null) {
             HermitPurpleAddon.getLogger().debug("pressed {}", !level.isClientSide);
             Vec3 lookVec = user.getLookAngle();
             Vec3 startPos = user.getEyePosition();
             Vec3 endPos = startPos.add(lookVec.scale(DISTANCE));
             BlockHitResult result = user.level().clip(new ClipContext(user.getEyePosition(), endPos, ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, CollisionContext.empty()));
             BlockState blockCollision = OBBCollisionUtil.getCollidingBlock(user.level(), result.getBlockPos());
-            if (blockCollision != null && !blockCollision.isAir() && !blockCollision.liquid()){
+            if (blockCollision != null && !blockCollision.isAir() && !blockCollision.liquid()) {
                 boolean present = power.userStandEffects.getEffectOfType(AddonStandAbilities.NODES_CONTROL.get()).isPresent();
                 CountNodesEffect effect;
-                if(!present){
+                if (!present) {
                     effect = AddonStandAbilities.NODES_CONTROL.get().create(level);
                     power.userStandEffects.addEffect(effect);
-                }else {
+                } else {
                     effect = power.userStandEffects.getEffectOfType(AddonStandAbilities.NODES_CONTROL.get()).get();
                 }
                 Entity target;
-                if(effect.getTarget() != null){
+                if (effect.getTarget() != null) {
                     target = effect.getTarget();
-                }else {
+                } else {
                     target = user;
                 }
-                NetNodeEntity nodeEntity = new NetNodeEntity(level,user,power.getPowerType().getStandStats().rangeMax()*10,target);
+                NetNodeEntity nodeEntity = new NetNodeEntity(level, user, power.getPowerType().getStandStats().rangeMax() * 10, target);
                 nodeEntity.setPos(result.getBlockPos().getCenter());
                 level.addFreshEntity(nodeEntity);
                 effect.addNode(1);
                 effect.withTarget(nodeEntity);
                 effect.updateTarget(level);
-                if(!level.isClientSide){
-                    float pitch = (float) (.5+Math.random());
-                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(user,new StandSoundPacket(user.getId(), AddonSoundEvents.HP_TENSION,true,1, pitch));
+                if (!level.isClientSide) {
+                    float pitch = (float) (.5 + Math.random());
+                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, new StandSoundPacket(user.getId(), AddonSoundEvents.HP_TENSION, true, 1, pitch));
                 }
             }
         }
@@ -99,9 +99,9 @@ public class HermitNetAbility extends HermitAction {
     public Component getName(Power<?> context) {
         StandPower power = PowerClass.STAND.cast(context);
         int nodes = 0;
-        if(power != null){
+        if (power != null) {
             nodes = power.userStandEffects.getEffectOfType(AddonStandAbilities.NODES_CONTROL.get()).map(CountNodesEffect::getNodes).orElse(0);
         }
-        return Component.translatable(nameTlKey, nodes,Math.round(MAX));
+        return Component.translatable(nameTlKey, nodes, Math.round(MAX));
     }
 }

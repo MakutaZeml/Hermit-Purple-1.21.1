@@ -22,6 +22,7 @@ import java.util.*;
 public class WeakBlockEffect extends StandEffectInstance {
     private BlockPos center;
     private final List<BlockPos> affectedBlocks = new ArrayList<>();
+
     public WeakBlockEffect(@NotNull EntityCustomEffectType<?> effectType) {
         super(effectType);
         removeOnUserLogout = false;
@@ -29,25 +30,25 @@ public class WeakBlockEffect extends StandEffectInstance {
 
     @Override
     protected void start() {
-        if(userPower != null){
+        if (userPower != null) {
             userPower.addExp(0.1f);
         }
     }
 
     @Override
     protected void tick() {
-        if(center != null){
-            if(!affectedBlocks.isEmpty()){
-                for (BlockPos pos : new ArrayList<>(affectedBlocks)){
-                    if(level.getBlockState(pos).isAir() || level.getBlockState(pos).liquid()){
+        if (center != null) {
+            if (!affectedBlocks.isEmpty()) {
+                for (BlockPos pos : new ArrayList<>(affectedBlocks)) {
+                    if (level.getBlockState(pos).isAir() || level.getBlockState(pos).liquid()) {
                         affectedBlocks.remove(pos);
                         level.getData(AddonDataAttachmentTypes.WEAK).removeWeakBlock(pos);
                     }
                 }
 
-                AABB aabb = new AABB(center.getX()-1,center.getY()-1,center.getZ()-1,center.getX()+2,center.getY()+2,center.getZ()+2);
-                List<Entity> entities = level.getEntities(null,aabb).stream().filter(entity1 -> entity1 instanceof LivingEntity && entity1 != getStandUser() && entity1 != getStandUser().getVehicle()).toList();
-                if(!entities.isEmpty()){
+                AABB aabb = new AABB(center.getX() - 1, center.getY() - 1, center.getZ() - 1, center.getX() + 2, center.getY() + 2, center.getZ() + 2);
+                List<Entity> entities = level.getEntities(null, aabb).stream().filter(entity1 -> entity1 instanceof LivingEntity && entity1 != getStandUser() && entity1 != getStandUser().getVehicle()).toList();
+                if (!entities.isEmpty()) {
                     for (Entity ent : entities) {
                         if (ent.mainSupportingBlockPos.map(affectedBlocks::contains).orElse(false)) {
                             for (BlockPos pos : new ArrayList<>(affectedBlocks)) {
@@ -63,7 +64,7 @@ public class WeakBlockEffect extends StandEffectInstance {
                 }
             }
         }
-        if(affectedBlocks.isEmpty()){
+        if (affectedBlocks.isEmpty()) {
             this.remove();
         }
     }
@@ -76,12 +77,12 @@ public class WeakBlockEffect extends StandEffectInstance {
         return this.center;
     }
 
-    public WeakBlockEffect setCenter(BlockPos blockPos, StandStatFormulas.BlockMiningTier tier, int id){
+    public WeakBlockEffect setCenter(BlockPos blockPos, StandStatFormulas.BlockMiningTier tier, int id) {
         center = blockPos;
-        Iterable<BlockPos> pos = BlockPos.betweenClosed(blockPos.offset(-1,-1,-1),blockPos.offset(1,1,1));
-        pos.forEach(position ->{
-            if(!level.getBlockState(position).isAir() && !level.getBlockState(position).liquid() &&
-                    tier.canMine(level.getBlockState(position))){
+        Iterable<BlockPos> pos = BlockPos.betweenClosed(blockPos.offset(-1, -1, -1), blockPos.offset(1, 1, 1));
+        pos.forEach(position -> {
+            if (!level.getBlockState(position).isAir() && !level.getBlockState(position).liquid() &&
+                    tier.canMine(level.getBlockState(position))) {
                 affectedBlocks.add(position.immutable());
                 level.getData(AddonDataAttachmentTypes.WEAK).addWeakBlocks(position.immutable());
             }
@@ -94,11 +95,11 @@ public class WeakBlockEffect extends StandEffectInstance {
     protected void writeAdditionalSaveData(CompoundTag nbt) {
         super.writeAdditionalSaveData(nbt);
         nbt.put("center", NbtUtils.writeBlockPos(center));
-        nbt.putInt("amount",affectedBlocks.size());
-        for(int i=0;i< affectedBlocks.size();i++){
+        nbt.putInt("amount", affectedBlocks.size());
+        for (int i = 0; i < affectedBlocks.size(); i++) {
             String sex = "blockPos";
             String nbtName = sex.concat(String.valueOf(i));
-            nbt.put(nbtName,NbtUtils.writeBlockPos(affectedBlocks.get(i)));
+            nbt.put(nbtName, NbtUtils.writeBlockPos(affectedBlocks.get(i)));
         }
     }
 
@@ -106,15 +107,15 @@ public class WeakBlockEffect extends StandEffectInstance {
     @Override
     protected void readAdditionalSaveData(CompoundTag nbt) {
         super.readAdditionalSaveData(nbt);
-        Optional<BlockPos> posOptional =  NbtUtils.readBlockPos(nbt,"center");
+        Optional<BlockPos> posOptional = NbtUtils.readBlockPos(nbt, "center");
         posOptional.ifPresent(blockPos -> this.center = blockPos);
         int size = nbt.getInt("amount");
-        for (int i =0;i<size;i++){
+        for (int i = 0; i < size; i++) {
             String sex = "blockPos";
             String nbtName = sex.concat(String.valueOf(i));
-            Optional<BlockPos> stuff = NbtUtils.readBlockPos(nbt,nbtName);
+            Optional<BlockPos> stuff = NbtUtils.readBlockPos(nbt, nbtName);
             stuff.ifPresent(blockPos -> {
-                if(!affectedBlocks.contains(blockPos)){
+                if (!affectedBlocks.contains(blockPos)) {
                     affectedBlocks.add(blockPos);
                 }
             });
@@ -137,7 +138,7 @@ public class WeakBlockEffect extends StandEffectInstance {
         super.readAdditionalPacketData(buf, clientIsUser);
         this.center = buf.readBlockPos();
         int size = buf.readInt();
-        for (int i=0;i<size;i++){
+        for (int i = 0; i < size; i++) {
             BlockPos pos = buf.readBlockPos();
             affectedBlocks.add(pos);
         }

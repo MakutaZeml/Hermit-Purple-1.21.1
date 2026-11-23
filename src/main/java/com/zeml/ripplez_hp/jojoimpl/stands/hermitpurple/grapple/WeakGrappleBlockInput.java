@@ -43,12 +43,13 @@ public class WeakGrappleBlockInput extends HermitAction {
         LivingEntity user = context.getUser();
         if (user == null || !RotpConfig.canStandBreakBlocks(user)) return null;
 
-        StandPower standPower = PowerClass.STAND.cast(context);		if (standPower == null) return null;
+        StandPower standPower = PowerClass.STAND.cast(context);
+        if (standPower == null) return null;
         LivingComponentAction action = LivingComponentAction.getComponent(user);
-        if(action.getAction() instanceof GrappleBlockAbility.GrapplingBlock grapplingBlock){
-            if(grapplingBlock.getPhase() == ActionPhase.PERFORM && grapplingBlock.getEndPos() != null
-                    && grapplingBlock.getEndPos().distanceTo(user.position())<3){
-                abilities.replaceOtherAbilityWith(standPower,"hp_weak",this);
+        if (action.getAction() instanceof GrappleBlockAbility.GrapplingBlock grapplingBlock) {
+            if (grapplingBlock.getPhase() == ActionPhase.PERFORM && grapplingBlock.getEndPos() != null
+                    && grapplingBlock.getEndPos().distanceTo(user.position()) < 3) {
+                abilities.replaceOtherAbilityWith(standPower, "hp_weak", this);
             }
         }
         return super.replaceWithSubAbility(context, abilities);
@@ -57,21 +58,21 @@ public class WeakGrappleBlockInput extends HermitAction {
     @Override
     public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime, ActionInputBuffer.BufferingState bufferingState) {
         StandPower standPower = StandPower.get(user);
-        if(standPower !=null){
+        if (standPower != null) {
             LivingComponentAction action = LivingComponentAction.getComponent(user);
-            if(action.getAction() instanceof GrappleBlockAbility.GrapplingBlock grapplingBlock){
-                if(grapplingBlock.getPhase() == ActionPhase.PERFORM && grapplingBlock.getEndPos() != null
-                        && grapplingBlock.getEndPos().distanceTo(user.position())<3){
+            if (action.getAction() instanceof GrappleBlockAbility.GrapplingBlock grapplingBlock) {
+                if (grapplingBlock.getPhase() == ActionPhase.PERFORM && grapplingBlock.getEndPos() != null
+                        && grapplingBlock.getEndPos().distanceTo(user.position()) < 3) {
                     StandStatFormulas.BlockMiningTier tier = StandStatFormulas.getStandHarvestLevel(6);
-                    if(standPower.getPowerType() != null && standPower.getPowerType().getStandStats() != null){
-                        tier = StandStatFormulas.getStandHarvestLevel(standPower.getPowerType().getStandStats().power()*2);
+                    if (standPower.getPowerType() != null && standPower.getPowerType().getStandStats() != null) {
+                        tier = StandStatFormulas.getStandHarvestLevel(standPower.getPowerType().getStandStats().power() * 2);
                     }
                     HermitPurpleAddon.getLogger().debug("pressed");
                     WeakBlockEffect effect = AddonStandAbilities.WEAK_BLOCK_EFFECT.get().create(level).setCenter(BlockPos.containing(grapplingBlock.getEndPos()), tier, user.getId());
                     standPower.userStandEffects.addEffect(effect);
-                    if(!level.isClientSide){
-                        float pitch = (float) (.5+Math.random());
-                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(user,new StandSoundPacket(user.getId(), AddonSoundEvents.HP_TENSION,true,1, pitch));
+                    if (!level.isClientSide) {
+                        float pitch = (float) (.5 + Math.random());
+                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, new StandSoundPacket(user.getId(), AddonSoundEvents.HP_TENSION, true, 1, pitch));
                     }
                 }
             }

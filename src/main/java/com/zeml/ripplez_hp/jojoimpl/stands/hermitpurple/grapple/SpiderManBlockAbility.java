@@ -15,8 +15,9 @@ public class SpiderManBlockAbility extends GrappleBlockAbility {
         createActionObj = SpiderMan::new;
     }
 
-    public static class SpiderMan extends GrappleBlockAbility.GrapplingBlock implements SingleGrappleAction{
+    public static class SpiderMan extends GrappleBlockAbility.GrapplingBlock implements SingleGrappleAction {
         private double distance;
+
         public SpiderMan(EntityActionType ability) {
             super(ability);
         }
@@ -24,12 +25,12 @@ public class SpiderManBlockAbility extends GrappleBlockAbility {
         @Override
         public void performStuff() {
             vines = null;
-            if(this.endPos != null){
+            if (this.endPos != null) {
                 performer.resetFallDistance();
-                if(endPos.distanceTo(performer.position()) > distance){
-                    leashStoleCode(performer,endPos,distance);
+                if (endPos.distanceTo(performer.position()) > distance) {
+                    leashStoleCode(performer, endPos, distance);
                     StandPower power = StandPower.get(performer);
-                    if(power != null){
+                    if (power != null) {
                         power.consumeStamina(2);
                         power.addExp(.02f);
                     }
@@ -43,7 +44,7 @@ public class SpiderManBlockAbility extends GrappleBlockAbility {
             super.performThis(distance, end);
         }
 
-        private static void leashStoleCode(LivingEntity user, Vec3 pos, double distance){
+        private static void leashStoleCode(LivingEntity user, Vec3 pos, double distance) {
             double d0 = (pos.x - user.getX()) / distance;
             double d1 = (pos.y - user.getY()) / distance;
             double d2 = (pos.z - user.getZ()) / distance;
@@ -54,8 +55,8 @@ public class SpiderManBlockAbility extends GrappleBlockAbility {
         @Override
         public void onSetPhase(ActionPhase newPhase) {
             super.onSetPhase(newPhase);
-            if(newPhase == ActionPhase.PERFORM){
-                if(endPos != null){
+            if (newPhase == ActionPhase.PERFORM) {
+                if (endPos != null) {
                     this.distance = endPos.distanceTo(performer.position());
                 }
             }

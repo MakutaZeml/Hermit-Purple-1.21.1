@@ -13,10 +13,10 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
 
 public class StandInitHermitPurple {
-	public static final String SKIN_VIEW_TYPE = "zhermit";
+    public static final String SKIN_VIEW_TYPE = "zhermit";
 
     @ApiStatus.Internal
-    public static HermitPurpleType create(ResourceLocation id){
+    public static HermitPurpleType create(ResourceLocation id) {
         return new HermitPurpleType(
                 new StandStats.Builder()
                         .power(6)
@@ -28,56 +28,56 @@ public class StandInitHermitPurple {
 
                 new MovesetBuilder()
                         .addAbility("hp_vine", AddonStandAbilities.VINE)
-                        .addAbility("hp_vine2",AddonStandAbilities.VINE, vine->vine.isSubAbility = true)
-                        .addAbility("hp_grab",AddonStandAbilities.VINE_GRAB)
-                        .addAbility("hp_vine_heavy",AddonStandAbilities.VINE_HEAVY)
-                        .addAbility("hp_grapple_block",AddonStandAbilities.GRAPPLING_BLOCK)
-                        .addAbility("hp_spider_grapple_block",AddonStandAbilities.GRAPPLING_SPIDER_BLOCK)
+                        .addAbility("hp_vine2", AddonStandAbilities.VINE, vine -> vine.isSubAbility = true)
+                        .addAbility("hp_grab", AddonStandAbilities.VINE_GRAB)
+                        .addAbility("hp_vine_heavy", AddonStandAbilities.VINE_HEAVY)
+                        .addAbility("hp_grapple_block", AddonStandAbilities.GRAPPLING_BLOCK)
+                        .addAbility("hp_spider_grapple_block", AddonStandAbilities.GRAPPLING_SPIDER_BLOCK)
                         .addAbility("hp_target", AddonStandAbilities.SELECT_TARGET)
                         .addAbility("hp_doxx", AddonStandAbilities.MAP_DIVINATION)
-                        .addAbility("hp_compass",AddonStandAbilities.COMPASS_DIVINATION, compass -> compass.isSubAbility = true)
-                        .addAbility("hp_camera",AddonStandAbilities.CAMERA_DIVINATION, camera ->camera.isSubAbility = true)
+                        .addAbility("hp_compass", AddonStandAbilities.COMPASS_DIVINATION, compass -> compass.isSubAbility = true)
+                        .addAbility("hp_camera", AddonStandAbilities.CAMERA_DIVINATION, camera -> camera.isSubAbility = true)
                         .addAbility("hp_block", AddonStandAbilities.THORNS)
-                        .addAbility("hp_weak",AddonStandAbilities.WEAK_BLOCK)
-                        .addAbility("hp_grapple_weak",AddonStandAbilities.WEAK_BLOCK_INPUT,weak->weak.isSubAbility= true)
-                        .addAbility("hp_net",AddonStandAbilities.HERMIT_NET)
-                        .addAbility("hp_unnet",AddonStandAbilities.HERMIT_UNNET)
+                        .addAbility("hp_weak", AddonStandAbilities.WEAK_BLOCK)
+                        .addAbility("hp_grapple_weak", AddonStandAbilities.WEAK_BLOCK_INPUT, weak -> weak.isSubAbility = true)
+                        .addAbility("hp_net", AddonStandAbilities.HERMIT_NET)
+                        .addAbility("hp_unnet", AddonStandAbilities.HERMIT_UNNET)
 
                         .makeControlScheme("hotbar")
-                        .bind("hp_vine", InputMethod.CLICK,InputKey.LMB)
-                        .bind("hp_grab",InputMethod.HOLD,InputKey.LMB)
-                        .bind("hp_vine_heavy",InputMethod.CLICK,InputKey.RMB)
-                        .bind("hp_grapple_block",InputMethod.HOLD,InputKey.RMB)
-                        .bind("hp_spider_grapple_block",InputMethod.HOLD,InputKey.RMB.withModifier(InputKey.Modifier.CONTROL))
+                        .bind("hp_vine", InputMethod.CLICK, InputKey.LMB)
+                        .bind("hp_grab", InputMethod.HOLD, InputKey.LMB)
+                        .bind("hp_vine_heavy", InputMethod.CLICK, InputKey.RMB)
+                        .bind("hp_grapple_block", InputMethod.HOLD, InputKey.RMB)
+                        .bind("hp_spider_grapple_block", InputMethod.HOLD, InputKey.RMB.withModifier(InputKey.Modifier.CONTROL))
 
                         .makeHotbar(0, ModStands.USE_SPECIAL, ModStands.SWITCH_SPECIAL)
-                        .addToHotbar("hp_target",0,InputMethod.CLICK)
-                        .addToHotbar("hp_doxx",0,InputMethod.CLICK)
-                        .addToHotbar("hp_block",0,InputMethod.HOLD)
-                        .addToHotbar("hp_weak",0,InputMethod.HOLD)
-                        .addToHotbar("hp_net",0,InputMethod.CLICK)
-                        .addHotbarSlotVariation("hp_unnet","hp_net", InputKey.Modifier.SHIFT,InputMethod.CLICK)
+                        .addToHotbar("hp_target", 0, InputMethod.CLICK)
+                        .addToHotbar("hp_doxx", 0, InputMethod.CLICK)
+                        .addToHotbar("hp_block", 0, InputMethod.HOLD)
+                        .addToHotbar("hp_weak", 0, InputMethod.HOLD)
+                        .addToHotbar("hp_net", 0, InputMethod.CLICK)
+                        .addHotbarSlotVariation("hp_unnet", "hp_net", InputKey.Modifier.SHIFT, InputMethod.CLICK)
 
 
                         .finalizeControlScheme()
 
                         .addSkill(StandUnlockableSkill.startingAbility("hp_vine"))
-                        .addSkill(StandUnlockableSkill.unlockableAbility("hp_grab",50))
+                        .addSkill(StandUnlockableSkill.unlockableAbility("hp_grab", 50))
                         .addSkill(StandUnlockableSkill.startingAbility("hp_vine_heavy"))
-                        .addSkill(StandUnlockableSkill.unlockableAbility("hp_grapple_block",75).withAbility("hp_spider_grapple_block"))
+                        .addSkill(StandUnlockableSkill.unlockableAbility("hp_grapple_block", 75).withAbility("hp_spider_grapple_block"))
                         .addSkill(StandUnlockableSkill.startingAbility("hp_doxx"))
                         .addSkill(StandUnlockableSkill.startingAbility("hp_target"))
-                        .addSkill(StandUnlockableSkill.unlockableAbility("hp_block",50))
-                        .addSkill(StandUnlockableSkill.unlockableAbility("hp_weak",25))
-                        .addSkill(StandUnlockableSkill.unlockableAbility("block_toss",50).setIncomplete().prerequisiteSkill("hp_weak"))
-                        .addSkill(StandUnlockableSkill.unlockableAbility("hp_grapple_weak",20).prerequisiteSkill("hp_weak","hp_grapple_block"))
-                        .addSkill(StandUnlockableSkill.unlockableAbility("hp_net",30).withAbility("hp_unnet").prerequisiteSkill("hp_grapple_block"))
+                        .addSkill(StandUnlockableSkill.unlockableAbility("hp_block", 50))
+                        .addSkill(StandUnlockableSkill.unlockableAbility("hp_weak", 25))
+                        .addSkill(StandUnlockableSkill.unlockableAbility("block_toss", 50).setIncomplete().prerequisiteSkill("hp_weak"))
+                        .addSkill(StandUnlockableSkill.unlockableAbility("hp_grapple_weak", 20).prerequisiteSkill("hp_weak", "hp_grapple_block"))
+                        .addSkill(StandUnlockableSkill.unlockableAbility("hp_net", 30).withAbility("hp_unnet").prerequisiteSkill("hp_grapple_block"))
 
-                ,id
+                , id
         ).init(stand -> {
-        	stand.discStoryPartPriority = 1;
-        	stand.makeSummonedStandObj = SummonedStand.SyncableSummonedStand::new;
-        	stand.skinUIType = SKIN_VIEW_TYPE;
+            stand.discStoryPartPriority = 1;
+            stand.makeSummonedStandObj = SummonedStand.SyncableSummonedStand::new;
+            stand.skinUIType = SKIN_VIEW_TYPE;
         });
     }
 
