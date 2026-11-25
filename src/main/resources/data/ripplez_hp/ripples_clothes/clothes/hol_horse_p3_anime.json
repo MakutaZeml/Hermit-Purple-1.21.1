@@ -1,0 +1,45 @@
+{
+  "character": "ripplez_hp:hol_horse",
+  "story_part": "jojo_ripples:p3",
+  "pieces": {
+    "head": {
+      "asset_id": "ripplez_hp_clothes:hol_horse_p3_anime",
+      "texture_id": "ripplez_hp_clothes:hol_horse_p3_anime",
+      "item_model": "ripplez_hp_clothes:hol_horse_p3_anime_head",
+      "item_name": {
+        "translate": "item.ripplez_hp_clothes.hol_horse_p3_anime_head"
+      },
+      "equip_sound": "item.armor.equip_generic"
+    },
+
+    "chest": {
+      "asset_id": "ripplez_hp_clothes:hol_horse_p3_anime",
+      "texture_id": "ripplez_hp_clothes:hol_horse_p3_anime",
+      "item_model": "ripplez_hp_clothes:hol_horse_p3_anime_chest",
+      "item_name": {
+        "translate": "item.ripplez_hp_clothes.hol_horse_p3_anime_chest"
+      },
+      "equip_sound": "item.armor.equip_generic"
+    },
+
+    "legs": {
+      "asset_id": "ripplez_hp_clothes:hol_horse_p3_anime",
+      "texture_id": "ripplez_hp_clothes:hol_horse_p3_anime",
+      "item_model": "ripplez_hp_clothes:hol_horse_p3_anime_legs",
+      "item_name": {
+        "translate": "item.ripplez_hp_clothes.hol_horse_p3_anime_legs"
+      },
+      "equip_sound": "item.armor.equip_generic"
+    },
+
+    "feet": {
+      "asset_id": "ripplez_hp_clothes:hol_horse_p3_anime",
+      "texture_id": "ripplez_hp_clothes:hol_horse_p3_anime",
+      "item_model": "ripplez_hp_clothes:hol_horse_p3_anime_feet",
+      "item_name": {
+        "translate": "item.ripplez_hp_clothes.hol_horse_p3_anime_feet"
+      },
+      "equip_sound": "item.armor.equip_generic"
+    }
+  }
+}

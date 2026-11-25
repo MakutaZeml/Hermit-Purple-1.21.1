@@ -99,6 +99,7 @@
   "ripplez_hp.vl_subtitle.dua": "Duaaa",
   "ripplez_hp.vl_subtitle.car": "\"Imposible, this isn't the car\"",
 
+  "ripplez_hp.vl_subtitle.emperor": "\"Emperor\"",
 
   "commands.hermit.target.failed": "Unable to set the target",
   "commands.hermit.target.succes": "%s was set as %s target",
@@ -108,6 +109,11 @@
   "ripplez_hp.type.players": "Players",
   "ripplez_hp.type.hostile": "Hostile mobs",
   "ripplez_hp.type.non": "Just a Gun, I wish you are happy",
+
+  "item.ripplez_hp_clothes.hol_horse_p3_anime_head": "Hol Horse's Hat",
+  "item.ripplez_hp_clothes.hol_horse_p3_anime_chest": "Hol Horse's Coat",
+  "item.ripplez_hp_clothes.hol_horse_p3_anime_legs": "Hol Horse's Pants",
+  "item.ripplez_hp_clothes.hol_horse_p3_anime_feet": "Hol Horse's Shoes",
 
   "item.ripplez_hp_clothes.joseph_p3_ova_head": "Joseph's Hat",
   "item.ripplez_hp_clothes.joseph_p3_ova_chest": "Joseph's Coat",
@@ -137,6 +143,9 @@
   "character.ripplez_hp.jonathan": "Jonathan Joestar",
   "character.ripplez_hp.jonathan.short": "Jonathan",
   "clothes.ripplez_hp.jonathan_ldn": "London Jacket (anime)",
+
+  "character.ripplez_hp.hol_horse": "Hol Horse",
+  "character.ripplez_hp.hol_horse.short": "Hol Horse",
 
   "item.ripplez_hp_clothes.jonathan_ldn_head": "Jonathan's Deerstalker Cap",
   "item.ripplez_hp_clothes.jonathan_ldn_chest": "Jonathan's Padded Jacket",

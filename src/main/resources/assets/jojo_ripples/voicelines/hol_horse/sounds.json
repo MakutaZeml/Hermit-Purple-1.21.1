@@ -1,0 +1,10 @@
+{
+  "vl_stand_summon": {
+    "stand_type": "ripplez_hp:emperor",
+    "subtitle": "ripplez_hp.vl_subtitle.emperor",
+    "sounds": [
+      "ripplez_hp:user/hol_0",
+      "ripplez_hp:user/hol_1"
+    ]
+  }
+}
