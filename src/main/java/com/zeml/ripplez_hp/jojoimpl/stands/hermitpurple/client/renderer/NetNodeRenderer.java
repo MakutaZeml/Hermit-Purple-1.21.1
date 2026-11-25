@@ -4,8 +4,10 @@ import com.github.standobyte.jojo.client.ClientGlobals;
 import com.github.standobyte.jojo.client.entityrender.entities.SimpleEntityRenderer;
 import com.github.standobyte.jojo.client.standskin.StandSkin;
 import com.github.standobyte.jojo.client.standskin.StandSkinsLoader;
+import com.github.standobyte.jojo.powersystem.standpower.type.SummonedStand;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.zeml.ripplez_hp.client.HermitClientUtil;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple.entity.NetNodeEntity;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.LightTexture;
@@ -32,9 +34,13 @@ public class NetNodeRenderer extends SimpleEntityRenderer<NetNodeEntity, EntityM
             return;
         }
         if (entity.getTarget() != null && !entity.isBroken()) {
+            float alpha = 1;
             int color = 0xc573fb;
             if (entity.getStandPower() != null) {
                 StandSkin skin = StandSkinsLoader.getInstance().getSkin(entity.getStandPower());
+                if (entity.getStandPower().getSummonedStand() instanceof SummonedStand.SyncableSummonedStand stand) {
+                    alpha = stand.unsummonAlpha(partialTick);
+                }
                 if (skin != null) {
                     color = skin.getColors().secondary();
                 }
@@ -60,25 +66,21 @@ public class NetNodeRenderer extends SimpleEntityRenderer<NetNodeEntity, EntityM
             BlockPos blockpos = BlockPos.containing(vec3);
             BlockPos blockpos1 = BlockPos.containing(vec31);
             int i = this.getBlockLightLevel(entity, blockpos);
-            int j = this.getBlockLightL(entity.level(), blockpos1);
+            int j = HermitClientUtil.getBlockLightL(entity.level(), blockpos1);
             int k = entity.level().getBrightness(LightLayer.SKY, blockpos);
             int l = entity.level().getBrightness(LightLayer.SKY, blockpos1);
 
             int j1;
             for (j1 = 0; j1 <= 24; ++j1) {
-                addVertexPair(vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F, 0.025F, f5, f6, j1, false, color);
+                HermitClientUtil.addVertexPair(vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F, 0.025F, f5, f6, j1, false, color, alpha);
             }
 
             for (j1 = 24; j1 >= 0; --j1) {
-                addVertexPair(vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F, 0.0F, f5, f6, j1, true, color);
+                HermitClientUtil.addVertexPair(vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F, 0.0F, f5, f6, j1, true, color, alpha);
             }
             poseStack.popPose();
         }
         super.render(entity, yRotation, partialTick, poseStack, buffer, packedLight);
-    }
-
-    private int getBlockLightL(Level level, BlockPos pos) {
-        return level.getBrightness(LightLayer.BLOCK, pos);
     }
 
 
@@ -98,21 +100,4 @@ public class NetNodeRenderer extends SimpleEntityRenderer<NetNodeEntity, EntityM
         }
     }
 
-    private static void addVertexPair(VertexConsumer buffer, Matrix4f pose, float startX, float startY, float startZ,
-                                      int entityBlockLight, int holderBlockLight, int entitySkyLight, int holderSkyLight,
-                                      float yOffset, float dy, float dx, float dz, int index, boolean reverse, int color) {
-        float f = (float) index / 24.0F;
-        int i = (int) Mth.lerp(f, (float) entityBlockLight, (float) holderBlockLight);
-        int j = (int) Mth.lerp(f, (float) entitySkyLight, (float) holderSkyLight);
-        int k = LightTexture.pack(i, j);
-        float f1 = index % 2 == (reverse ? 1 : 0) ? 0.7F : 1.0F;
-        float f2 = (((color & 0xFFFFFF) >> 16) & 0xFF) * f1;
-        float f3 = (((color & 0xFFFFFF) >> 8) & 0xFF) * f1;
-        float f4 = ((color & 0xFFFFFF) & 0xFF) * f1;
-        float f5 = startX * f;
-        float f6 = startY > 0.0F ? startY * f * f : startY - startY * (1.0F - f) * (1.0F - f);
-        float f7 = startZ * f;
-        buffer.addVertex(pose, f5 - dx, f6 + dy, f7 + dz).setColor(f2 / 255, f3 / 255, f4 / 255, 1).setLight(k);
-        buffer.addVertex(pose, f5 + dx, f6 + yOffset - dy, f7 - dz).setColor(f2 / 255, f3 / 255, f4 / 255, 1).setLight(k);
-    }
 }

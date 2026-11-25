@@ -3,6 +3,7 @@ package com.zeml.ripplez_hp.init;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.jojoimpl.stands.emperor.entity.BulletPilot;
 import com.zeml.ripplez_hp.jojoimpl.stands.emperor.entity.EmperorBulletEntity;
+import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple.entity.GrappleBlockEntity;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple.entity.NetNodeEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -16,32 +17,38 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 @EventBusSubscriber(modid = HermitPurpleAddon.MOD_ID)
 public final class AddonEntityTypes {
-	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, HermitPurpleAddon.MOD_ID);
-	
-	@SubscribeEvent
-	public static void registerAttributes(EntityAttributeCreationEvent event) {
-		event.put(EMPEROR_RIDER.get(),BulletPilot.createAttributes().build());
-	}
+    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, HermitPurpleAddon.MOD_ID);
 
-	public static final DeferredHolder<EntityType<?>, EntityType<EmperorBulletEntity>> EMPEROR_BULLET = ENTITY_TYPES.register("emperor_bullet", key ->
-			EntityType.Builder.<EmperorBulletEntity>of(EmperorBulletEntity::new, MobCategory.MISC)
-			.sized(0.0625F, 0.0625F)
-			.clientTrackingRange(20)
-			.build(createIDFor(key)));
+    @SubscribeEvent
+    public static void registerAttributes(EntityAttributeCreationEvent event) {
+        event.put(EMPEROR_RIDER.get(), BulletPilot.createAttributes().build());
+    }
 
-	public static final DeferredHolder<EntityType<?>, EntityType<BulletPilot>> EMPEROR_RIDER = ENTITY_TYPES.register("emperor_rider", key ->
-			EntityType.Builder.<BulletPilot>of(BulletPilot::new, MobCategory.MISC)
-					.sized(0F, 0F)
-					.clientTrackingRange(30)
-					.build(createIDFor(key)));
+    public static final DeferredHolder<EntityType<?>, EntityType<EmperorBulletEntity>> EMPEROR_BULLET = ENTITY_TYPES.register("emperor_bullet", key ->
+            EntityType.Builder.<EmperorBulletEntity>of(EmperorBulletEntity::new, MobCategory.MISC)
+                    .sized(0.0625F, 0.0625F)
+                    .clientTrackingRange(20)
+                    .build(createIDFor(key)));
 
-	public static final DeferredHolder<EntityType<?>, EntityType<NetNodeEntity>> HERMIT_NODE = ENTITY_TYPES.register("hermit_node", key ->
-			EntityType.Builder.<NetNodeEntity>of(NetNodeEntity::new, MobCategory.MISC)
-					.sized(0.5F, 0.5F)
-					.clientTrackingRange(20)
-					.build(createIDFor(key)));
-	
-	public static String createIDFor(ResourceLocation key) {
-		return key.toString();
-	}
+    public static final DeferredHolder<EntityType<?>, EntityType<BulletPilot>> EMPEROR_RIDER = ENTITY_TYPES.register("emperor_rider", key ->
+            EntityType.Builder.<BulletPilot>of(BulletPilot::new, MobCategory.MISC)
+                    .sized(0F, 0F)
+                    .clientTrackingRange(30)
+                    .build(createIDFor(key)));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<NetNodeEntity>> HERMIT_NODE = ENTITY_TYPES.register("hermit_node", key ->
+            EntityType.Builder.<NetNodeEntity>of(NetNodeEntity::new, MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(20)
+                    .build(createIDFor(key)));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<GrappleBlockEntity>> HERMIT_GRAPPLE = ENTITY_TYPES.register("hermit_grapple", key ->
+            EntityType.Builder.<GrappleBlockEntity>of(GrappleBlockEntity::new, MobCategory.MISC)
+                    .sized(0.05F, 0.05F)
+                    .clientTrackingRange(30)
+                    .build(createIDFor(key)));
+
+    public static String createIDFor(ResourceLocation key) {
+        return key.toString();
+    }
 }

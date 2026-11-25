@@ -5,6 +5,7 @@ import com.github.standobyte.jojo.powersystem.ability.AbilityType;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionPhase;
 import com.github.standobyte.jojo.powersystem.entityaction.type.EntityActionType;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
+import com.github.standobyte.jojo.util.functions.JojoModUtil;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 
@@ -24,7 +25,6 @@ public class SpiderManBlockAbility extends GrappleBlockAbility {
 
         @Override
         public void performStuff() {
-            vines = null;
             if (this.endPos != null) {
                 performer.resetFallDistance();
                 if (endPos.distanceTo(performer.position()) > distance) {
@@ -48,7 +48,10 @@ public class SpiderManBlockAbility extends GrappleBlockAbility {
             double d0 = (pos.x - user.getX()) / distance;
             double d1 = (pos.y - user.getY()) / distance;
             double d2 = (pos.z - user.getZ()) / distance;
-            user.setDeltaMovement(user.getDeltaMovement().add(Math.copySign(d0 * d0 * 0.4, d0), Math.copySign(d1 * d1 * 0.4, d1), Math.copySign(d2 * d2 * 0.4, d2)));
+            if(!user.level().isClientSide){
+                user.setDeltaMovement(user.getDeltaMovement().add(Math.copySign(d0 * d0 * 0.4, d0), Math.copySign(d1 * d1 * 0.4, d1), Math.copySign(d2 * d2 * 0.4, d2)));
+                JojoModUtil.forceSyncMotion(user);
+            }
 
         }
 

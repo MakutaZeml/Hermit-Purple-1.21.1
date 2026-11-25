@@ -13,11 +13,14 @@ import com.github.standobyte.jojo.powersystem.standpower.entity.StandEntity;
 import com.github.standobyte.jojo.subsystems.hitboxes.ExtendableOBB;
 import com.github.standobyte.jojo.subsystems.hitboxes.OBBCollisionUtil;
 import com.github.standobyte.jojo.subsystems.hitboxes.OrientedBoundingBox;
+import com.github.standobyte.jojo.util.functions.JojoModUtil;
 import com.github.standobyte.jojo.util.functions.MathUtil;
+import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import com.zeml.ripplez_hp.init.HermitTags;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.HermitAction;
+import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple.entity.GrappleBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
@@ -42,8 +45,8 @@ public class GrappleBlockAbility extends HermitAction {
     }
 
 
-    public static class GrapplingBlock extends EntityActionInstance implements SingleGrappleAction {
-        public ExtendableOBB vines;
+    public static class GrapplingBlock extends EntityActionInstance {
+        protected GrappleBlockEntity grappleBlock;
         public Vec3 endPos;
 
         public GrapplingBlock(EntityActionType ability) {
@@ -52,9 +55,8 @@ public class GrappleBlockAbility extends HermitAction {
 
         @Override
         public void onActionSet(@Nullable EntityActionInstance prevAction) {
-            float lifespan = phasesLength.getFloat(ActionPhase.WINDUP);
-            OrientedBoundingBox obb = new OrientedBoundingBox(new Vec3(0, 1.35, 0), 0.25d, 0.25d, 1d, getPerformer().getYRot(), getPerformer().getXRot());
-            this.vines = new ExtendableOBB(obb, 1.5F, (int) lifespan, 0, new Vec3(0, 1.35, 0));
+
+
         }
 
         @Override
@@ -68,22 +70,19 @@ public class GrappleBlockAbility extends HermitAction {
                 }
                 case RECOVERY -> {
                     performer.resetFallDistance();
+                    if(grappleBlock != null){
+                        grappleBlock.remove(Entity.RemovalReason.DISCARDED);
+                        grappleBlock = null;
+                    }
                 }
             }
 
         }
 
         public void windUpStuff() {
-            if (vines != null) {
-                this.vines.tick();
-                Vec3 pos = getPerformer().position();
-                Vec3 offset = new Vec3(0.0, 1.5, 0)
-                        .yRot(-getPerformer().yBodyRot * MathUtil.DEG_TO_RAD);
-                this.vines.updatePosition(level(), pos, offset, getPerformer().getXRot(), getPerformer().getYRot());
-                endPos = this.vines.rotatableHitbox().center.add(getPerformer().getLookAngle().scale(vines.rotatableHitbox().extent.length()));
-                BlockHitResult result = level().clip(new ClipContext(vines.rotatableHitbox().center, endPos, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, CollisionContext.empty()));
-                BlockState blockCollision = OBBCollisionUtil.getCollidingBlock(level(), result.getBlockPos());
-                if (blockCollision != null) {
+            if(grappleBlock != null){
+                endPos = grappleBlock.position();
+                if(grappleBlock.isAttached()){
                     if (level().isClientSide) {
                         if (endPos != null) {
                             StandPower power = StandPower.get(performer);
@@ -95,21 +94,20 @@ public class GrappleBlockAbility extends HermitAction {
                     }
                     setPhase(ActionPhase.PERFORM, 0);
                     syncPhaseChanges();
-                } else if (curPhaseTick > 20) {
+                }else if (curPhaseTick > 20) {
                     setPhase(ActionPhase.RECOVERY, 0);
                     syncPhaseChanges();
                 }
+
             }
         }
 
         public void performStuff() {
-            vines = null;
             StandPower power = StandPower.get(performer);
             if (endPos != null) {
                 if (power != null) {
-                    BlockPos blockPos = BlockPos.containing(endPos);
                     if (!level().isClientSide) {
-                        if ((level().getBlockState(blockPos).isAir()) && curPhaseTick > 5) {
+                        if ((level().getBlockState(grappleBlock.blockPosition()).isAir()) && curPhaseTick > 5) {
                             setPhase(ActionPhase.RECOVERY, 0);
                             syncPhaseChanges();
                         }
@@ -127,12 +125,12 @@ public class GrappleBlockAbility extends HermitAction {
 
             }
             if (power == null || !power.isSummoned()) {
-                setPhase(ActionPhase.RECOVERY, 15);
+                setPhase(ActionPhase.RECOVERY, 0);
                 syncPhaseChanges();
             }
         }
 
-        @Override
+
         public @Nullable Vec3 getEndPos() {
             return endPos;
         }
@@ -141,6 +139,10 @@ public class GrappleBlockAbility extends HermitAction {
         public void onSetPhase(ActionPhase newPhase) {
             switch (newPhase) {
                 case WINDUP -> {
+                    grappleBlock = new GrappleBlockEntity(performer,level());
+                    grappleBlock.shootFromRotation(performer,1,1);
+                    level().addFreshEntity(grappleBlock);
+
                     StandPower power = StandPower.get(performer);
                     if (power != null && !level().isClientSide) {
                         PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer, new StandSoundPacket(performer.getId(), AddonSoundEvents.HP_VINE_THROW, true, 1, 1));
@@ -195,7 +197,10 @@ public class GrappleBlockAbility extends HermitAction {
 
 
         private void doDragEntity(Entity entity, Vec3 vec) {
-            entity.setDeltaMovement(vec);
+            if(!level().isClientSide){
+                entity.setDeltaMovement(vec);
+                JojoModUtil.forceSyncMotion(entity);
+            }
         }
 
         @Override

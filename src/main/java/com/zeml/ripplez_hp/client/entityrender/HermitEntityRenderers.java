@@ -4,6 +4,7 @@ import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.init.AddonEntityTypes;
 import com.zeml.ripplez_hp.jojoimpl.stands.emperor.client.BulletRiderRenderer;
 import com.zeml.ripplez_hp.jojoimpl.stands.emperor.client.EmperorBulletRenderer;
+import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.client.renderer.GrappleBlockRenderer;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.client.renderer.HermitPurpleVinesLayer;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.client.renderer.HermitPurpleLayer;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.client.renderer.NetNodeRenderer;
@@ -23,10 +24,11 @@ import static com.github.standobyte.jojo.client.ModEntityTypeRenderers.castToHum
 public class HermitEntityRenderers {
 
     @SubscribeEvent
-    public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event){
+    public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(AddonEntityTypes.EMPEROR_BULLET.get(), EmperorBulletRenderer::new);
         event.registerEntityRenderer(AddonEntityTypes.EMPEROR_RIDER.get(), BulletRiderRenderer::new);
         event.registerEntityRenderer(AddonEntityTypes.HERMIT_NODE.get(), NetNodeRenderer::new);
+        event.registerEntityRenderer(AddonEntityTypes.HERMIT_GRAPPLE.get(), GrappleBlockRenderer::new);
     }
 
 
