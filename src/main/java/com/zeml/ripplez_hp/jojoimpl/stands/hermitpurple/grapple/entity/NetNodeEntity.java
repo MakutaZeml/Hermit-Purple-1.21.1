@@ -213,7 +213,7 @@ public class NetNodeEntity extends DamagingEntity {
     }
 
     @Nullable
-    public StandPower getStandPower(){
+    public StandPower getStandPower() {
         return userStandPower.get();
     }
 

@@ -39,7 +39,7 @@ public class HermitTargetScreen extends Screen {
     private static final Component TAB_STANDS = Component.translatable("gui.hermitpurpletarget.tab_stands");
     private static final Component RANDOM = Component.translatable("gui.hermitpurpletarget.random");
     private static final Component TAB_PLAYERS_SELECTED = TAB_PLAYERS.plainCopy().withStyle(ChatFormatting.UNDERLINE);
-    private static final Component TAB_ENTITIES_SELECTED =TAB_ENTITIES.plainCopy().withStyle(ChatFormatting.UNDERLINE);
+    private static final Component TAB_ENTITIES_SELECTED = TAB_ENTITIES.plainCopy().withStyle(ChatFormatting.UNDERLINE);
     private static final Component TAB_STRUCTURES_SELECTED = TAB_STRUCTURES.plainCopy().withStyle(ChatFormatting.UNDERLINE);
     private static final Component TAB_BIOMES_SELECTED = TAB_BIOMES.plainCopy().withStyle(ChatFormatting.UNDERLINE);
     private static final Component TAB_STANDS_SELECTED = TAB_STANDS.plainCopy().withStyle(ChatFormatting.UNDERLINE);
@@ -80,6 +80,7 @@ public class HermitTargetScreen extends Screen {
     private int windowHeight() {
         return Math.max(52, this.height - 128 - 16);
     }
+
     private int listEnd() {
         return 80 + this.windowHeight() - 8;
     }
@@ -87,6 +88,7 @@ public class HermitTargetScreen extends Screen {
     private int marginX() {
         return (this.width - 238) / 2;
     }
+
     @Override
     public Component getNarrationMessage() {
         return (this.serverLabel != null
@@ -95,25 +97,25 @@ public class HermitTargetScreen extends Screen {
     }
 
     @Override
-    protected void init(){
+    protected void init() {
         this.layout.addTitleHeader(TITLE, this.font);
-        this.hpSelectList = new HermitList(this.minecraft,this.width,this.listEnd() - 100,88,36);
+        this.hpSelectList = new HermitList(this.minecraft, this.width, this.listEnd() - 100, 88, 36);
         int i = this.hpSelectList.getRowWidth() / 3;
         int j = this.hpSelectList.getRowLeft();
         int k = this.hpSelectList.getRowRight();
         int i1 = 64 + 16 * this.backgroundUnits();
         this.playersButton = this.addRenderableWidget(Button.builder(TAB_PLAYERS,
-                (onPress)->this.showPage(HermitTargetScreen.Mode.PLAYERS)).bounds(j, 45, i, 20).build());
+                (onPress) -> this.showPage(HermitTargetScreen.Mode.PLAYERS)).bounds(j, 45, i, 20).build());
         this.entitiesButton = this.addRenderableWidget(Button.builder(TAB_ENTITIES,
-                (onPress)->this.showPage(HermitTargetScreen.Mode.ENTITIES)).bounds((j + k - i) / 2 + 1, 45, i, 20).build());
+                (onPress) -> this.showPage(HermitTargetScreen.Mode.ENTITIES)).bounds((j + k - i) / 2 + 1, 45, i, 20).build());
         this.standsButton = this.addRenderableWidget(Button.builder(TAB_STANDS,
-                (onPress)->this.showPage(HermitTargetScreen.Mode.STAND)).bounds(k - i + 1, 45, i, 20).build());
+                (onPress) -> this.showPage(HermitTargetScreen.Mode.STAND)).bounds(k - i + 1, 45, i, 20).build());
         this.structuresButton = this.addRenderableWidget(Button.builder(TAB_STRUCTURES,
-                (onPress)->this.showPage(HermitTargetScreen.Mode.STRUCTURES)).bounds(j,i1,i,20).build());
+                (onPress) -> this.showPage(HermitTargetScreen.Mode.STRUCTURES)).bounds(j, i1, i, 20).build());
         this.biomesButton = this.addRenderableWidget(Button.builder(TAB_BIOMES,
-                (onPress)->this.showPage(HermitTargetScreen.Mode.BIOMES)).bounds(k - i + 1, i1, i, 20).build());
+                (onPress) -> this.showPage(HermitTargetScreen.Mode.BIOMES)).bounds(k - i + 1, i1, i, 20).build());
         this.randomButton = this.addRenderableWidget(Button.builder(RANDOM,
-                (onPress)-> PacketDistributor.sendToServer(new SetTargetPacket(0,""))).bounds((j + k - i) / 2 + 1, i1, i, 20).build());
+                (onPress) -> PacketDistributor.sendToServer(new SetTargetPacket(0, ""))).bounds((j + k - i) / 2 + 1, i1, i, 20).build());
 
         String s = this.searchBox != null ? this.searchBox.getValue() : "";
         this.searchBox = new EditBox(this.font, this.marginX() + 28, 74, 200, 15, Component.empty()) {
@@ -135,7 +137,7 @@ public class HermitTargetScreen extends Screen {
         return false;
     }
 
-    private void showPage(HermitTargetScreen.Mode page){
+    private void showPage(HermitTargetScreen.Mode page) {
         this.page = page;
         this.playersButton.setMessage(TAB_PLAYERS);
         this.biomesButton.setMessage(TAB_BIOMES);
@@ -145,7 +147,7 @@ public class HermitTargetScreen extends Screen {
         this.structuresButton.setMessage(TAB_STRUCTURES);
         boolean flag = false;
         Collection<?> collection = null;
-        if(minecraft.level != null){
+        if (minecraft.level != null) {
             switch (page) {
                 case PLAYERS -> {
                     this.hpSelectList.setMode(1);
@@ -180,7 +182,7 @@ public class HermitTargetScreen extends Screen {
         GameNarrator gamenarrator = this.minecraft.getNarrator();
         if (!this.searchBox.getValue().isEmpty() && this.hpSelectList.isEmpty() && !this.searchBox.isFocused()) {
             gamenarrator.sayNow(EMPTY_SEARCH.getString());
-        }else if (flag){
+        } else if (flag) {
 
         }
     }
@@ -256,28 +258,29 @@ public class HermitTargetScreen extends Screen {
         this.searchBox.setValue(searchString);
     }
 
-    enum Mode{
+    enum Mode {
         PLAYERS,
         ENTITIES,
         STRUCTURES,
         STAND,
         BIOMES;
     }
+
     private int backgroundUnits() {
         return this.windowHeight() / 16;
     }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-        double scroll = Math.max(0,Math.min(hpSelectList.getMaxScroll(),hpSelectList.getScrollAmount()-50*scrollY)) ;
+        double scroll = Math.max(0, Math.min(hpSelectList.getMaxScroll(), hpSelectList.getScrollAmount() - 50 * scrollY));
         hpSelectList.setScrollAmount(scroll);
         return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if(hpSelectList.isMouseOver(mouseX,mouseY)){
-            hpSelectList.mouseClicked(mouseX,mouseY,button);
+        if (hpSelectList.isMouseOver(mouseX, mouseY)) {
+            hpSelectList.mouseClicked(mouseX, mouseY, button);
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }

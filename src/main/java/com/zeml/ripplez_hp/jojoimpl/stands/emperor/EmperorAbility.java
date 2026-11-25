@@ -29,14 +29,14 @@ public class EmperorAbility extends EntityActionAbility {
     @Override
     public ConditionCheck checkSpecificConditions(Power<?> context) {
         LivingEntity user = context.getUser();
-        if(user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem emperorItem){
-            if(user instanceof Player player && player.getCooldowns().isOnCooldown(emperorItem)){
+        if (user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem emperorItem) {
+            if (user instanceof Player player && player.getCooldowns().isOnCooldown(emperorItem)) {
                 return ConditionCheck.NEGATIVE;
             }
             return ConditionCheck.POSITIVE;
         }
-        if(user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem emperorItem){
-            if(user instanceof Player player && player.getCooldowns().isOnCooldown(emperorItem)){
+        if (user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem emperorItem) {
+            if (user instanceof Player player && player.getCooldowns().isOnCooldown(emperorItem)) {
                 return ConditionCheck.NEGATIVE;
             }
             return ConditionCheck.POSITIVE;
@@ -46,8 +46,8 @@ public class EmperorAbility extends EntityActionAbility {
 
     @Override
     public ActionAnimIdentifier getEntityAnim(EntityActionInstance action) {
-        if(!isRight(action.getPowerUser())){
-            return ActionAnimIdentifier.getOrCreate(abilityId.nameInMoveset().concat("_l"),false);
+        if (!isRight(action.getPowerUser())) {
+            return ActionAnimIdentifier.getOrCreate(abilityId.nameInMoveset().concat("_l"), false);
         }
         return super.getEntityAnim(action);
     }

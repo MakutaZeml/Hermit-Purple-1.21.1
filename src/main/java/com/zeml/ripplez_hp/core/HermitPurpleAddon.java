@@ -21,6 +21,7 @@ public class HermitPurpleAddon {
     public static final String MOD_ID = "ripplez_hp";
     @Deprecated
     public static final Logger LOGGER = LogUtils.getLogger();
+
     public HermitPurpleAddon(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.register(this);
 
@@ -41,7 +42,7 @@ public class HermitPurpleAddon {
     }
 
     @SubscribeEvent
-    private void registerNetwork(RegisterPayloadHandlersEvent event){
+    private void registerNetwork(RegisterPayloadHandlersEvent event) {
         HermitPackets.register(event);
     }
 

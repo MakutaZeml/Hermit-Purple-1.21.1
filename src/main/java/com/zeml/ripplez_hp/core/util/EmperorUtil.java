@@ -22,29 +22,30 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class EmperorUtil {
     protected static HashMap<ResourceLocation, ItemStack> cache = new HashMap<>();
     public static final ResourceLocation model = HermitPurpleAddon.resLoc("emperor");
-    public static void giveEmperor(LivingEntity user, StandPower standPower){
+
+    public static void giveEmperor(LivingEntity user, StandPower standPower) {
         ItemStack emperor = new ItemStack(AddonItems.EMPEROR.asItem());
-        emperor.set(HermitDataComponents.EMPEROR.get(), new EmperorGunData(Optional.of(user.getUUID()), Optional.empty(),0));
-        if(user instanceof MannequinEntity){
-            user.setItemSlot(EquipmentSlot.HEAD,emperor);
-        }else {
-            if(!user.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()){
-                if(user.getItemInHand(InteractionHand.OFF_HAND).isEmpty()){
-                    user.setItemInHand(InteractionHand.OFF_HAND,emperor);
-                }else {
+        emperor.set(HermitDataComponents.EMPEROR.get(), new EmperorGunData(Optional.of(user.getUUID()), Optional.empty(), 0));
+        if (user instanceof MannequinEntity) {
+            user.setItemSlot(EquipmentSlot.HEAD, emperor);
+        } else {
+            if (!user.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
+                if (user.getItemInHand(InteractionHand.OFF_HAND).isEmpty()) {
+                    user.setItemInHand(InteractionHand.OFF_HAND, emperor);
+                } else {
                     ItemStack itemStack = user.getItemInHand(InteractionHand.MAIN_HAND);
-                    ItemEntity item = new ItemEntity(user.level(),user.getX(),user.getY(),user.getZ(),itemStack);
+                    ItemEntity item = new ItemEntity(user.level(), user.getX(), user.getY(), user.getZ(), itemStack);
                     user.level().addFreshEntity(item);
-                    user.setItemInHand(InteractionHand.MAIN_HAND,emperor);
+                    user.setItemInHand(InteractionHand.MAIN_HAND, emperor);
                 }
-            }else {
-                user.setItemInHand(InteractionHand.MAIN_HAND,emperor);
+            } else {
+                user.setItemInHand(InteractionHand.MAIN_HAND, emperor);
             }
         }
     }
 
-    private static ItemStack standSkinEmperor(StandPower power){
-        return cache.computeIfAbsent(model,modelPath->{
+    private static ItemStack standSkinEmperor(StandPower power) {
+        return cache.computeIfAbsent(model, modelPath -> {
             ItemStack emperor = new ItemStack(AddonItems.EMPEROR.asItem());
             if (modelPath != null) {
                 emperor.set(ModItemDataComponents.ITEM_MODEL.get(), modelPath);
@@ -54,19 +55,19 @@ public class EmperorUtil {
     }
 
 
-    public static boolean noEmperor(LivingEntity user){
-        if(user instanceof Player){
+    public static boolean noEmperor(LivingEntity user) {
+        if (user instanceof Player) {
             AtomicInteger count = new AtomicInteger(0);
             ((Player) user).getInventory().items.forEach(itemStack -> {
-                if(itemStack.get(HermitDataComponents.EMPEROR) != null){
+                if (itemStack.get(HermitDataComponents.EMPEROR) != null) {
                     EmperorGunData data = itemStack.get(HermitDataComponents.EMPEROR);
-                    if(data.getUuidOwner().isPresent() && data.getUuidOwner().get() == user.getUUID()){
-                        count.set(count.get()+1);
+                    if (data.getUuidOwner().isPresent() && data.getUuidOwner().get() == user.getUUID()) {
+                        count.set(count.get() + 1);
                     }
                 }
             });
             return count.get() == 0;
-        }else {
+        } else {
             return false;
         }
     }

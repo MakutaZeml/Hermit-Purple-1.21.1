@@ -15,14 +15,14 @@ public class HermitPurpleType extends StandType {
         super(stats, moveset, id);
     }
 
-	@Override
-	public boolean summon(LivingEntity user, StandPower standPower) {
-		if(!user.level().isClientSide){
-			if (!user.isShiftKeyDown()) {
-				VoiceLineServerSide.play(user, ModSoundEvents.VOICELINE_STAND_SUMMON);
-			}
-		}
-		return super.summon(user, standPower);
-	}
+    @Override
+    public boolean summon(LivingEntity user, StandPower standPower) {
+        if (!user.level().isClientSide) {
+            if (!user.isShiftKeyDown()) {
+                VoiceLineServerSide.play(user, ModSoundEvents.VOICELINE_STAND_SUMMON);
+            }
+        }
+        return super.summon(user, standPower);
+    }
 
 }

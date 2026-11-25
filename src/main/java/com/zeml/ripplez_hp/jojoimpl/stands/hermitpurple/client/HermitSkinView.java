@@ -49,109 +49,110 @@ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 
 @OnlyIn(Dist.CLIENT)
 public class HermitSkinView extends StandSkinsScreen.SkinView {
-	public static final ActionAnimIdentifier POSE_ANIM_ID = ActionAnimIdentifier.getOrCreate("stand_info");
-	private final List<RenderLayer<?,?>> layers = new ArrayList<>();
-	private AnimFramePose pose;
-	public HermitSkinView(StandType standType, StandSkin skin, StandSkinsScreen screen, 
-			int x, int y, int standY, int row, int column, boolean isBottomRow) {
-		super(standType, skin, screen, x, y, standY, row, column, isBottomRow);
-		Minecraft mc = Minecraft.getInstance();
-		LivingEntityRenderer<?, ?> renderer = (LivingEntityRenderer<?, ?>) mc.getEntityRenderDispatcher().getRenderer(mc.player);
-		for (RenderLayer<?, ?> layer : ((LivingRendererLayers<?, ?>) renderer).jojo_ripples$allLayers()) {
-			if (layer instanceof HermitPurpleLayer || layer instanceof  HermitPurpleVinesLayer) {
-				this.layers.add(layer);
+    public static final ActionAnimIdentifier POSE_ANIM_ID = ActionAnimIdentifier.getOrCreate("stand_info");
+    private final List<RenderLayer<?, ?>> layers = new ArrayList<>();
+    private AnimFramePose pose;
 
-				RotpAnimDefinition anim = skin.getStandAnimation(POSE_ANIM_ID);
-				if (anim != null) {
-					this.pose = anim.calcAnimPose(0, 1, null, null).deepCopy();
-				}
+    public HermitSkinView(StandType standType, StandSkin skin, StandSkinsScreen screen,
+                          int x, int y, int standY, int row, int column, boolean isBottomRow) {
+        super(standType, skin, screen, x, y, standY, row, column, isBottomRow);
+        Minecraft mc = Minecraft.getInstance();
+        LivingEntityRenderer<?, ?> renderer = (LivingEntityRenderer<?, ?>) mc.getEntityRenderDispatcher().getRenderer(mc.player);
+        for (RenderLayer<?, ?> layer : ((LivingRendererLayers<?, ?>) renderer).jojo_ripples$allLayers()) {
+            if (layer instanceof HermitPurpleLayer || layer instanceof HermitPurpleVinesLayer) {
+                this.layers.add(layer);
+
+                RotpAnimDefinition anim = skin.getStandAnimation(POSE_ANIM_ID);
+                if (anim != null) {
+                    this.pose = anim.calcAnimPose(0, 1, null, null).deepCopy();
+                }
 
 
-			}
-		}
-	}
+            }
+        }
+    }
 
-	@Override
-	public void renderStandModel(GuiGraphics gui, float posX, float posY,
-								 float scale, float scaleZoom, float yRot, float xRot, float xOffsetRatio, float yOffsetRatio,
-								 StandType standType, StandSkin standSkin,
-								 boolean extractRenderState, float ticks, int color, StandEntityRenderer.MenuType screen) {
-		for(RenderLayer<?,?> layer: layers){
-			if(layer instanceof HermitPurpleLayer<?,?> layer1){
-				HumanoidModel<?> model = layer1.purpleModel.getModel(skin);
-				ResourceLocation texture = skin.getTexture(HermitPurpleLayer.HERMIT);
+    @Override
+    public void renderStandModel(GuiGraphics gui, float posX, float posY,
+                                 float scale, float scaleZoom, float yRot, float xRot, float xOffsetRatio, float yOffsetRatio,
+                                 StandType standType, StandSkin standSkin,
+                                 boolean extractRenderState, float ticks, int color, StandEntityRenderer.MenuType screen) {
+        for (RenderLayer<?, ?> layer : layers) {
+            if (layer instanceof HermitPurpleLayer<?, ?> layer1) {
+                HumanoidModel<?> model = layer1.purpleModel.getModel(skin);
+                ResourceLocation texture = skin.getTexture(HermitPurpleLayer.HERMIT);
 
-				Quaternionf rotation = new Quaternionf()
-						.rotateX(xRot)
-						.rotateY(yRot);
+                Quaternionf rotation = new Quaternionf()
+                        .rotateX(xRot)
+                        .rotateY(yRot);
 
-				PoseStack poseStack = gui.pose();
-				poseStack.pushPose();
+                PoseStack poseStack = gui.pose();
+                poseStack.pushPose();
 
-				poseStack.translate(posX, posY, 350.0);
+                poseStack.translate(posX, posY, 350.0);
 
-				poseStack.translate(xOffsetRatio, yOffsetRatio, 0);
-				poseStack.scale(-scale, scale, scale);
-				poseStack.scale(scaleZoom, scaleZoom, scaleZoom);
-				poseStack.mulPose(rotation);
-				poseStack.translate(0, -1.35, 0);
-				poseStack.mulPose(Axis.YP.rotationDegrees(180));
+                poseStack.translate(xOffsetRatio, yOffsetRatio, 0);
+                poseStack.scale(-scale, scale, scale);
+                poseStack.scale(scaleZoom, scaleZoom, scaleZoom);
+                poseStack.mulPose(rotation);
+                poseStack.translate(0, -1.35, 0);
+                poseStack.mulPose(Axis.YP.rotationDegrees(180));
 
-				Lighting.setupForEntityInInventory();
+                Lighting.setupForEntityInInventory();
 
-				if (pose != null) {
-					((IHumanoidAnimModel) model).jojo_ripples$setupHumanoidPose(pose);
-				}
+                if (pose != null) {
+                    ((IHumanoidAnimModel) model).jojo_ripples$setupHumanoidPose(pose);
+                }
 
-				// FIXME doesn't get cropped by OpenGL's scissor
-				RenderSystem.runAsFancy(() -> {
-					MultiBufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-					VertexConsumer buffer = bufferSource.getBuffer(model.renderType(texture));
-					model.renderToBuffer(poseStack, buffer, ClientUtil.MAX_LIGHT, OverlayTexture.NO_OVERLAY, color);
-				});
+                // FIXME doesn't get cropped by OpenGL's scissor
+                RenderSystem.runAsFancy(() -> {
+                    MultiBufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+                    VertexConsumer buffer = bufferSource.getBuffer(model.renderType(texture));
+                    model.renderToBuffer(poseStack, buffer, ClientUtil.MAX_LIGHT, OverlayTexture.NO_OVERLAY, color);
+                });
 
-				poseStack.popPose();
+                poseStack.popPose();
 
-				Lighting.setupFor3DItems();
-			} else if (layer instanceof HermitPurpleVinesLayer<?,?> layer1) {
-				HumanoidModel<?> model = layer1.purpleModel.getModel(skin);
-				ResourceLocation texture = skin.getTexture(HermitPurpleVinesLayer.HERMIT);
+                Lighting.setupFor3DItems();
+            } else if (layer instanceof HermitPurpleVinesLayer<?, ?> layer1) {
+                HumanoidModel<?> model = layer1.purpleModel.getModel(skin);
+                ResourceLocation texture = skin.getTexture(HermitPurpleVinesLayer.HERMIT);
 
-				Quaternionf rotation = new Quaternionf()
-						.rotateX(xRot)
-						.rotateY(yRot);
+                Quaternionf rotation = new Quaternionf()
+                        .rotateX(xRot)
+                        .rotateY(yRot);
 
-				PoseStack poseStack = gui.pose();
-				poseStack.pushPose();
+                PoseStack poseStack = gui.pose();
+                poseStack.pushPose();
 
-				poseStack.translate(posX, posY, 350.0);
+                poseStack.translate(posX, posY, 350.0);
 
-				poseStack.translate(xOffsetRatio, yOffsetRatio, 0);
-				poseStack.scale(-scale, scale, scale);
-				poseStack.scale(scaleZoom, scaleZoom, scaleZoom);
-				poseStack.mulPose(rotation);
-				poseStack.translate(0, -1.35, 0);
-				poseStack.mulPose(Axis.YP.rotationDegrees(180));
+                poseStack.translate(xOffsetRatio, yOffsetRatio, 0);
+                poseStack.scale(-scale, scale, scale);
+                poseStack.scale(scaleZoom, scaleZoom, scaleZoom);
+                poseStack.mulPose(rotation);
+                poseStack.translate(0, -1.35, 0);
+                poseStack.mulPose(Axis.YP.rotationDegrees(180));
 
-				Lighting.setupForEntityInInventory();
+                Lighting.setupForEntityInInventory();
 
-				if (pose != null) {
-					((IHumanoidAnimModel) model).jojo_ripples$setupHumanoidPose(pose);
-				}
+                if (pose != null) {
+                    ((IHumanoidAnimModel) model).jojo_ripples$setupHumanoidPose(pose);
+                }
 
-				// FIXME doesn't get cropped by OpenGL's scissor
-				RenderSystem.runAsFancy(() -> {
-					MultiBufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-					VertexConsumer buffer = bufferSource.getBuffer(model.renderType(texture));
-					model.renderToBuffer(poseStack, buffer, ClientUtil.MAX_LIGHT, OverlayTexture.NO_OVERLAY, color);
-				});
+                // FIXME doesn't get cropped by OpenGL's scissor
+                RenderSystem.runAsFancy(() -> {
+                    MultiBufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+                    VertexConsumer buffer = bufferSource.getBuffer(model.renderType(texture));
+                    model.renderToBuffer(poseStack, buffer, ClientUtil.MAX_LIGHT, OverlayTexture.NO_OVERLAY, color);
+                });
 
-				poseStack.popPose();
+                poseStack.popPose();
 
-				Lighting.setupFor3DItems();
-			}
-		}
+                Lighting.setupFor3DItems();
+            }
+        }
 
-	}
+    }
 
 }

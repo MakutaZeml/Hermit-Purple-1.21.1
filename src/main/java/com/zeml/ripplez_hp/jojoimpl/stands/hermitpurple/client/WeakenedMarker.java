@@ -11,8 +11,8 @@ import java.util.List;
 
 public class WeakenedMarker extends MarkerRenderer {
 
-    public WeakenedMarker(Minecraft minecraft){
-        super("hp_weak",minecraft);
+    public WeakenedMarker(Minecraft minecraft) {
+        super("hp_weak", minecraft);
         renderThroughBlocks = true;
         useStandSkinColor = true;
 
@@ -22,7 +22,7 @@ public class WeakenedMarker extends MarkerRenderer {
     protected boolean shouldRender() {
         LocalPlayer player = mc.player;
         StandPower power = StandPower.get(player);
-        if(power != null && power.hasPower()){
+        if (power != null && power.hasPower()) {
             return power.userStandEffects.getEffectsOfType(AddonStandAbilities.WEAK_BLOCK_EFFECT.get()).findAny().isPresent();
         }
         return false;
@@ -32,10 +32,10 @@ public class WeakenedMarker extends MarkerRenderer {
     protected void updatePositions(List<MarkerInstance> list, float v) {
         LocalPlayer player = mc.player;
         StandPower power = StandPower.get(player);
-        if(power != null && power.hasPower()){
+        if (power != null && power.hasPower()) {
             List<WeakBlockEffect> effects = power.userStandEffects.getEffectsOfType(AddonStandAbilities.WEAK_BLOCK_EFFECT.get()).toList();
-            for (WeakBlockEffect effect: effects){
-                if(effect.getCenter() != null){
+            for (WeakBlockEffect effect : effects) {
+                if (effect.getCenter() != null) {
                     list.add(new MarkerInstance(blockMarkerPos(effect.getCenter())));
                 }
             }

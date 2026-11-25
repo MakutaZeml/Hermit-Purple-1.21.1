@@ -48,7 +48,7 @@ public class SpiderManBlockAbility extends GrappleBlockAbility {
             double d0 = (pos.x - user.getX()) / distance;
             double d1 = (pos.y - user.getY()) / distance;
             double d2 = (pos.z - user.getZ()) / distance;
-            if(!user.level().isClientSide){
+            if (!user.level().isClientSide) {
                 user.setDeltaMovement(user.getDeltaMovement().add(Math.copySign(d0 * d0 * 0.4, d0), Math.copySign(d1 * d1 * 0.4, d1), Math.copySign(d2 * d2 * 0.4, d2)));
                 JojoModUtil.forceSyncMotion(user);
             }

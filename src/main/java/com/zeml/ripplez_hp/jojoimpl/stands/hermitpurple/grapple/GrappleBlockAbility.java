@@ -70,7 +70,7 @@ public class GrappleBlockAbility extends HermitAction {
                 }
                 case RECOVERY -> {
                     performer.resetFallDistance();
-                    if(grappleBlock != null){
+                    if (grappleBlock != null) {
                         grappleBlock.remove(Entity.RemovalReason.DISCARDED);
                         grappleBlock = null;
                     }
@@ -80,9 +80,9 @@ public class GrappleBlockAbility extends HermitAction {
         }
 
         public void windUpStuff() {
-            if(grappleBlock != null){
+            if (grappleBlock != null) {
                 endPos = grappleBlock.position();
-                if(grappleBlock.isAttached()){
+                if (grappleBlock.isAttached()) {
                     if (level().isClientSide) {
                         if (endPos != null) {
                             StandPower power = StandPower.get(performer);
@@ -94,7 +94,7 @@ public class GrappleBlockAbility extends HermitAction {
                     }
                     setPhase(ActionPhase.PERFORM, 0);
                     syncPhaseChanges();
-                }else if (curPhaseTick > 20) {
+                } else if (curPhaseTick > 20) {
                     setPhase(ActionPhase.RECOVERY, 0);
                     syncPhaseChanges();
                 }
@@ -139,8 +139,8 @@ public class GrappleBlockAbility extends HermitAction {
         public void onSetPhase(ActionPhase newPhase) {
             switch (newPhase) {
                 case WINDUP -> {
-                    grappleBlock = new GrappleBlockEntity(performer,level());
-                    grappleBlock.shootFromRotation(performer,1,1);
+                    grappleBlock = new GrappleBlockEntity(performer, level());
+                    grappleBlock.shootFromRotation(performer, 1, 1);
                     level().addFreshEntity(grappleBlock);
 
                     StandPower power = StandPower.get(performer);
@@ -197,7 +197,7 @@ public class GrappleBlockAbility extends HermitAction {
 
 
         private void doDragEntity(Entity entity, Vec3 vec) {
-            if(!level().isClientSide){
+            if (!level().isClientSide) {
                 entity.setDeltaMovement(vec);
                 JojoModUtil.forceSyncMotion(entity);
             }

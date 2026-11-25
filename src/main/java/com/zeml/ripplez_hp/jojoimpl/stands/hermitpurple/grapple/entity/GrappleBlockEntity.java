@@ -36,10 +36,10 @@ public class GrappleBlockEntity extends ModdedProjectileEntity {
     @Override
     public void tick() {
         super.tick();
-        if(this.getOwner() != null){
+        if (this.getOwner() != null) {
             this.setInvisible(this.getOwner().isInvisible());
             LivingComponentAction action = LivingComponentAction.getComponent(getOwner());
-            if(!(action.getAction() instanceof GrappleBlockAbility.GrapplingBlock)){
+            if (!(action.getAction() instanceof GrappleBlockAbility.GrapplingBlock)) {
                 this.remove(RemovalReason.DISCARDED);
             }
 
@@ -103,14 +103,14 @@ public class GrappleBlockEntity extends ModdedProjectileEntity {
     }
 
     @Nullable
-    public StandPower standPower(){
+    public StandPower standPower() {
         return userStandPower.get();
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(ATTACHED,false);
+        builder.define(ATTACHED, false);
     }
 
     @Override
@@ -128,6 +128,6 @@ public class GrappleBlockEntity extends ModdedProjectileEntity {
     @Override
     protected void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
-        nbt.putBoolean("attached",this.isAttached());
+        nbt.putBoolean("attached", this.isAttached());
     }
 }

@@ -24,12 +24,12 @@ public class GuidedBulletEffect extends StandEffectInstance {
     protected void start() {
         LivingEntity user = getStandUser();
         LivingEntity target = getTargetLiving();
-        if(user != null && target != null){
-            if(level.isClientSide){
-                if (user == ClientProxy.getClientPlayer()){
+        if (user != null && target != null) {
+            if (level.isClientSide) {
+                if (user == ClientProxy.getClientPlayer()) {
                     ClientEntityController.setInstance(new ClientMobController(target));
                 }
-            }else {
+            } else {
                 EntityComponentController.setControlTarget(user, target, "entity");
             }
         }
@@ -37,7 +37,7 @@ public class GuidedBulletEffect extends StandEffectInstance {
 
     @Override
     protected void tick() {
-        if(getTargetLiving() == null){
+        if (getTargetLiving() == null) {
             this.remove();
         }
 
@@ -46,18 +46,18 @@ public class GuidedBulletEffect extends StandEffectInstance {
     @Override
     protected void stop() {
         LivingEntity user = getStandUser();
-        if(level.isClientSide){
-            if (user == ClientProxy.getClientPlayer()){
+        if (level.isClientSide) {
+            if (user == ClientProxy.getClientPlayer()) {
                 ClientEntityController.setInstance(null);
             }
-        }else {
+        } else {
             EntityComponentController component = ComponentUtil.getExistingDataOrNull(user, ModDataAttachmentTypes.CONTROLLER);
             if (component != null) {
                 component.stopControlling();
             }
         }
         LivingEntity targetLiving = getTargetLiving();
-        if(targetLiving != null){
+        if (targetLiving != null) {
             targetLiving.remove(Entity.RemovalReason.DISCARDED);
         }
 
@@ -66,7 +66,7 @@ public class GuidedBulletEffect extends StandEffectInstance {
     @Override
     public void remove() {
         LivingEntity targetLiving = getTargetLiving();
-        if(targetLiving != null){
+        if (targetLiving != null) {
             targetLiving.remove(Entity.RemovalReason.DISCARDED);
         }
         super.remove();

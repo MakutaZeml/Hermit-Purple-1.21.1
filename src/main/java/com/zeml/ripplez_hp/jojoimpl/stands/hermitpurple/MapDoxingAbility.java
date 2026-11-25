@@ -36,33 +36,29 @@ public class MapDoxingAbility extends HermitAction {
     public MapDoxingAbility(AbilityType<?> abilityType, AbilityId abilityId) {
         super(abilityType, abilityId, DoxxingAction::new);
         usageGroup = AbilityUsageGroup.UTILITY;
-        setDefaultPhaseLength(ActionPhase.WINDUP,20);
+        setDefaultPhaseLength(ActionPhase.WINDUP, 20);
     }
-
 
 
     @Override
     public ConditionCheck checkSpecificConditions(Power<?> context) {
         LivingEntity user = context.getUser();
-        if(user != null && user.getItemInHand(InteractionHand.OFF_HAND).is(Items.MAP) &&
-                user.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()){
+        if (user != null && user.getItemInHand(InteractionHand.OFF_HAND).is(Items.MAP) &&
+                user.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
             return ConditionCheck.POSITIVE;
         }
         return ConditionCheck.NEGATIVE;
     }
-    
-
-
 
 
     @Override
     public ActionAnimIdentifier getEntityAnim(EntityActionInstance action) {
-        if(action.getPowerUser() instanceof  LivingEntity livingEntity && livingEntity.getMainArm() == HumanoidArm.LEFT){
-            return ActionAnimIdentifier.getOrCreate(abilityId.nameInMoveset().concat("_l"),false);
+        if (action.getPowerUser() instanceof LivingEntity livingEntity && livingEntity.getMainArm() == HumanoidArm.LEFT) {
+            return ActionAnimIdentifier.getOrCreate(abilityId.nameInMoveset().concat("_l"), false);
         }
         return super.getEntityAnim(action);
     }
-    
+
     public static class DoxxingAction extends EntityActionInstance {
 
         public DoxxingAction(EntityActionType ability) {
@@ -71,34 +67,34 @@ public class MapDoxingAbility extends HermitAction {
 
         @Override
         public void actionPerformStart() {
-            if(level().isClientSide){
+            if (level().isClientSide) {
                 StandSkin skin = StandSkinsLoader.getCurSkin();
-                if(skin != null){
+                if (skin != null) {
                     PacketDistributor.sendToServer(new SetColorPacket(skin.getColor()));
                 }
             }
 
             StandPower standPower = StandPower.get(performer);
-            if(standPower != null){
-                if(!standPower.isSummoned() && standPower.getPowerType() != null){
-                    standPower.getPowerType().summon(performer,standPower);
+            if (standPower != null) {
+                if (!standPower.isSummoned() && standPower.getPowerType() != null) {
+                    standPower.getPowerType().summon(performer, standPower);
                 }
             }
-            if(!level().isClientSide){
+            if (!level().isClientSide) {
                 HermitPurpleAddon.getLogger().debug("Why is not working?");
-                byte scale = performer.isShiftKeyDown()?(byte) 0: (byte)2;
+                byte scale = performer.isShiftKeyDown() ? (byte) 0 : (byte) 2;
                 BlockPos blockPos = null;
                 String target = null;
                 ItemStack itemStack = performer.getItemInHand(InteractionHand.OFF_HAND);
-                if(itemStack.is(Items.MAP)){
-                    if(performer.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode() < 4){
+                if (itemStack.is(Items.MAP)) {
+                    if (performer.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode() < 4) {
                         Entity entity = DoxingHelper.HPLivingObjectives(performer);
-                        if(entity != null){
+                        if (entity != null) {
                             blockPos = entity.getOnPos();
                             target = entity.getName().getString();
 
                         }
-                    }else {
+                    } else {
                         switch (performer.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode()) {
                             case 4 -> {
                                 blockPos = DoxingHelper.structurePos(performer);
@@ -113,26 +109,26 @@ public class MapDoxingAbility extends HermitAction {
                             }
                         }
                     }
-                    if(blockPos != null){
+                    if (blockPos != null) {
                         itemStack.setCount(itemStack.getCount() - 1);
                         ServerLevel serverLevel = (ServerLevel) level();
-                        ItemStack map = MapItem.create(level(),blockPos.getX(),blockPos.getZ(),scale,true,true);
-                        MapItem.renderBiomePreviewMap(serverLevel,map);
-                        MapItemSavedData.addTargetDecoration(map,blockPos,"+", MapDecorationTypes.RED_X);
+                        ItemStack map = MapItem.create(level(), blockPos.getX(), blockPos.getZ(), scale, true, true);
+                        MapItem.renderBiomePreviewMap(serverLevel, map);
+                        MapItemSavedData.addTargetDecoration(map, blockPos, "+", MapDecorationTypes.RED_X);
                         String displayName = "filled_map.divination";
                         map.set(DataComponents.ITEM_NAME, Component.translatable(displayName, target));
                         map.set(DataComponents.MAP_COLOR, new MapItemColor(performer.getData(AddonDataAttachmentTypes.HERMIT_DATA).getColor()));
-                        performer.setItemInHand(InteractionHand.MAIN_HAND,map);
-                        if(standPower != null){
+                        performer.setItemInHand(InteractionHand.MAIN_HAND, map);
+                        if (standPower != null) {
                             standPower.addExp(.2F);
                         }
-                        VoiceLineServerSide.play(performer,AddonSoundEvents.DIVINATION,0,false);
-                       PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer,
-                                new StandSoundPacket(performer.getId(),AddonSoundEvents.SUMMON_HP,true,1,1));
+                        VoiceLineServerSide.play(performer, AddonSoundEvents.DIVINATION, 0, false);
+                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer,
+                                new StandSoundPacket(performer.getId(), AddonSoundEvents.SUMMON_HP, true, 1, 1));
                     }
                 }
             }
         }
     }
-    
+
 }

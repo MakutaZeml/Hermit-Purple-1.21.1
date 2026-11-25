@@ -34,16 +34,16 @@ import java.util.Optional;
 @OnlyIn(Dist.CLIENT)
 public class EmperorSkinView extends StandSkinsScreen.SkinView {
 
-	public EmperorSkinView(StandType standType, StandSkin skin, StandSkinsScreen screen, 
-			int x, int y, int standY, int row, int column, boolean isBottomRow) {
-		super(standType, skin, screen, x, y, standY, row, column, isBottomRow);
-	}
+    public EmperorSkinView(StandType standType, StandSkin skin, StandSkinsScreen screen,
+                           int x, int y, int standY, int row, int column, boolean isBottomRow) {
+        super(standType, skin, screen, x, y, standY, row, column, isBottomRow);
+    }
 
-	@Override
-	public void renderStand(GuiGraphics gui, int mouseX, int mouseY, float ticks, boolean isHovered, 
-			float posX, float posY, float scale, float scaleZoom, 
-			float yRot, float xRot, float xOffsetRatio, float yOffsetRatio) {
-        renderArmoredMannequin(gui, skin, posX-5, posY, scale, scaleZoom, yRot, xRot, xOffsetRatio, yOffsetRatio, ticks);
+    @Override
+    public void renderStand(GuiGraphics gui, int mouseX, int mouseY, float ticks, boolean isHovered,
+                            float posX, float posY, float scale, float scaleZoom,
+                            float yRot, float xRot, float xOffsetRatio, float yOffsetRatio) {
+        renderArmoredMannequin(gui, skin, posX - 5, posY, scale, scaleZoom, yRot, xRot, xOffsetRatio, yOffsetRatio, ticks);
 
     }
 
@@ -59,14 +59,14 @@ public class EmperorSkinView extends StandSkinsScreen.SkinView {
 
     public static void renderArmoredMannequin(GuiGraphics gui, StandSkin skin, float posX, float posY,
                                               float scale, float scaleZoom, float yRot, float xRot,
-                                              float xOffsetRatio, float yOffsetRatio, float ticks){
+                                              float xOffsetRatio, float yOffsetRatio, float ticks) {
         Quaternionf rotation = new Quaternionf().rotateX(-xRot).rotateY(-yRot + .75F);
         gui.pose().pushPose();
         gui.pose().translate(posX, posY, 350.0);
         gui.pose().translate(xOffsetRatio, yOffsetRatio, 0.0F);
         gui.pose().scale(scale, -scale, scale);
         gui.pose().translate(0.0, 1.25, 0.0);
-        gui.pose().scale(scaleZoom*2, scaleZoom*2, scaleZoom*2);
+        gui.pose().scale(scaleZoom * 2, scaleZoom * 2, scaleZoom * 2);
         gui.pose().mulPose(rotation);
         gui.pose().translate(0.0, -1.75, 0.0);
         gui.flush();
@@ -81,7 +81,7 @@ public class EmperorSkinView extends StandSkinsScreen.SkinView {
         StandPower standPower = StandPower.get(mannequin);
         if (standPower != null) {
             standPower.setStand(AddonStands.EMPEROR.get());
-            standPower.getPowerType().summon(mannequin,standPower);
+            standPower.getPowerType().summon(mannequin, standPower);
             standPower.setSummonedStand(standPower.getPowerType().makeSummonedStandObj.get());
             standPower.setSelectedSkin(Optional.of(skin.skinId));
         }

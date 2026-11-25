@@ -103,10 +103,10 @@ public class EmperorBulletRenderer extends SimpleEntityRenderer<EmperorBulletEnt
         if (first) {
             renderFront(matrixStack, new Vec3(0, 0, 1), vertexBuilder);
         }
-        renderSide(matrixStack, new Vec3(0, -1,  0),  length, u0, u1, vertexBuilder);
-        renderSide(matrixStack, new Vec3(0,  0, -1),  length, u0, u1, vertexBuilder);
-        renderSide(matrixStack, new Vec3(0,  1,  0),  length, u0, u1, vertexBuilder);
-        renderSide(matrixStack, new Vec3(0,  0,  1),  length, u0, u1, vertexBuilder);
+        renderSide(matrixStack, new Vec3(0, -1, 0), length, u0, u1, vertexBuilder);
+        renderSide(matrixStack, new Vec3(0, 0, -1), length, u0, u1, vertexBuilder);
+        renderSide(matrixStack, new Vec3(0, 1, 0), length, u0, u1, vertexBuilder);
+        renderSide(matrixStack, new Vec3(0, 0, 1), length, u0, u1, vertexBuilder);
 
         matrixStack.popPose();
         matrixStack.translate(trailSegmentVec.x, trailSegmentVec.y, trailSegmentVec.z);
@@ -126,44 +126,44 @@ public class EmperorBulletRenderer extends SimpleEntityRenderer<EmperorBulletEnt
                 packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1,
                 0, -1, 0,
                 u1, v0,
-                (float) lightNormal.x(), (float)lightNormal.y(), (float)lightNormal.z());
+                (float) lightNormal.x(), (float) lightNormal.y(), (float) lightNormal.z());
         HermitClientUtil.vertex(matrix, vertexBuilder,
                 packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1,
                 length, -1, 0,
                 u0, v0,
-                (float)lightNormal.x(),(float) lightNormal.y(),(float) lightNormal.z());
+                (float) lightNormal.x(), (float) lightNormal.y(), (float) lightNormal.z());
         HermitClientUtil.vertex(matrix, vertexBuilder,
                 packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1,
                 length, 1, 0,
                 u0, v1,
-                (float)lightNormal.x(),(float) lightNormal.y(),(float) lightNormal.z());
+                (float) lightNormal.x(), (float) lightNormal.y(), (float) lightNormal.z());
         HermitClientUtil.vertex(matrix, vertexBuilder,
                 packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1,
                 0, 1, 0,
                 u1, v1,
-                (float)lightNormal.x(), (float)lightNormal.y(), (float)lightNormal.z());
+                (float) lightNormal.x(), (float) lightNormal.y(), (float) lightNormal.z());
 
         matrixStack.mulPose(Axis.XP.rotationDegrees(180.0F));
         HermitClientUtil.vertex(matrix, vertexBuilder,
                 packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1,
                 0, -1, 0,
                 u1, v0,
-                (float)-lightNormal.x(), (float)-lightNormal.y(), (float)-lightNormal.z());
+                (float) -lightNormal.x(), (float) -lightNormal.y(), (float) -lightNormal.z());
         HermitClientUtil.vertex(matrix, vertexBuilder,
                 packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1,
                 length, -1, 0,
                 u0, v0,
-                (float)-lightNormal.x(), (float)-lightNormal.y(), (float)-lightNormal.z());
+                (float) -lightNormal.x(), (float) -lightNormal.y(), (float) -lightNormal.z());
         HermitClientUtil.vertex(matrix, vertexBuilder,
                 packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1,
                 length, 1, 0,
                 u0, v1,
-                (float)-lightNormal.x(), (float)-lightNormal.y(), (float)-lightNormal.z());
+                (float) -lightNormal.x(), (float) -lightNormal.y(), (float) -lightNormal.z());
         HermitClientUtil.vertex(matrix, vertexBuilder,
                 packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1,
                 0, 1, 0,
                 u1, v1,
-                (float)-lightNormal.x(), (float)-lightNormal.y(), (float)-lightNormal.z());
+                (float) -lightNormal.x(), (float) -lightNormal.y(), (float) -lightNormal.z());
 
         matrixStack.popPose();
     }
@@ -183,44 +183,44 @@ public class EmperorBulletRenderer extends SimpleEntityRenderer<EmperorBulletEnt
                 packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1,
                 -1, -1, 0,
                 u1, v0,
-                (float) lightNormal.x(), (float)lightNormal.y(),(float) lightNormal.z());
+                (float) lightNormal.x(), (float) lightNormal.y(), (float) lightNormal.z());
         HermitClientUtil.vertex(matrix, vertexBuilder,
                 packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1,
                 1, -1, 0,
                 u0, v0,
-                (float)lightNormal.x(), (float)lightNormal.y(), (float)lightNormal.z());
+                (float) lightNormal.x(), (float) lightNormal.y(), (float) lightNormal.z());
         HermitClientUtil.vertex(matrix, vertexBuilder,
                 packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1,
                 1, 1, 0,
                 u0, v1,
-                (float)lightNormal.x(), (float)lightNormal.y(), (float)lightNormal.z());
+                (float) lightNormal.x(), (float) lightNormal.y(), (float) lightNormal.z());
         HermitClientUtil.vertex(matrix, vertexBuilder,
                 packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1,
                 -1, 1, 0,
                 u1, v1,
-                (float)lightNormal.x(), (float)lightNormal.y(), (float)lightNormal.z());
+                (float) lightNormal.x(), (float) lightNormal.y(), (float) lightNormal.z());
 
         matrixStack.mulPose(Axis.XP.rotationDegrees(180.0F));
         HermitClientUtil.vertex(matrix, vertexBuilder,
                 packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1,
                 -1, -1, 0,
                 u1, v0,
-                (float)-lightNormal.x(), (float)-lightNormal.y(), (float)-lightNormal.z());
+                (float) -lightNormal.x(), (float) -lightNormal.y(), (float) -lightNormal.z());
         HermitClientUtil.vertex(matrix, vertexBuilder,
                 packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1,
                 1, -1, 0,
                 u0, v0,
-                (float)-lightNormal.x(), (float)-lightNormal.y(), (float)-lightNormal.z());
+                (float) -lightNormal.x(), (float) -lightNormal.y(), (float) -lightNormal.z());
         HermitClientUtil.vertex(matrix, vertexBuilder,
                 packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1,
                 1, 1, 0,
                 u0, v1,
-                (float)-lightNormal.x(), (float)-lightNormal.y(), (float)-lightNormal.z());
+                (float) -lightNormal.x(), (float) -lightNormal.y(), (float) -lightNormal.z());
         HermitClientUtil.vertex(matrix, vertexBuilder,
                 packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1,
                 -1, 1, 0,
                 u1, v1,
-                (float)-lightNormal.x(), (float)-lightNormal.y(), (float)-lightNormal.z());
+                (float) -lightNormal.x(), (float) -lightNormal.y(), (float) -lightNormal.z());
 
         matrixStack.popPose();
 

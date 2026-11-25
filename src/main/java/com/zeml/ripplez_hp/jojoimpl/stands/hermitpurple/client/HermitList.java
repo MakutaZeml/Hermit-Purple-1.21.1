@@ -13,7 +13,8 @@ import java.util.*;
 
 @OnlyIn(Dist.CLIENT)
 public class HermitList extends ContainerObjectSelectionList<PurpleEntry> {
-    private final List<PurpleEntry> purpleEntries = Lists.newArrayList();;
+    private final List<PurpleEntry> purpleEntries = Lists.newArrayList();
+    ;
     @Nullable
     private String filter;
     private int mode = 0;
@@ -39,7 +40,7 @@ public class HermitList extends ContainerObjectSelectionList<PurpleEntry> {
 
     public void updateList(Collection<?> list, double scrollAmount) {
         List<PurpleEntry> purpleList = new ArrayList<>();
-        this.addPurpleEntry(list,purpleList);
+        this.addPurpleEntry(list, purpleList);
         this.updateFiltersAndScroll(purpleList, scrollAmount);
     }
 
@@ -58,17 +59,17 @@ public class HermitList extends ContainerObjectSelectionList<PurpleEntry> {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        HermitPurpleAddon.getLogger().debug("CLICKED? {}",button);
+        HermitPurpleAddon.getLogger().debug("CLICKED? {}", button);
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    private void addPurpleEntry(Collection<?> list, List<PurpleEntry> purpleEntries){
-        list.forEach(object->{
-            purpleEntries.add(new PurpleEntry(minecraft,object,this.mode));
+    private void addPurpleEntry(Collection<?> list, List<PurpleEntry> purpleEntries) {
+        list.forEach(object -> {
+            purpleEntries.add(new PurpleEntry(minecraft, object, this.mode));
         });
     }
 
-    private void updateFiltersAndScroll(List<PurpleEntry> list, double scrollAmount){
+    private void updateFiltersAndScroll(List<PurpleEntry> list, double scrollAmount) {
         this.purpleEntries.clear();
         this.purpleEntries.addAll(list);
         this.sortPlayerEntries();
@@ -77,19 +78,19 @@ public class HermitList extends ContainerObjectSelectionList<PurpleEntry> {
         this.setScrollAmount(scrollAmount);
     }
 
-    private void sortPlayerEntries(){
-        this.purpleEntries.sort(Comparator.<PurpleEntry,Integer>comparing(purpleEntry -> {
-            if(purpleEntry.getMode() == 1 && purpleEntry.getItem() instanceof  UUID uuid){
-                if(this.minecraft.isLocalPlayer(uuid)){
+    private void sortPlayerEntries() {
+        this.purpleEntries.sort(Comparator.<PurpleEntry, Integer>comparing(purpleEntry -> {
+            if (purpleEntry.getMode() == 1 && purpleEntry.getItem() instanceof UUID uuid) {
+                if (this.minecraft.isLocalPlayer(uuid)) {
                     return 0;
                 }
             }
             return 4;
-        }).thenComparing(PurpleEntry::toString,String::compareToIgnoreCase));
+        }).thenComparing(PurpleEntry::toString, String::compareToIgnoreCase));
     }
 
-    private void updateFilteredPlayers(){
-        if(this.filter != null){
+    private void updateFilteredPlayers() {
+        if (this.filter != null) {
             this.purpleEntries.removeIf(purpleEntry -> !purpleEntry.toString().toLowerCase().contains(this.filter));
             this.replaceEntries(this.purpleEntries);
         }
@@ -99,7 +100,6 @@ public class HermitList extends ContainerObjectSelectionList<PurpleEntry> {
     public void setScrollAmount(double scroll) {
         super.setScrollAmount(scroll);
     }
-
 
 
 }

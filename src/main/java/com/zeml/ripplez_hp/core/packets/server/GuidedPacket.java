@@ -18,9 +18,9 @@ public record GuidedPacket(int entityID, boolean guided) implements CustomPacket
 
     private static CustomPacketPayload.Type<GuidedPacket> type;
 
-    public static class Handler implements HermitPackets.PacketOGHandler<GuidedPacket>{
+    public static class Handler implements HermitPackets.PacketOGHandler<GuidedPacket> {
 
-        public Handler(ResourceLocation packetId){
+        public Handler(ResourceLocation packetId) {
             type = new CustomPacketPayload.Type<>(packetId);
         }
 
@@ -32,8 +32,8 @@ public record GuidedPacket(int entityID, boolean guided) implements CustomPacket
         @Override
         public void handle(GuidedPacket payload, IPayloadContext context) {
             Entity entity = ClientProxy.getEntityById(payload.entityID);
-            if(entity != null){
-                entity.setData(AddonDataAttachmentTypes.GUIDED,payload.guided);
+            if (entity != null) {
+                entity.setData(AddonDataAttachmentTypes.GUIDED, payload.guided);
             }
         }
 
@@ -45,7 +45,7 @@ public record GuidedPacket(int entityID, boolean guided) implements CustomPacket
 
         @Override
         public GuidedPacket decode(RegistryFriendlyByteBuf buf) {
-            return new GuidedPacket(buf.readInt(),buf.readBoolean());
+            return new GuidedPacket(buf.readInt(), buf.readBoolean());
         }
     }
 }

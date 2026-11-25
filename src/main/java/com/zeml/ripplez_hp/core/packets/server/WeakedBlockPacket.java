@@ -25,7 +25,7 @@ public record WeakedBlockPacket(int sender, BlockPos pos, boolean added) impleme
 
     private static CustomPacketPayload.Type<WeakedBlockPacket> type;
 
-    public static class Handler implements HermitPackets.PacketOGHandler<WeakedBlockPacket>{
+    public static class Handler implements HermitPackets.PacketOGHandler<WeakedBlockPacket> {
 
         public Handler(ResourceLocation packetId) {
             type = new CustomPacketPayload.Type<>(packetId);
@@ -52,11 +52,11 @@ public record WeakedBlockPacket(int sender, BlockPos pos, boolean added) impleme
         @Override
         public void handle(WeakedBlockPacket payload, IPayloadContext context) {
             Entity entity = ClientProxy.getEntityById(payload.sender);
-            if(entity != null){
-                WeakenedBlockData data =  entity.level().getData(AddonDataAttachmentTypes.WEAK);
-                if(payload.added){
+            if (entity != null) {
+                WeakenedBlockData data = entity.level().getData(AddonDataAttachmentTypes.WEAK);
+                if (payload.added) {
                     data.addWeakBlocks(payload.pos);
-                }else {
+                } else {
                     data.removeWeakBlock(payload.pos);
                 }
             }

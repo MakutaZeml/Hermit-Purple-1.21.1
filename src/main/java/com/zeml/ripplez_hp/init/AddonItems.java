@@ -13,9 +13,9 @@ import static com.github.standobyte.jojo.init.ModItems.MAIN_TAB;
 
 @EventBusSubscriber(modid = HermitPurpleAddon.MOD_ID)
 public final class AddonItems {
-	public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(HermitPurpleAddon.MOD_ID);
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(HermitPurpleAddon.MOD_ID);
 
-	public static final DeferredItem<Item> EMPEROR = ITEMS.registerItem("emperor", EmperorItem::new, new Item.Properties().stacksTo(1));
+    public static final DeferredItem<Item> EMPEROR = ITEMS.registerItem("emperor", EmperorItem::new, new Item.Properties().stacksTo(1));
 
     @SubscribeEvent
     public static void addToTab(BuildCreativeModeTabContentsEvent event) {

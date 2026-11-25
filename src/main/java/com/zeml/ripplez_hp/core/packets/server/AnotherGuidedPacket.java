@@ -20,9 +20,9 @@ public record AnotherGuidedPacket(int entityID, int targetID) implements CustomP
 
     private static CustomPacketPayload.Type<AnotherGuidedPacket> type;
 
-    public static class Handler implements HermitPackets.PacketOGHandler<AnotherGuidedPacket>{
+    public static class Handler implements HermitPackets.PacketOGHandler<AnotherGuidedPacket> {
 
-        public Handler(ResourceLocation packetId){
+        public Handler(ResourceLocation packetId) {
             type = new CustomPacketPayload.Type<>(packetId);
         }
 
@@ -35,9 +35,9 @@ public record AnotherGuidedPacket(int entityID, int targetID) implements CustomP
         public void handle(AnotherGuidedPacket payload, IPayloadContext context) {
             Entity entity = ClientProxy.getEntityById(payload.entityID);
             Entity target = ClientProxy.getEntityById(payload.targetID());
-            if(entity instanceof LivingEntity user && target instanceof LivingEntity livingEntity){
+            if (entity instanceof LivingEntity user && target instanceof LivingEntity livingEntity) {
                 StandPower power = StandPower.get(user);
-                if(power != null){
+                if (power != null) {
                     GuidedBulletEffect effect = AddonStandAbilities.GUIDED_BULLET.get().create(user.level());
                     power.userStandEffects.addEffect(effect.withTarget(livingEntity));
                 }
@@ -52,7 +52,7 @@ public record AnotherGuidedPacket(int entityID, int targetID) implements CustomP
 
         @Override
         public AnotherGuidedPacket decode(RegistryFriendlyByteBuf buf) {
-            return new AnotherGuidedPacket(buf.readInt(),buf.readInt());
+            return new AnotherGuidedPacket(buf.readInt(), buf.readInt());
         }
     }
 }

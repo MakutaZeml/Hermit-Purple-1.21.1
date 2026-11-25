@@ -27,7 +27,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
-public class WeakBlockAbiliy extends HermitAction{
+public class WeakBlockAbiliy extends HermitAction {
     public WeakBlockAbiliy(AbilityType<?> abilityType, AbilityId abilityId) {
         super(abilityType, abilityId, TargetBlock::new);
         usageGroup = AbilityUsageGroup.SPECIAL;
@@ -35,7 +35,6 @@ public class WeakBlockAbiliy extends HermitAction{
         setDefaultPhaseLength(ActionPhase.PERFORM, 20);
         setDefaultPhaseLength(ActionPhase.RECOVERY, 15);
     }
-
 
 
     public static class TargetBlock extends EntityActionInstance implements ActionOBB {
@@ -55,28 +54,28 @@ public class WeakBlockAbiliy extends HermitAction{
 
         @Override
         public void actionTick() {
-            if(extendableOBB() != null){
+            if (extendableOBB() != null) {
                 Vec3 pos = getPerformer().position();
                 Vec3 offset = new Vec3(0.0, 1.5, 0).yRot(-getPerformer().yBodyRot * MathUtil.DEG_TO_RAD);
                 this.extendableOBB().updatePosition(level(), pos, offset, getPerformer().getXRot(), getPerformer().getYRot());
                 Vec3 endPos = this.extendableOBB().rotatableHitbox().center.add(getPerformer().getLookAngle().scale(extendableOBB().rotatableHitbox().extent.length()));
                 this.extendableOBB().tick();
-                switch (getPhase()){
+                switch (getPhase()) {
                     case WINDUP -> {
                         BlockHitResult blockHitResult = level().clip(new ClipContext(extendableOBB().rotatableHitbox().center, endPos, ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, CollisionContext.empty()));
                         BlockState blockCollision = OBBCollisionUtil.getCollidingBlock(level(), blockHitResult.getBlockPos());
                         StandPower power = StandPower.get(performer);
-                        if(power != null && power.hasPower()){
-                            if (blockCollision != null){
+                        if (power != null && power.hasPower()) {
+                            if (blockCollision != null) {
                                 StandStatFormulas.BlockMiningTier tier = StandStatFormulas.getStandHarvestLevel(6);
-                                if(power.getPowerType() != null && power.getPowerType().getStandStats() != null){
-                                    tier = StandStatFormulas.getStandHarvestLevel(power.getPowerType().getStandStats().power()*2);
+                                if (power.getPowerType() != null && power.getPowerType().getStandStats() != null) {
+                                    tier = StandStatFormulas.getStandHarvestLevel(power.getPowerType().getStandStats().power() * 2);
                                 }
-                                if(tier.canMine(level().getBlockState(blockHitResult.getBlockPos()))){
+                                if (tier.canMine(level().getBlockState(blockHitResult.getBlockPos()))) {
                                     this.blockPos = blockHitResult.getBlockPos();
                                     this.extendableOBB().setLifeSpan(30);
-                                }else {
-                                    setPhase(ActionPhase.RECOVERY,0);
+                                } else {
+                                    setPhase(ActionPhase.RECOVERY, 0);
                                 }
 
                             }
@@ -85,13 +84,13 @@ public class WeakBlockAbiliy extends HermitAction{
                     }
                     case PERFORM -> {
                         userWalkSpeed = 0;
-                        if(blockPos != null){
-                            performer.lookAt(EntityAnchorArgument.Anchor.EYES,blockPos.getCenter());
+                        if (blockPos != null) {
+                            performer.lookAt(EntityAnchorArgument.Anchor.EYES, blockPos.getCenter());
                         }
                     }
                     case RECOVERY -> {
-                        this.extendableOBB().forceRetract(level(),getPerformer(), this.id);
-                        if(getPhaseTicksLeft() ==1){
+                        this.extendableOBB().forceRetract(level(), getPerformer(), this.id);
+                        if (getPhaseTicksLeft() == 1) {
                             this.vines = null;
                         }
                     }
@@ -102,28 +101,28 @@ public class WeakBlockAbiliy extends HermitAction{
         @Override
         public void onSetPhase(ActionPhase newPhase) {
             if (newPhase == ActionPhase.WINDUP) {
-                if(!level().isClientSide){
-                    float pitch = (float) (.5+Math.random());
-                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer,new StandSoundPacket(performer.getId(), AddonSoundEvents.HP_VINE_SWING,true,1, pitch));
+                if (!level().isClientSide) {
+                    float pitch = (float) (.5 + Math.random());
+                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer, new StandSoundPacket(performer.getId(), AddonSoundEvents.HP_VINE_SWING, true, 1, pitch));
                 }
             }
         }
 
         @Override
         public void actionPerformEnd() {
-            if(blockPos != null){
+            if (blockPos != null) {
                 StandPower power = StandPower.get(performer);
-                if(power != null && power.hasPower()){
+                if (power != null && power.hasPower()) {
                     StandStatFormulas.BlockMiningTier tier = StandStatFormulas.getStandHarvestLevel(6);
-                    if(power.getPowerType() != null && power.getPowerType().getStandStats() != null){
-                        tier = StandStatFormulas.getStandHarvestLevel(power.getPowerType().getStandStats().power()*2);
+                    if (power.getPowerType() != null && power.getPowerType().getStandStats() != null) {
+                        tier = StandStatFormulas.getStandHarvestLevel(power.getPowerType().getStandStats().power() * 2);
                     }
-                    if(tier.canMine(level().getBlockState(blockPos))){
+                    if (tier.canMine(level().getBlockState(blockPos))) {
                         WeakBlockEffect blockEffect = AddonStandAbilities.WEAK_BLOCK_EFFECT.get().create(level()).setCenter(blockPos, tier, getPowerUser().getId());
                         power.userStandEffects.addEffect(blockEffect);
-                        if(!level().isClientSide){
-                            float pitch = (float) (.5+Math.random());
-                            PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer,new StandSoundPacket(performer.getId(), AddonSoundEvents.HP_TENSION,true,1, pitch));
+                        if (!level().isClientSide) {
+                            float pitch = (float) (.5 + Math.random());
+                            PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer, new StandSoundPacket(performer.getId(), AddonSoundEvents.HP_TENSION, true, 1, pitch));
                         }
                     }
 
@@ -133,8 +132,8 @@ public class WeakBlockAbiliy extends HermitAction{
 
         @Override
         public void onButtonStopHold() {
-            if(phase != ActionPhase.RECOVERY){
-                setPhase(ActionPhase.RECOVERY,0);
+            if (phase != ActionPhase.RECOVERY) {
+                setPhase(ActionPhase.RECOVERY, 0);
                 syncPhaseChanges();
             }
         }

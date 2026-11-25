@@ -15,12 +15,13 @@ import java.util.function.Function;
 
 public class HermitAction extends EntityActionAbility {
     public boolean noFinisherBarDecay = false;
+
     public HermitAction(AbilityType<?> abilityType, AbilityId abilityId) {
         super(abilityType, abilityId);
     }
 
-    public HermitAction (AbilityType<?> abilityType, AbilityId abilityId,
-                         Function<EntityActionType, ? extends EntityActionInstance> createActionObj){
+    public HermitAction(AbilityType<?> abilityType, AbilityId abilityId,
+                        Function<EntityActionType, ? extends EntityActionInstance> createActionObj) {
         super(abilityType, abilityId, createActionObj);
 
     }

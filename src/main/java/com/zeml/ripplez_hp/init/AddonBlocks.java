@@ -4,6 +4,6 @@ import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public final class AddonBlocks {
-	public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(HermitPurpleAddon.MOD_ID);
-	
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(HermitPurpleAddon.MOD_ID);
+
 }

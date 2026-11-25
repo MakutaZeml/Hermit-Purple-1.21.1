@@ -19,7 +19,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 public class ClientSetUp {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onClientSetup0(FMLClientSetupEvent event){
+    public static void onClientSetup0(FMLClientSetupEvent event) {
 
     }
 
@@ -28,8 +28,8 @@ public class ClientSetUp {
         Minecraft mc = Minecraft.getInstance();
         AddonMarkers.registerMarkers(mc);
 
-		StandSkinsScreen.skinViewTypes.put(StandInitHermitPurple.SKIN_VIEW_TYPE, HermitSkinView::new);
-		StandSkinsScreen.skinViewTypes.put(StandInitEmperor.SKIN_VIEW_TYPE, EmperorSkinView::new);
+        StandSkinsScreen.skinViewTypes.put(StandInitHermitPurple.SKIN_VIEW_TYPE, HermitSkinView::new);
+        StandSkinsScreen.skinViewTypes.put(StandInitEmperor.SKIN_VIEW_TYPE, EmperorSkinView::new);
     }
 
 }

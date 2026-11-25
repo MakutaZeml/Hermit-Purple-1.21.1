@@ -28,31 +28,31 @@ public class ShotAbility extends EmperorAbility {
     public ShotAbility(AbilityType<?> abilityType, AbilityId abilityId) {
         super(abilityType, abilityId);
         usageGroup = AbilityUsageGroup.COMBAT;
-        setDefaultPhaseLength(ActionPhase.WINDUP,5);
+        setDefaultPhaseLength(ActionPhase.WINDUP, 5);
     }
 
 
     @Override
     public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime, ActionInputBuffer.BufferingState bufferingState) {
-        if(user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem emperorItem){
-            if(!level.isClientSide){
+        if (user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem emperorItem) {
+            if (!level.isClientSide) {
                 EmperorGunData gunData = user.getItemInHand(InteractionHand.MAIN_HAND).get(HermitDataComponents.EMPEROR);
-                if(gunData != null){
-                    float multStamina = user.hasEffect(ModStatusEffects.RESOLVE)?.75F:1;
-                    EmperorItem.shot(level,gunData,multStamina,user);
-                    if(user instanceof Player player){
-                        player.getCooldowns().addCooldown(emperorItem,10);
+                if (gunData != null) {
+                    float multStamina = user.hasEffect(ModStatusEffects.RESOLVE) ? .75F : 1;
+                    EmperorItem.shot(level, gunData, multStamina, user);
+                    if (user instanceof Player player) {
+                        player.getCooldowns().addCooldown(emperorItem, 10);
                     }
                 }
             }
-        }else if(user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem emperorItem){
-            if(!level.isClientSide){
+        } else if (user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem emperorItem) {
+            if (!level.isClientSide) {
                 EmperorGunData gunData = user.getItemInHand(InteractionHand.OFF_HAND).get(HermitDataComponents.EMPEROR);
-                if(gunData != null){
-                    float multStamina = user.hasEffect(ModStatusEffects.RESOLVE)?.75F:1;
-                    EmperorItem.shot(level,gunData,multStamina,user);
-                    if(user instanceof Player player){
-                        player.getCooldowns().addCooldown(emperorItem,10);
+                if (gunData != null) {
+                    float multStamina = user.hasEffect(ModStatusEffects.RESOLVE) ? .75F : 1;
+                    EmperorItem.shot(level, gunData, multStamina, user);
+                    if (user instanceof Player player) {
+                        player.getCooldowns().addCooldown(emperorItem, 10);
                     }
                 }
             }
@@ -62,23 +62,22 @@ public class ShotAbility extends EmperorAbility {
 
     @Override
     public ActionAnimIdentifier getEntityAnim(EntityActionInstance action) {
-        if(!isRight(action.getPowerUser())){
-            return ActionAnimIdentifier.getOrCreate(abilityId.nameInMoveset().concat("_l"),false);
+        if (!isRight(action.getPowerUser())) {
+            return ActionAnimIdentifier.getOrCreate(abilityId.nameInMoveset().concat("_l"), false);
         }
         return super.getEntityAnim(action);
     }
 
-    public static boolean isRight(LivingEntity user){
-        if(user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem){
+    public static boolean isRight(LivingEntity user) {
+        if (user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem) {
             return user.getMainArm() == HumanoidArm.RIGHT;
         }
-        if(user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem){
+        if (user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem) {
             return user.getMainArm() == HumanoidArm.LEFT;
         }
 
         return false;
     }
-
 
 
 }

@@ -31,13 +31,13 @@ public class OpenTargetAbility extends EntityActionAbility {
 
     @Override
     public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime, ActionInputBuffer.BufferingState bufferingState) {
-        if(!level.isClientSide){
+        if (!level.isClientSide) {
             HermitTargetData data = user.getData(AddonDataAttachmentTypes.HERMIT_DATA);
             data.setStructures(level.registryAccess().registryOrThrow(Registries.STRUCTURE).keySet());
             HermitPurpleAddon.getLogger().debug("keyPress {}", level.registryAccess().registryOrThrow(Registries.STRUCTURE).keySet());
-            PacketDistributor.sendToPlayer((ServerPlayer) user, new HermitTargetDataPacket(user.getId(), data.mode, data.target, data.color,level.registryAccess().registryOrThrow(Registries.STRUCTURE).keySet()));
+            PacketDistributor.sendToPlayer((ServerPlayer) user, new HermitTargetDataPacket(user.getId(), data.mode, data.target, data.color, level.registryAccess().registryOrThrow(Registries.STRUCTURE).keySet()));
         }
-        if(level.isClientSide && user == Minecraft.getInstance().player){
+        if (level.isClientSide && user == Minecraft.getInstance().player) {
             ClientProxy.openScreen(new HermitTargetScreen());
         }
         return super.onKeyPress(level, user, extraClientInput, inputMethod, clickHoldResolveTime, bufferingState);

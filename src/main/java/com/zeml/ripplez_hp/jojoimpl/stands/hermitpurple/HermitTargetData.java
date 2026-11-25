@@ -16,11 +16,11 @@ public class HermitTargetData implements SynchronizableEntityData {
     protected int color;
     protected Set<ResourceLocation> structures;
 
-    public HermitTargetData(){
-        this(0,"",0xF070D0, null);
+    public HermitTargetData() {
+        this(0, "", 0xF070D0, null);
     }
 
-    public HermitTargetData(int mode, String target, int color, Set<ResourceLocation> structures){
+    public HermitTargetData(int mode, String target, int color, Set<ResourceLocation> structures) {
         this.mode = mode;
         this.target = target;
         this.color = color;
@@ -61,6 +61,6 @@ public class HermitTargetData implements SynchronizableEntityData {
 
     @Override
     public void syncToTracking(ServerPlayer serverPlayer) {
-        PacketDistributor.sendToPlayer(serverPlayer,new HermitTargetDataPacket(serverPlayer.getId(),this.mode, this.target,this.color,this.structures));
+        PacketDistributor.sendToPlayer(serverPlayer, new HermitTargetDataPacket(serverPlayer.getId(), this.mode, this.target, this.color, this.structures));
     }
 }

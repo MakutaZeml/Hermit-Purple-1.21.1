@@ -31,8 +31,8 @@ public class StandTargetAbility extends EntityActionAbility {
     @Override
     public ConditionCheck checkSpecificConditions(Power<?> context) {
         LivingEntity user = context.getUser();
-        if(user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem ||
-                user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem){
+        if (user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem ||
+                user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem) {
             return ConditionCheck.POSITIVE;
         }
         return ConditionCheck.NEGATIVE;
@@ -41,31 +41,31 @@ public class StandTargetAbility extends EntityActionAbility {
 
     @Override
     public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime) {
-        if(!level.isClientSide){
-            if(user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem){
+        if (!level.isClientSide) {
+            if (user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem) {
                 ItemStack itemStack = user.getItemInHand(InteractionHand.MAIN_HAND);
                 EmperorGunData data = itemStack.get(HermitDataComponents.EMPEROR);
-                if(data != null && StandPower.get(user).hasPower()){
+                if (data != null && StandPower.get(user).hasPower()) {
                     StandPower power = StandPower.get(user);
-                    if(power != null && power.getStandInstance().isPresent() && power.getStandInstance().get().getStandType() != null &&
-                            power.getStandInstance().get().getStandType().getStandStats() != null){
+                    if (power != null && power.getStandInstance().isPresent() && power.getStandInstance().get().getStandType() != null &&
+                            power.getStandInstance().get().getStandType().getStandStats() != null) {
                         double maxRange = power.getStandInstance().get().getStandType().getStandStats().rangeMax();
-                        ActionTarget target = HitResultUtil.clip(user.getEyePosition(),user.getLookAngle(),maxRange,maxRange,level, entity -> entity.isAlive(),user,0);
-                        if(target.getType() == ActionTarget.TargetType.ENTITY && target.getEntity() instanceof LivingEntity){
+                        ActionTarget target = HitResultUtil.clip(user.getEyePosition(), user.getLookAngle(), maxRange, maxRange, level, entity -> entity.isAlive(), user, 0);
+                        if (target.getType() == ActionTarget.TargetType.ENTITY && target.getEntity() instanceof LivingEntity) {
                             data.setUUIDTarget(Optional.of(target.getEntity().getUUID()));
                         }
                     }
                 }
-            }else if(user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem){
+            } else if (user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem) {
                 ItemStack itemStack = user.getItemInHand(InteractionHand.OFF_HAND);
                 EmperorGunData data = itemStack.get(HermitDataComponents.EMPEROR);
-                if(data != null && StandPower.get(user).hasPower()){
+                if (data != null && StandPower.get(user).hasPower()) {
                     StandPower power = StandPower.get(user);
-                    if(power != null && power.getStandInstance().isPresent() && power.getStandInstance().get().getStandType() != null &&
-                            power.getStandInstance().get().getStandType().getStandStats() != null){
+                    if (power != null && power.getStandInstance().isPresent() && power.getStandInstance().get().getStandType() != null &&
+                            power.getStandInstance().get().getStandType().getStandStats() != null) {
                         double maxRange = power.getStandInstance().get().getStandType().getStandStats().rangeMax();
-                        ActionTarget target = HitResultUtil.clip(user.getEyePosition(),user.getLookAngle(),maxRange,maxRange,level,entity -> entity.isAlive(),user,0);
-                        if(target.getType() == ActionTarget.TargetType.ENTITY && target.getEntity() instanceof LivingEntity){
+                        ActionTarget target = HitResultUtil.clip(user.getEyePosition(), user.getLookAngle(), maxRange, maxRange, level, entity -> entity.isAlive(), user, 0);
+                        if (target.getType() == ActionTarget.TargetType.ENTITY && target.getEntity() instanceof LivingEntity) {
                             data.setUUIDTarget(Optional.of(target.getEntity().getUUID()));
                         }
                     }

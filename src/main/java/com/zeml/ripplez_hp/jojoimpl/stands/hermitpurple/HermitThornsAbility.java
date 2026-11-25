@@ -42,14 +42,14 @@ import java.util.Map;
 import java.util.UUID;
 
 
-public class HermitThornsAbility extends HermitAction{
+public class HermitThornsAbility extends HermitAction {
 
 
     public HermitThornsAbility(AbilityType<?> abilityType, AbilityId abilityId) {
-        super(abilityType, abilityId,Thorning::new);
+        super(abilityType, abilityId, Thorning::new);
         usageGroup = AbilityUsageGroup.COMBAT;
-        setDefaultPhaseLength(ActionPhase.PERFORM,1);
-        setDefaultPhaseLength(ActionPhase.RECOVERY,10);
+        setDefaultPhaseLength(ActionPhase.PERFORM, 1);
+        setDefaultPhaseLength(ActionPhase.RECOVERY, 10);
 
     }
 
@@ -57,8 +57,8 @@ public class HermitThornsAbility extends HermitAction{
     @Override
     public ConditionCheck checkSpecificConditions(Power<?> context) {
         StandPower stand = PowerClass.STAND.cast(context);
-        if(stand != null && stand.hasPower()){
-            if(stand.userStandEffects.getEffectOfType(AddonStandAbilities.HERMIT_THORNS_EFFECT.get()).isPresent()){
+        if (stand != null && stand.hasPower()) {
+            if (stand.userStandEffects.getEffectOfType(AddonStandAbilities.HERMIT_THORNS_EFFECT.get()).isPresent()) {
                 return ConditionCheck.GREEN_HIGHLIGHT;
             }
         }
@@ -69,12 +69,12 @@ public class HermitThornsAbility extends HermitAction{
     @Override
     public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime, ActionInputBuffer.BufferingState bufferingState) {
         StandPower standPower = StandPower.get(user);
-        if(standPower != null && standPower.hasPower()){
+        if (standPower != null && standPower.hasPower()) {
             boolean active = !standPower.userStandEffects.getEffectsOfType(AddonStandAbilities.HERMIT_THORNS_EFFECT.get()).findAny().isEmpty();
-            if(active){
+            if (active) {
                 standPower.userStandEffects.getEffectsOfType(AddonStandAbilities.HERMIT_THORNS_EFFECT.get()).forEach(EntityCustomEffect::remove);
-            }else {
-                if(standPower.getPowerType() != null) standPower.getPowerType().summon(user,standPower);
+            } else {
+                if (standPower.getPowerType() != null) standPower.getPowerType().summon(user, standPower);
                 HermitThornsEffect effect = AddonStandAbilities.HERMIT_THORNS_EFFECT.get().create(level);
                 standPower.userStandEffects.addEffect(effect);
             }
@@ -94,8 +94,9 @@ public class HermitThornsAbility extends HermitAction{
         }
     }
 
-    public static class HermitThornsEffect  extends StandEffectInstance {
+    public static class HermitThornsEffect extends StandEffectInstance {
         protected final Map<UUID, MutableInt> blockedEntitiesTimers = new HashMap<>();
+
         public HermitThornsEffect(@NotNull EntityCustomEffectType<?> effectType) {
             super(effectType);
         }
@@ -106,11 +107,11 @@ public class HermitThornsAbility extends HermitAction{
 
         @Override
         protected void tick() {
-            if(!level.isClientSide){
+            if (!level.isClientSide) {
                 blockedEntitiesTimers.entrySet().removeIf(entityTimerEntry -> entityTimerEntry.getValue().decrementAndGet() <= 0);
             }
-            if(userPower != null){
-                if(!userPower.hasPower() || !userPower.isSummoned()){
+            if (userPower != null) {
+                if (!userPower.hasPower() || !userPower.isSummoned()) {
                     this.remove();
                 }
             }
@@ -125,17 +126,17 @@ public class HermitThornsAbility extends HermitAction{
     }
 
     @EventBusSubscriber(modid = HermitPurpleAddon.MOD_ID)
-    public static class ThornsUtil{
+    public static class ThornsUtil {
         @SubscribeEvent
-        public static void onStartedStandTakesDamage(LivingIncomingDamageEvent event){
+        public static void onStartedStandTakesDamage(LivingIncomingDamageEvent event) {
             LivingEntity user = event.getEntity();
             DamageContainer dmg = event.getContainer();
             DamageSource dmgSource = dmg.getSource();
             Entity attacker = event.getSource().getDirectEntity();
-            if(dmgSource.isDirect() && ( user!= attacker) && attacker != null && dmgSource.is(Tags.DamageTypes.IS_PHYSICAL)){
+            if (dmgSource.isDirect() && (user != attacker) && attacker != null && dmgSource.is(Tags.DamageTypes.IS_PHYSICAL)) {
                 StandPower power = StandPower.get(user);
-                if(power != null){
-                    power.userStandEffects.getEffectOfType(AddonStandAbilities.HERMIT_THORNS_EFFECT.get()).ifPresent(effect->{
+                if (power != null) {
+                    power.userStandEffects.getEffectOfType(AddonStandAbilities.HERMIT_THORNS_EFFECT.get()).ifPresent(effect -> {
                         DamageSourceModified _dmgSource = (DamageSourceModified) dmgSource;
                         if (!dmgSource.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
                             @Nullable UUID attackerId = attacker.getUUID();
@@ -149,14 +150,13 @@ public class HermitThornsAbility extends HermitAction{
                         float reduced = reducedAmount(event.getOriginalAmount(), power);
                         var damageType = DamageUtil.type(user.level(), ModDamageTypes.STAND_ATTACK);
                         DamageSource newDmgSource = new DamageSource(damageType, user);
-                        attacker.hurt(newDmgSource,1);
+                        attacker.hurt(newDmgSource, 1);
                         //TODO implement Hamon when it's done
-                        if (reduced< 1) {
+                        if (reduced < 1) {
                             if (reduced == 0) {
                                 event.setCanceled(true);
 
-                            }
-                            else {
+                            } else {
                                 float dmgAmount = dmg.getNewDamage();
                                 float newDmg = dmgAmount * reduced;
                                 event.setAmount(newDmg);
@@ -169,7 +169,7 @@ public class HermitThornsAbility extends HermitAction{
         }
 
 
-        protected static float reducedAmount(float origDmgAmount, StandPower userPower){
+        protected static float reducedAmount(float origDmgAmount, StandPower userPower) {
             float blockedRatio = 1;
             if (userPower != null && userPower.usesStamina()) {
                 float staminaCost = StandStatFormulas.getGuardStaminaCost(origDmgAmount);
@@ -181,15 +181,13 @@ public class HermitThornsAbility extends HermitAction{
             }
             float dmgCoeff;
             dmgCoeff = 1 - 0.4f * blockedRatio;
-            double furtherReductionCap = userPower.getPowerType().getStandStats().durability()/ 2;
+            double furtherReductionCap = userPower.getPowerType().getStandStats().durability() / 2;
             if (origDmgAmount < furtherReductionCap) {
                 dmgCoeff *= (float) (origDmgAmount / furtherReductionCap);
             }
             return dmgCoeff;
         }
     }
-
-
 
 
 }

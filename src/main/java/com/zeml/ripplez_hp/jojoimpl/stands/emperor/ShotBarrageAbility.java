@@ -29,22 +29,21 @@ public class ShotBarrageAbility extends EmperorAbility {
     public ShotBarrageAbility(AbilityType<?> abilityType, AbilityId abilityId) {
         super(abilityType, abilityId, EmperorBarrage::new);
         usageGroup = AbilityUsageGroup.COMBAT;
-        setDefaultPhaseLength(ActionPhase.WINDUP,5);
-        setDefaultPhaseLength(ActionPhase.PERFORM,11);
-        setDefaultPhaseLength(ActionPhase.RECOVERY,2);
+        setDefaultPhaseLength(ActionPhase.WINDUP, 5);
+        setDefaultPhaseLength(ActionPhase.PERFORM, 11);
+        setDefaultPhaseLength(ActionPhase.RECOVERY, 2);
     }
-
 
 
     @Override
     public ActionAnimIdentifier getEntityAnim(EntityActionInstance action) {
-        if(!isRight(action.getPowerUser())){
-            return ActionAnimIdentifier.getOrCreate(abilityId.nameInMoveset().concat("_l"),false);
+        if (!isRight(action.getPowerUser())) {
+            return ActionAnimIdentifier.getOrCreate(abilityId.nameInMoveset().concat("_l"), false);
         }
         return super.getEntityAnim(action);
     }
 
-    public static class EmperorBarrage extends EntityActionInstance{
+    public static class EmperorBarrage extends EntityActionInstance {
         public EmperorBarrage(EntityActionType ability) {
             super(ability);
         }
@@ -52,36 +51,36 @@ public class ShotBarrageAbility extends EmperorAbility {
 
         @Override
         public void actionTick() {
-            if(this.phase == ActionPhase.PERFORM){
-                int t = Math.round(this.getPhaseTicksLeft())%13;
-                boolean shotTick = t==1|| t==3||t==5|| t==7||t==9 || t==11;
-                if(shotTick){
-                    if(!this.level().isClientSide){
-                        if(performer.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem emperorItem){
+            if (this.phase == ActionPhase.PERFORM) {
+                int t = Math.round(this.getPhaseTicksLeft()) % 13;
+                boolean shotTick = t == 1 || t == 3 || t == 5 || t == 7 || t == 9 || t == 11;
+                if (shotTick) {
+                    if (!this.level().isClientSide) {
+                        if (performer.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem emperorItem) {
                             EmperorGunData gunData = performer.getItemInHand(InteractionHand.MAIN_HAND).get(HermitDataComponents.EMPEROR);
-                            if(gunData != null){
-                                float multStamina = performer.hasEffect(ModStatusEffects.RESOLVE)?.75F:1;
-                                EmperorItem.shot(this.level() ,gunData,multStamina,performer);
-                                if(performer instanceof Player player){
-                                    player.getCooldowns().addCooldown(emperorItem,10);
+                            if (gunData != null) {
+                                float multStamina = performer.hasEffect(ModStatusEffects.RESOLVE) ? .75F : 1;
+                                EmperorItem.shot(this.level(), gunData, multStamina, performer);
+                                if (performer instanceof Player player) {
+                                    player.getCooldowns().addCooldown(emperorItem, 10);
                                 }
                             }
-                        } else if(performer.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem emperorItem) {
+                        } else if (performer.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem emperorItem) {
                             EmperorGunData gunData = performer.getItemInHand(InteractionHand.OFF_HAND).get(HermitDataComponents.EMPEROR);
-                            if(gunData != null){
-                                float multStamina = performer.hasEffect(ModStatusEffects.RESOLVE)?.75F:1;
-                                EmperorItem.shot(this.level(),gunData,multStamina,performer);
-                                if(performer instanceof Player player){
-                                    player.getCooldowns().addCooldown(emperorItem,10);
+                            if (gunData != null) {
+                                float multStamina = performer.hasEffect(ModStatusEffects.RESOLVE) ? .75F : 1;
+                                EmperorItem.shot(this.level(), gunData, multStamina, performer);
+                                if (performer instanceof Player player) {
+                                    player.getCooldowns().addCooldown(emperorItem, 10);
                                 }
                             }
                         }
                     }
                 }
             }
-            if(this.phase == ActionPhase.RECOVERY){
-                if(performer instanceof Player player){
-                    player.getCooldowns().addCooldown(AddonItems.EMPEROR.asItem(),65);
+            if (this.phase == ActionPhase.RECOVERY) {
+                if (performer instanceof Player player) {
+                    player.getCooldowns().addCooldown(AddonItems.EMPEROR.asItem(), 65);
                 }
             }
         }

@@ -24,24 +24,25 @@ import java.util.List;
 import java.util.UUID;
 
 @OnlyIn(Dist.CLIENT)
-public class PurpleEntry extends ContainerObjectSelectionList.Entry<PurpleEntry>{
+public class PurpleEntry extends ContainerObjectSelectionList.Entry<PurpleEntry> {
     protected static final WidgetSprites SPRITES = new WidgetSprites(ResourceLocation.withDefaultNamespace("widget/button"), ResourceLocation.withDefaultNamespace("widget/button_disabled"), ResourceLocation.withDefaultNamespace("widget/button_highlighted"));
     private final Minecraft minecraft;
     private final List<AbstractWidget> children;
     private final Object item;
     private final int mode;
     private final String name;
-    @Nullable private final ImageButton hpButton;
+    @Nullable
+    private final ImageButton hpButton;
 
 
-    public PurpleEntry(Minecraft minecraft, Object o, int mode){
+    public PurpleEntry(Minecraft minecraft, Object o, int mode) {
         this.minecraft = minecraft;
         this.item = o;
         this.mode = mode;
         this.name = getName(o);
-        this.hpButton = new ImageButton(0, 0, 20, 20,SPRITES,(ctx)->{
-            HermitPurpleAddon.getLogger().debug("Packet Sent {} {}", item.toString(),this.mode);
-            PacketDistributor.sendToServer(new SetTargetPacket(this.mode,item.toString()));
+        this.hpButton = new ImageButton(0, 0, 20, 20, SPRITES, (ctx) -> {
+            HermitPurpleAddon.getLogger().debug("Packet Sent {} {}", item.toString(), this.mode);
+            PacketDistributor.sendToServer(new SetTargetPacket(this.mode, item.toString()));
         });
         this.children = new ArrayList<>();
         this.children.add(this.hpButton);
@@ -62,8 +63,8 @@ public class PurpleEntry extends ContainerObjectSelectionList.Entry<PurpleEntry>
         int j = top + (height - 24) / 2;
         int k = i + 24 + 4;
         int l = top + (height - 18) / 2;
-        guiGraphics.drawString(minecraft.font,this.name, k, l + 12,0xFFFFFF,false);
-        if(this.hpButton != null){
+        guiGraphics.drawString(minecraft.font, this.name, k, l + 12, 0xFFFFFF, false);
+        if (this.hpButton != null) {
             this.hpButton.setX(left + (width - this.hpButton.getWidth() - 4));
             this.hpButton.setY(top + (height - this.hpButton.getHeight()) / 2);
             this.hpButton.render(guiGraphics, mouseX, mouseY, partialTick);
@@ -73,7 +74,7 @@ public class PurpleEntry extends ContainerObjectSelectionList.Entry<PurpleEntry>
 
 
     @Nullable
-    public Component getNameComponent(){
+    public Component getNameComponent() {
         switch (this.mode) {
             case 1 -> {
                 if (this.item instanceof UUID uuid && this.minecraft.level != null) {
@@ -109,9 +110,9 @@ public class PurpleEntry extends ContainerObjectSelectionList.Entry<PurpleEntry>
     }
 
 
-    public String getName(Object object){
+    public String getName(Object object) {
         Component nameComponent = getNameComponent();
-        if(nameComponent != null){
+        if (nameComponent != null) {
             return nameComponent.getString();
         }
         return object.toString();

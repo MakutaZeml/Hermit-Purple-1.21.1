@@ -3,6 +3,7 @@ package com.zeml.ripplez_hp.mc.item.component;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
@@ -11,14 +12,14 @@ import net.minecraft.network.codec.StreamCodec;
 
 public class EmperorGunData {
     protected Optional<UUID> owner;
-    protected  Optional<UUID> UUIDTarget;
+    protected Optional<UUID> UUIDTarget;
     protected int mode;
 
     public EmperorGunData() {
-        this(Optional.empty(),Optional.empty(), 0);
+        this(Optional.empty(), Optional.empty(), 0);
     }
 
-    public EmperorGunData(Optional<UUID> owner ,Optional<UUID> uuidTarget, int mode) {
+    public EmperorGunData(Optional<UUID> owner, Optional<UUID> uuidTarget, int mode) {
         this.owner = owner;
         this.UUIDTarget = uuidTarget;
         this.mode = mode;
@@ -27,22 +28,24 @@ public class EmperorGunData {
     public Optional<UUID> getUuidOwner() {
         return this.owner;
     }
+
     public Optional<UUID> getUuidTarget() {
         return this.UUIDTarget;
     }
+
     public int getMode() {
         return mode;
     }
 
-    public void setOwner(Optional<UUID> owner){
+    public void setOwner(Optional<UUID> owner) {
         this.owner = owner;
     }
 
-    public void setUUIDTarget(Optional<UUID> uuidTarget){
+    public void setUUIDTarget(Optional<UUID> uuidTarget) {
         this.UUIDTarget = uuidTarget;
     }
 
-    public void setMode(int mode){
+    public void setMode(int mode) {
         this.mode = mode;
     }
 

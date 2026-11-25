@@ -40,7 +40,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class HermitHeavyVineWhip extends HermitAction{
+public class HermitHeavyVineWhip extends HermitAction {
 
 
     public HermitHeavyVineWhip(AbilityType<?> abilityType, AbilityId abilityId) {
@@ -58,7 +58,7 @@ public class HermitHeavyVineWhip extends HermitAction{
         super.initActionFromConfig(action, level, powerUser, performer);
         if (!level.isClientSide()) {
             action.phasesLength.put(ActionPhase.WINDUP, StandStatFormulas.getHeavyAttackWindup(
-                   StandPower.get(powerUser).getPowerType().getStandStats().speed() , 0));
+                    StandPower.get(powerUser).getPowerType().getStandStats().speed(), 0));
         }
     }
 
@@ -73,24 +73,24 @@ public class HermitHeavyVineWhip extends HermitAction{
 
         @Override
         public void onActionSet(@Nullable EntityActionInstance prevAction) {
-                OrientedBoundingBox obb = new OrientedBoundingBox(new Vec3(0, 1.35, 0), 1d, 1d, 1d, getPerformer().getYRot(), getPerformer().getXRot());
-                this.vines = new ExtendableOBB(obb, .8F, phasesLength.get(ActionPhase.PERFORM).intValue()+phasesLength.get(ActionPhase.RECOVERY).intValue(),
-                        phasesLength.get(ActionPhase.PERFORM).intValue()+phasesLength.get(ActionPhase.RECOVERY).intValue()-5,
-                        new Vec3(0, 1.35, 0));
+            OrientedBoundingBox obb = new OrientedBoundingBox(new Vec3(0, 1.35, 0), 1d, 1d, 1d, getPerformer().getYRot(), getPerformer().getXRot());
+            this.vines = new ExtendableOBB(obb, .8F, phasesLength.get(ActionPhase.PERFORM).intValue() + phasesLength.get(ActionPhase.RECOVERY).intValue(),
+                    phasesLength.get(ActionPhase.PERFORM).intValue() + phasesLength.get(ActionPhase.RECOVERY).intValue() - 5,
+                    new Vec3(0, 1.35, 0));
         }
 
         @Override
         public void actionPerformStart() {
             LivingEntity user = getPowerUser();
             StandPower standPower = StandPower.get(user);
-            if(standPower != null){
+            if (standPower != null) {
                 standPower.consumeStamina(25);
-                if(!standPower.isSummoned() && standPower.getPowerType() != null){
-                    standPower.getPowerType().summon(user,standPower);
+                if (!standPower.isSummoned() && standPower.getPowerType() != null) {
+                    standPower.getPowerType().summon(user, standPower);
                 }
             }
-            if(!level().isClientSide){
-                VoiceLineServerSide.play(performer, AddonSoundEvents.ATTACK,0,false);
+            if (!level().isClientSide) {
+                VoiceLineServerSide.play(performer, AddonSoundEvents.ATTACK, 0, false);
             }
 
 
@@ -98,12 +98,12 @@ public class HermitHeavyVineWhip extends HermitAction{
 
         @Override
         public void actionTick() {
-            if (getPhase() == ActionPhase.PERFORM && extendableOBB() != null){
+            if (getPhase() == ActionPhase.PERFORM && extendableOBB() != null) {
                 Vec3 pos = getPerformer().position();
                 Vec3 offset = new Vec3(0.0, 1.5, 0.2)
                         .yRot(-getPerformer().yBodyRot * MathUtil.DEG_TO_RAD);
                 this.extendableOBB().updatePosition(level(), pos, offset, getPerformer().getXRot(), getPerformer().getYRot());
-                if (!level().isClientSide()){
+                if (!level().isClientSide()) {
                     Vec3 endPos = this.extendableOBB().rotatableHitbox().center.add(getPerformer().getLookAngle().scale(extendableOBB().rotatableHitbox().extent.length()));
                     OBBCollisionUtil.getEntitiesInOBB(level(), this.extendableOBB().rotatableHitbox(), entity -> entity != getPerformer() && entity != getPowerUser() && !entities.contains(entity) && !(entity instanceof ItemEntity) && entity != performer.getVehicle()).forEach(entity -> {
                         var damageType = DamageUtil.type(level(), ModDamageTypes.STAND_ATTACK);
@@ -111,21 +111,21 @@ public class HermitHeavyVineWhip extends HermitAction{
                         float dmgAmount = (float) StandPower.get(performer).getPowerType().getStandStats().power();
                         dmgAmount = StandStatFormulas.getHeavyAttackDamage(dmgAmount);
                         entities.add(entity);
-                        if(entity.hurt(dmgSource, dmgAmount)){
-                            if(Math.random() <=.2){
-                                if(entity instanceof LivingEntity livingEntity){
+                        if (entity.hurt(dmgSource, dmgAmount)) {
+                            if (Math.random() <= .2) {
+                                if (entity instanceof LivingEntity livingEntity) {
                                     ItemStack mainHand = livingEntity.getItemInHand(InteractionHand.MAIN_HAND);
                                     ItemStack offHand = livingEntity.getItemInHand(InteractionHand.OFF_HAND);
                                     ItemStack cloned;
-                                    if(!mainHand.isEmpty()){
+                                    if (!mainHand.isEmpty()) {
                                         cloned = mainHand.copyAndClear();
-                                        ItemEntity itemEntity = new ItemEntity(this.level(),livingEntity.getX(),livingEntity.getY(),livingEntity.getZ(),cloned);
+                                        ItemEntity itemEntity = new ItemEntity(this.level(), livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), cloned);
                                         itemEntity.copyPosition(livingEntity);
                                         itemEntity.setPickUpDelay(100);
                                         level().addFreshEntity(itemEntity);
-                                    }else if(!offHand.isEmpty()){
+                                    } else if (!offHand.isEmpty()) {
                                         cloned = offHand.copyAndClear();
-                                        ItemEntity itemEntity = new ItemEntity(this.level(),livingEntity.getX(),livingEntity.getY(),livingEntity.getZ(),cloned);
+                                        ItemEntity itemEntity = new ItemEntity(this.level(), livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), cloned);
                                         itemEntity.copyPosition(livingEntity);
                                         itemEntity.setPickUpDelay(100);
                                         itemEntity.copyPosition(livingEntity);
@@ -140,33 +140,31 @@ public class HermitHeavyVineWhip extends HermitAction{
                     });
 
 
-
                     HitResult result = level().clip(new ClipContext(extendableOBB().rotatableHitbox().center, endPos, ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, CollisionContext.empty()));
-                    if (result instanceof BlockHitResult blockHitResult){
+                    if (result instanceof BlockHitResult blockHitResult) {
                         BlockState blockCollision = OBBCollisionUtil.getCollidingBlock(level(), blockHitResult.getBlockPos());
-                        if (blockCollision != null){
-                            HermitPurpleBlock.blockInteraction(level(),blockHitResult.getBlockPos());
+                        if (blockCollision != null) {
+                            HermitPurpleBlock.blockInteraction(level(), blockHitResult.getBlockPos());
                             this.extendableOBB().forceRetract(level(), getPerformer(), this.id);
                         }
                     }
 
                 }
                 this.extendableOBB().tick();
-                if (this.extendableOBB().isRetracted()){
+                if (this.extendableOBB().isRetracted()) {
                     setPhaseStart(ActionPhase.RECOVERY);
                     syncPhaseChanges();
                 }
             }
 
 
-            if(this.getPhase() == ActionPhase.RECOVERY){
-                if(getPhaseTicksLeft()==0){
+            if (this.getPhase() == ActionPhase.RECOVERY) {
+                if (getPhaseTicksLeft() == 0) {
                     vines = null;
                 }
                 entities.clear();
             }
         }
-
 
 
         @Override
@@ -179,9 +177,9 @@ public class HermitHeavyVineWhip extends HermitAction{
         public void onSetPhase(ActionPhase newPhase) {
             Level level = level();
             if (newPhase == ActionPhase.PERFORM) {
-                if(!level.isClientSide){
-                    float pitch = (float) (.5+Math.random());
-                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer,new StandSoundPacket(performer.getId(), AddonSoundEvents.HP_VINE_SWING,true,1, pitch));
+                if (!level.isClientSide) {
+                    float pitch = (float) (.5 + Math.random());
+                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer, new StandSoundPacket(performer.getId(), AddonSoundEvents.HP_VINE_SWING, true, 1, pitch));
                 }
             }
         }

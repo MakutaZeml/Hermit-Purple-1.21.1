@@ -43,17 +43,17 @@ public class GuideBulletAbility extends EmperorAbility {
 
     public GuideBulletAbility(AbilityType<?> abilityType, AbilityId abilityId) {
         super(abilityType, abilityId, Guided::new);
-        setDefaultPhaseLength(ActionPhase.WINDUP,5);
+        setDefaultPhaseLength(ActionPhase.WINDUP, 5);
     }
 
     @Nullable
     @Override
     public Ability replaceWithSubAbility(Power<?> context, AvailableAbilities abilities) {
         StandPower standPower = PowerClass.STAND.cast(context);
-        if(context.getUser() != null && context.getUser().getData(AddonDataAttachmentTypes.GUIDED)
-                && standPower != null){
-            if(standPower.userStandEffects.getEffectsOfType(AddonStandAbilities.GUIDED_BULLET.get()).findAny().isEmpty()){
-                abilities.replaceOtherAbilityWith(context,"emp_shot",this);
+        if (context.getUser() != null && context.getUser().getData(AddonDataAttachmentTypes.GUIDED)
+                && standPower != null) {
+            if (standPower.userStandEffects.getEffectsOfType(AddonStandAbilities.GUIDED_BULLET.get()).findAny().isEmpty()) {
+                abilities.replaceOtherAbilityWith(context, "emp_shot", this);
             }
         }
         return super.replaceWithSubAbility(context, abilities);
@@ -63,7 +63,7 @@ public class GuideBulletAbility extends EmperorAbility {
     @Override
     public void renderAbilityIcon(Power<?> context, GuiGraphics guiGraphics, TextureAtlasSprite sprite, float x, float y, int color) {
         StandPower standPower = PowerClass.STAND.cast(context);
-        if (standPower != null){
+        if (standPower != null) {
             PoseStack poseStack = guiGraphics.pose();
             guiGraphics.enableScissor((int) x, (int) y, (int) x + 16, (int) y + 16);
             RenderSystem.enableBlend();
@@ -86,26 +86,26 @@ public class GuideBulletAbility extends EmperorAbility {
         @Override
         public void actionPerformStart() {
             StandPower power = StandPower.get(performer);
-            if(power != null && power.hasPower() && power.getStandInstance().get().getStandType() != null &&
-                    power.getStandInstance().get().getStandType().getStandStats() != null){
-                EmperorBulletEntity emperorBullet =  new EmperorBulletEntity(performer,level());
+            if (power != null && power.hasPower() && power.getStandInstance().get().getStandType() != null &&
+                    power.getStandInstance().get().getStandType().getStandStats() != null) {
+                EmperorBulletEntity emperorBullet = new EmperorBulletEntity(performer, level());
                 emperorBullet.setStandPower((float) power.getStandInstance().get().getStandType().getStandStats().power());
                 emperorBullet.setStandRange((float) power.getStandInstance().get().getStandType().getStandStats().rangeMax());
-                emperorBullet.shootFromRotation(performer,1F,1F);
+                emperorBullet.shootFromRotation(performer, 1F, 1F);
                 emperorBullet.setControlled(true);
                 level().addFreshEntity(emperorBullet);
-                if(!level().isClientSide){
-                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer, new StandSoundPacket(performer.getId(), AddonSoundEvents.EMP_SHOT,true,1,1));
+                if (!level().isClientSide) {
+                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer, new StandSoundPacket(performer.getId(), AddonSoundEvents.EMP_SHOT, true, 1, 1));
                 }
-                BulletPilot bulletPilot = new BulletPilot(level(),performer);
+                BulletPilot bulletPilot = new BulletPilot(level(), performer);
                 bulletPilot.startRiding(emperorBullet);
                 bulletPilot.copyPosition(emperorBullet);
                 level().addFreshEntity(bulletPilot);
                 GuidedBulletEffect effect = AddonStandAbilities.GUIDED_BULLET.get().create(level());
-                if(!level().isClientSide){
+                if (!level().isClientSide) {
                     power.userStandEffects.addEffect(effect.withTarget(bulletPilot));
-                    if(performer instanceof ServerPlayer player){
-                        PacketDistributor.sendToPlayer(player,new AnotherGuidedPacket(player.getId(), bulletPilot.getId()));
+                    if (performer instanceof ServerPlayer player) {
+                        PacketDistributor.sendToPlayer(player, new AnotherGuidedPacket(player.getId(), bulletPilot.getId()));
                     }
                 }
             }
@@ -115,18 +115,18 @@ public class GuideBulletAbility extends EmperorAbility {
 
     @Override
     public ActionAnimIdentifier getEntityAnim(EntityActionInstance action) {
-        if(!isRight(action.getPowerUser())){
-            return ActionAnimIdentifier.getOrCreate(abilityId.nameInMoveset().concat("_l"),false);
+        if (!isRight(action.getPowerUser())) {
+            return ActionAnimIdentifier.getOrCreate(abilityId.nameInMoveset().concat("_l"), false);
         }
         return super.getEntityAnim(action);
     }
 
 
-    public static boolean isRight(LivingEntity user){
-        if(user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem){
+    public static boolean isRight(LivingEntity user) {
+        if (user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem) {
             return user.getMainArm() == HumanoidArm.RIGHT;
         }
-        if(user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem){
+        if (user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem) {
             return user.getMainArm() == HumanoidArm.LEFT;
         }
 

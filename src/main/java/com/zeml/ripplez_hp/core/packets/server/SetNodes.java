@@ -23,7 +23,7 @@ public record SetNodes(int entityID, int nodes) implements CustomPacketPayload {
 
     private static CustomPacketPayload.Type<SetNodes> type;
 
-    public static class Handler implements HermitPackets.PacketOGHandler<SetNodes>{
+    public static class Handler implements HermitPackets.PacketOGHandler<SetNodes> {
 
         public Handler(ResourceLocation packetId) {
             type = new CustomPacketPayload.Type<>(packetId);
@@ -50,13 +50,13 @@ public record SetNodes(int entityID, int nodes) implements CustomPacketPayload {
         @Override
         public void handle(SetNodes payload, IPayloadContext context) {
             Entity entity = ClientProxy.getEntityById(payload.entityID);
-            if(entity instanceof LivingEntity living){
+            if (entity instanceof LivingEntity living) {
                 StandPower standPower = StandPower.get(living);
-                if(standPower != null){
+                if (standPower != null) {
                     standPower.userStandEffects.getEffectOfType(AddonStandAbilities.NODES_CONTROL.get()).ifPresent(countNodesEffect -> countNodesEffect.setNodes(payload.nodes));
                 }
             }
         }
     }
-    
+
 }

@@ -11,7 +11,7 @@ import java.util.Set;
 public class WeakenedBlockData {
     Set<BlockPos> weakBlocks;
 
-    public WeakenedBlockData(){
+    public WeakenedBlockData() {
         weakBlocks = new HashSet<>();
     }
 
@@ -19,15 +19,15 @@ public class WeakenedBlockData {
         return weakBlocks;
     }
 
-    public void addWeakBlocks(BlockPos pos){
+    public void addWeakBlocks(BlockPos pos) {
         weakBlocks.add(pos.immutable());
     }
 
-    public void removeWeakBlock(BlockPos pos){
+    public void removeWeakBlock(BlockPos pos) {
         weakBlocks.remove(pos);
     }
 
-    public boolean hasBlock(BlockPos pos){
+    public boolean hasBlock(BlockPos pos) {
         return weakBlocks.contains(pos);
     }
 
@@ -42,6 +42,7 @@ public class WeakenedBlockData {
             })
 
     );
+
     @Override
     public String toString() {
         return super.toString().concat(" weak ").concat(weakBlocks.toString());

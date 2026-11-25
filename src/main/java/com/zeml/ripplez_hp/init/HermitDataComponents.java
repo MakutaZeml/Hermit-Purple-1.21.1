@@ -15,5 +15,5 @@ public class HermitDataComponents {
 
 
     public static final Supplier<DataComponentType<EmperorGunData>> EMPEROR = DATA_COMPONENT_TYPES.registerComponentType("emperor",
-            builder->builder.persistent(EmperorGunData.CODEC).networkSynchronized(EmperorGunData.STREAM_CODEC).cacheEncoding());
+            builder -> builder.persistent(EmperorGunData.CODEC).networkSynchronized(EmperorGunData.STREAM_CODEC).cacheEncoding());
 }

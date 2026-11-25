@@ -28,18 +28,18 @@ public class TargetSelectAbility extends EntityActionAbility {
         this.nameLess = Component.translatable("jojo_ripples.skill.emp_target");
         this.random = Component.translatable("ripplez_hp.type.random");
         this.players = Component.translatable("ripplez_hp.type.players");
-        this.hostile = Component.translatable( "ripplez_hp.type.hostile");
+        this.hostile = Component.translatable("ripplez_hp.type.hostile");
         this.gun = Component.translatable("ripplez_hp.type.non");
-        this.spriteHostile = this.spriteName+"_hostile";
-        this.spritePlayer = this.spriteName+ "_player";
-        this.spriteGun = this.spriteName+"_gun";
+        this.spriteHostile = this.spriteName + "_hostile";
+        this.spritePlayer = this.spriteName + "_player";
+        this.spriteGun = this.spriteName + "_gun";
     }
 
     @Override
     public ConditionCheck checkSpecificConditions(Power<?> context) {
         LivingEntity user = context.getUser();
-        if(user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem ||
-                user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem){
+        if (user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem ||
+                user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem) {
             return ConditionCheck.POSITIVE;
         }
         return ConditionCheck.NEGATIVE;
@@ -47,17 +47,17 @@ public class TargetSelectAbility extends EntityActionAbility {
 
     @Override
     public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime, ActionInputBuffer.BufferingState bufferingState) {
-        if(user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem){
+        if (user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem) {
             ItemStack itemStack = user.getItemInHand(InteractionHand.MAIN_HAND);
             EmperorGunData data = itemStack.get(HermitDataComponents.EMPEROR);
-            if(data != null){
-                data.setMode(data.getMode()-1);
+            if (data != null) {
+                data.setMode(data.getMode() - 1);
             }
-        }else if(user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem){
+        } else if (user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem) {
             ItemStack itemStack = user.getItemInHand(InteractionHand.OFF_HAND);
             EmperorGunData data = itemStack.get(HermitDataComponents.EMPEROR);
-            if(data != null){
-                data.setMode(data.getMode()-1);
+            if (data != null) {
+                data.setMode(data.getMode() - 1);
             }
         }
         return super.onKeyPress(level, user, extraClientInput, inputMethod, clickHoldResolveTime, bufferingState);
@@ -73,23 +73,23 @@ public class TargetSelectAbility extends EntityActionAbility {
     @Override
     public Component getName(Power<?> context) {
         LivingEntity user = context.getUser();
-        if(user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem){
+        if (user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem) {
             ItemStack itemStack = user.getItemInHand(InteractionHand.MAIN_HAND);
             EmperorGunData data = itemStack.get(HermitDataComponents.EMPEROR);
-            if(data != null){
+            if (data != null) {
                 return getData(data);
             }
-        }else  if(user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem){
+        } else if (user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem) {
             ItemStack itemStack = user.getItemInHand(InteractionHand.OFF_HAND);
             EmperorGunData data = itemStack.get(HermitDataComponents.EMPEROR);
-            if(data != null){
+            if (data != null) {
                 return getData(data);
             }
         }
         return this.nameLess;
     }
 
-    private Component getData(EmperorGunData data){
+    private Component getData(EmperorGunData data) {
         return switch (Math.abs(data.getMode() % 4)) {
             case 0 -> Component.translatable("jojo_ripples.ability.emp_target", random);
             case 1 -> Component.translatable("jojo_ripples.ability.emp_target", hostile);
@@ -107,16 +107,16 @@ public class TargetSelectAbility extends EntityActionAbility {
     @Override
     public String getSpriteName(Power<?> context) {
         LivingEntity user = context.getUser();
-        if(user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem){
+        if (user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem) {
             ItemStack itemStack = user.getItemInHand(InteractionHand.MAIN_HAND);
             EmperorGunData data = itemStack.get(HermitDataComponents.EMPEROR);
-            if(data != null){
+            if (data != null) {
                 return getModSprite(data);
             }
-        }else if(user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem){
+        } else if (user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem) {
             ItemStack itemStack = user.getItemInHand(InteractionHand.OFF_HAND);
             EmperorGunData data = itemStack.get(HermitDataComponents.EMPEROR);
-            if(data != null){
+            if (data != null) {
                 return getModSprite(data);
             }
         }
@@ -124,7 +124,7 @@ public class TargetSelectAbility extends EntityActionAbility {
     }
 
 
-    protected String getModSprite(EmperorGunData data){
+    protected String getModSprite(EmperorGunData data) {
         return switch (Math.abs(data.getMode() % 4)) {
             case 1 -> this.spriteHostile;
             case 2 -> this.spritePlayer;

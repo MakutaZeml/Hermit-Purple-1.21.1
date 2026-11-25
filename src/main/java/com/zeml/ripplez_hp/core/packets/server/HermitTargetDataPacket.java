@@ -15,7 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
-public record HermitTargetDataPacket(int userID,int mode, String target, int color, Set<ResourceLocation> structures) implements CustomPacketPayload {
+public record HermitTargetDataPacket(int userID, int mode, String target, int color,
+                                     Set<ResourceLocation> structures) implements CustomPacketPayload {
 
 
     @Override
@@ -26,7 +27,7 @@ public record HermitTargetDataPacket(int userID,int mode, String target, int col
 
     private static CustomPacketPayload.Type<HermitTargetDataPacket> type;
 
-    public static class Handler implements HermitPackets.PacketOGHandler<HermitTargetDataPacket>{
+    public static class Handler implements HermitPackets.PacketOGHandler<HermitTargetDataPacket> {
 
         public Handler(ResourceLocation packetId) {
             type = new CustomPacketPayload.Type<>(packetId);
@@ -45,8 +46,8 @@ public record HermitTargetDataPacket(int userID,int mode, String target, int col
             buf.writeUtf(packet.target);
             buf.writeInt(packet.color);
             buf.writeInt(packet.structures.size());
-            for (ResourceLocation structure : packet.structures){
-                ResourceLocation.STREAM_CODEC.encode(buf,structure);
+            for (ResourceLocation structure : packet.structures) {
+                ResourceLocation.STREAM_CODEC.encode(buf, structure);
             }
         }
 
@@ -58,17 +59,17 @@ public record HermitTargetDataPacket(int userID,int mode, String target, int col
             int color = buf.readInt();
             int times = buf.readInt();
             Set<ResourceLocation> structures = new HashSet<>();
-            for (int i = 0; i < times; i++){
+            for (int i = 0; i < times; i++) {
                 structures.add(ResourceLocation.STREAM_CODEC.decode(buf));
             }
-            return new HermitTargetDataPacket(userID,mode,target,color,structures);
+            return new HermitTargetDataPacket(userID, mode, target, color, structures);
         }
 
         @Override
         public void handle(HermitTargetDataPacket payload, IPayloadContext context) {
             Entity entity = ClientProxy.getEntityById(payload.userID);
-            if(entity != null){
-                entity.setData(AddonDataAttachmentTypes.HERMIT_DATA, new HermitTargetData(payload.mode, payload.target, payload.color,payload.structures));
+            if (entity != null) {
+                entity.setData(AddonDataAttachmentTypes.HERMIT_DATA, new HermitTargetData(payload.mode, payload.target, payload.color, payload.structures));
             }
         }
     }

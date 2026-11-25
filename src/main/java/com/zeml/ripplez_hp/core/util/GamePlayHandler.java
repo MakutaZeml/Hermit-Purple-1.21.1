@@ -23,24 +23,24 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 public class GamePlayHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void blockDamage(LivingDamageEvent.Post event){
+    public static void blockDamage(LivingDamageEvent.Post event) {
         DamageSource dmgSource = event.getSource();
         LivingEntity living = event.getEntity();
-        if(!dmgSource.is(DamageTypeTags.IS_EXPLOSION) && !dmgSource.is(DamageTypeTags.IS_FIRE) &&
+        if (!dmgSource.is(DamageTypeTags.IS_EXPLOSION) && !dmgSource.is(DamageTypeTags.IS_FIRE) &&
                 !dmgSource.is(DamageTypeTags.IS_FREEZING) && !dmgSource.is(DamageTypeTags.IS_DROWNING) &&
-                !dmgSource.is(DamageTypeTags.IS_FALL) && !dmgSource.is(DamageTypeTags.IS_PROJECTILE)){
+                !dmgSource.is(DamageTypeTags.IS_FALL) && !dmgSource.is(DamageTypeTags.IS_PROJECTILE)) {
 
         }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onItem(EntityJoinLevelEvent event){
-        if(event.getEntity() instanceof ItemEntity item){
-            if(item.getItem().get(HermitDataComponents.EMPEROR.get()) != null){
+    public static void onItem(EntityJoinLevelEvent event) {
+        if (event.getEntity() instanceof ItemEntity item) {
+            if (item.getItem().get(HermitDataComponents.EMPEROR.get()) != null) {
                 ItemStack emperor = item.getItem();
                 EmperorGunData data = emperor.get(HermitDataComponents.EMPEROR.get());
-                if(data.getUuidOwner().isPresent()){
-                    if(((ServerLevel) item.level()).getEntity(data.getUuidOwner().get()) instanceof LivingEntity user){
+                if (data.getUuidOwner().isPresent()) {
+                    if (((ServerLevel) item.level()).getEntity(data.getUuidOwner().get()) instanceof LivingEntity user) {
                         if (!user.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
                             if (user.getItemInHand(InteractionHand.OFF_HAND).isEmpty()) {
                                 user.setItemInHand(InteractionHand.OFF_HAND, emperor);

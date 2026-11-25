@@ -30,8 +30,9 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class HermitPurpleLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M> implements FirstPersonModelLayer {
     public final ResourceModelEntry purpleModel;
-    public static final ResourceLocation HERMIT = ResourceLocation.tryBuild(HermitPurpleAddon.MOD_ID,"textures/entity/stand/hermito_purple.png");
-    private final ResourceLocation THORNS = ResourceLocation.tryBuild(HermitPurpleAddon.MOD_ID,"textures/entity/stand/hermito_torns.png");
+    public static final ResourceLocation HERMIT = ResourceLocation.tryBuild(HermitPurpleAddon.MOD_ID, "textures/entity/stand/hermito_purple.png");
+    private final ResourceLocation THORNS = ResourceLocation.tryBuild(HermitPurpleAddon.MOD_ID, "textures/entity/stand/hermito_torns.png");
+
     public HermitPurpleLayer(RenderLayerParent<T, M> renderer) {
         super(renderer);
         this.purpleModel = RotpGeckoModelLoader.getInstance().getModelContainer(HermitPurpleAddon.resLoc("hermit_base"));
@@ -40,32 +41,32 @@ public class HermitPurpleLayer<T extends LivingEntity, M extends HumanoidModel<T
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T t, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if(!ClientGlobals.canSeeStands || (t.isInvisible() && !(t instanceof MannequinEntity))){
+        if (!ClientGlobals.canSeeStands || (t.isInvisible() && !(t instanceof MannequinEntity))) {
             return;
         }
 
         StandPower standData = StandPower.get(t);
-        if(standData != null && standData.getPowerType() == AddonStands.HERMIT_PURPLE.get() && standData.getSummonedStand() instanceof SyncableSummonedStand stand){
+        if (standData != null && standData.getPowerType() == AddonStands.HERMIT_PURPLE.get() && standData.getSummonedStand() instanceof SyncableSummonedStand stand) {
             boolean slim = ModelUtil.isSlimModel(t);
             StandSkin standSkin = StandSkinsLoader.getInstance().getSkin(standData);
             M parentModel = getParentModel();
             HermitPurpleModel purpleModel = this.purpleModel.getModel(standSkin);
-            
+
             purpleModel.setAllVisible(true);
             parentModel.copyPropertiesTo(purpleModel);
             purpleModel.setSlim(slim);
-            
+
             float alpha = stand.unsummonAlpha(partialTicks);
             int color = ARGB.white(alpha);
 
             ResourceLocation texture = standSkin.getTexture(HERMIT);
             VertexConsumer ivertexbuilder = buffer.getBuffer(RenderType.entityTranslucent(texture));
-            purpleModel.renderToBuffer(poseStack,ivertexbuilder,packedLight, OverlayTexture.NO_OVERLAY, color);
+            purpleModel.renderToBuffer(poseStack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, color);
 
-            if(standData.userStandEffects.getEffectsOfType(AddonStandAbilities.HERMIT_THORNS_EFFECT.get()).findAny().isPresent()){
+            if (standData.userStandEffects.getEffectsOfType(AddonStandAbilities.HERMIT_THORNS_EFFECT.get()).findAny().isPresent()) {
                 ResourceLocation thorns_texture = standSkin.getTexture(THORNS);
                 VertexConsumer thorns_vertex = buffer.getBuffer(RenderType.entityTranslucent(thorns_texture));
-                purpleModel.renderToBuffer(poseStack,thorns_vertex,packedLight, OverlayTexture.NO_OVERLAY, color);
+                purpleModel.renderToBuffer(poseStack, thorns_vertex, packedLight, OverlayTexture.NO_OVERLAY, color);
             }
         }
     }
@@ -76,7 +77,7 @@ public class HermitPurpleLayer<T extends LivingEntity, M extends HumanoidModel<T
 
         boolean slim = ModelUtil.isSlimModel(t);
         StandPower standData = StandPower.get(t);
-        if(standData != null && standData.getPowerType() == AddonStands.HERMIT_PURPLE.get() && standData.getSummonedStand() instanceof SyncableSummonedStand stand) {
+        if (standData != null && standData.getPowerType() == AddonStands.HERMIT_PURPLE.get() && standData.getSummonedStand() instanceof SyncableSummonedStand stand) {
             StandSkin standSkin = StandSkinsLoader.getInstance().getSkin(standData);
             ResourceLocation texture = standSkin.getTexture(HERMIT);
             HermitPurpleModel purpleModel = this.purpleModel.getModel(standSkin);
@@ -88,7 +89,7 @@ public class HermitPurpleLayer<T extends LivingEntity, M extends HumanoidModel<T
             purpleModel.leftLeg.visible = false;
             purpleModel.hat.visible = false;
             getParentModel().copyPropertiesTo(purpleModel);
-            
+
             float alpha = stand.unsummonAlpha(partialTick);
             int color = ARGB.white(alpha);
             ModelPart arm = FirstPersonModelLayer.getArm(purpleModel, humanoidArm);

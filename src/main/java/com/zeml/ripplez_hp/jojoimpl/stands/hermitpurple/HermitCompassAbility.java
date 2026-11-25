@@ -37,13 +37,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class HermitCompassAbility extends HermitAction{
+public class HermitCompassAbility extends HermitAction {
 
 
     public HermitCompassAbility(AbilityType<?> abilityType, AbilityId abilityId) {
         super(abilityType, abilityId, HermitCompass::new);
-        setDefaultPhaseLength(ActionPhase.WINDUP,10);
-        setDefaultPhaseLength(ActionPhase.PERFORM,200);
+        setDefaultPhaseLength(ActionPhase.WINDUP, 10);
+        setDefaultPhaseLength(ActionPhase.PERFORM, 200);
         usageGroup = AbilityUsageGroup.UTILITY;
     }
 
@@ -51,9 +51,9 @@ public class HermitCompassAbility extends HermitAction{
     @Override
     public Ability replaceWithSubAbility(Power<?> context, AvailableAbilities abilities) {
         StandPower standPower = PowerClass.STAND.cast(context);
-        if(context.getUser() != null && context.getUser().getItemInHand(InteractionHand.OFF_HAND).is(Items.COMPASS)
-                && standPower != null){
-            abilities.replaceOtherAbilityWith(context,"hp_doxx",this);
+        if (context.getUser() != null && context.getUser().getItemInHand(InteractionHand.OFF_HAND).is(Items.COMPASS)
+                && standPower != null) {
+            abilities.replaceOtherAbilityWith(context, "hp_doxx", this);
         }
         return super.replaceWithSubAbility(context, abilities);
     }
@@ -63,8 +63,8 @@ public class HermitCompassAbility extends HermitAction{
     public ConditionCheck checkSpecificConditions(Power<?> context) {
         ItemStack stack = context.getUser().getItemInHand(InteractionHand.OFF_HAND);
         ItemStack main = context.getUser().getMainHandItem();
-        if(context.getUser() != null && stack.is(Items.COMPASS)){
-            if((main.isEmpty() && stack.getCount()>1)||(stack.getCount()==1)){
+        if (context.getUser() != null && stack.is(Items.COMPASS)) {
+            if ((main.isEmpty() && stack.getCount() > 1) || (stack.getCount() == 1)) {
                 return ConditionCheck.POSITIVE;
 
             }
@@ -73,20 +73,19 @@ public class HermitCompassAbility extends HermitAction{
     }
 
 
-
-
     @Override
     public ActionAnimIdentifier getEntityAnim(EntityActionInstance action) {
-        if(action.getPowerUser() instanceof  LivingEntity livingEntity && livingEntity.getMainArm() == HumanoidArm.LEFT){
-            return ActionAnimIdentifier.getOrCreate(abilityId.nameInMoveset().concat("_l"),false);
+        if (action.getPowerUser() instanceof LivingEntity livingEntity && livingEntity.getMainArm() == HumanoidArm.LEFT) {
+            return ActionAnimIdentifier.getOrCreate(abilityId.nameInMoveset().concat("_l"), false);
         }
         return super.getEntityAnim(action);
     }
 
-    public static class HermitCompass extends EntityActionInstance{
+    public static class HermitCompass extends EntityActionInstance {
         private Entity entity;
         private ResourceKey<Level> dimension;
         private ItemStack brujula;
+
         public HermitCompass(EntityActionType ability) {
             super(ability);
         }
@@ -101,13 +100,13 @@ public class HermitCompassAbility extends HermitAction{
 
         @Override
         public void actionTick() {
-            if(phase == ActionPhase.PERFORM){
-                if(!this.level().isClientSide && brujula != null && curPhaseTick % 20 == 1 && this.entity != null){
+            if (phase == ActionPhase.PERFORM) {
+                if (!this.level().isClientSide && brujula != null && curPhaseTick % 20 == 1 && this.entity != null) {
                     GlobalPos globalPos = new GlobalPos(this.dimension, this.entity.getOnPos());
                     LodestoneTracker tracker = new LodestoneTracker(Optional.of(globalPos), false);
                     this.brujula.set(DataComponents.LODESTONE_TRACKER, tracker);
                     StandPower standPower = StandPower.get(performer);
-                    if(standPower != null){
+                    if (standPower != null) {
                         standPower.addExp(.07F);
                     }
                 }
@@ -116,16 +115,16 @@ public class HermitCompassAbility extends HermitAction{
 
         @Override
         public void actionPerformStart() {
-            if(!level().isClientSide){
+            if (!level().isClientSide) {
                 BlockPos blockPos = null;
                 String target = null;
                 LivingEntity user = performer;
                 boolean self = false;
                 StandPower standPower = StandPower.get(user);
-                if(standPower != null){
+                if (standPower != null) {
                     standPower.consumeStamina(25);
-                    if(!standPower.isSummoned() && standPower.getPowerType() != null){
-                        standPower.getPowerType().summon(user,standPower);
+                    if (!standPower.isSummoned() && standPower.getPowerType() != null) {
+                        standPower.getPowerType().summon(user, standPower);
                     }
                 }
                 ItemStack itemStack = user.getItemInHand(InteractionHand.OFF_HAND);
@@ -173,20 +172,20 @@ public class HermitCompassAbility extends HermitAction{
                         }
                         String displayName = "filled_map.divination";
                         compass.set(DataComponents.ITEM_NAME, Component.translatable(displayName, target));
-                        user.setItemInHand(InteractionHand.MAIN_HAND,itemStack);
+                        user.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
                         user.setItemInHand(InteractionHand.OFF_HAND, compass);
 
-                        if(standPower != null){
+                        if (standPower != null) {
                             standPower.addExp(.2F);
                         }
-                        if(user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode() > 4 || this.entity == performer){
+                        if (user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode() > 4 || this.entity == performer) {
                             setPhaseStart(ActionPhase.RECOVERY);
-                        }else {
+                        } else {
                             this.brujula = user.getItemInHand(InteractionHand.OFF_HAND);
                         }
-                        VoiceLineServerSide.play(user,AddonSoundEvents.DIVINATION,0,false);
-                       PacketDistributor.sendToPlayersTrackingEntityAndSelf(user,
-                                new StandSoundPacket(user.getId(),AddonSoundEvents.SUMMON_HP,true,1,1));
+                        VoiceLineServerSide.play(user, AddonSoundEvents.DIVINATION, 0, false);
+                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(user,
+                                new StandSoundPacket(user.getId(), AddonSoundEvents.SUMMON_HP, true, 1, 1));
 
                     }
                 }

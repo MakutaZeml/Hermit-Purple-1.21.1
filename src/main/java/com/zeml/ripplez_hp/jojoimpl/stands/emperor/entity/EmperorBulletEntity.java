@@ -136,15 +136,15 @@ public class EmperorBulletEntity extends ModdedProjectileEntity {
     protected void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
         homingTarget.saveNbt(nbt, "HomingTarget");
-        nbt.putBoolean("controlled",controlled);
+        nbt.putBoolean("controlled", controlled);
     }
 
     @Override
     protected void onHitEntity(EntityHitResult entityRayTraceResult) {
         if (!level().isClientSide() && isAlive()) {
             LivingEntity owner = getOwner();
-            if(owner != null){
-                StandPower.addExp(owner,.07F);
+            if (owner != null) {
+                StandPower.addExp(owner, .07F);
             }
         }
         super.onHitEntity(entityRayTraceResult);

@@ -19,14 +19,14 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class AddonStands {
-	public static final DeferredRegister<StandType> STANDS = DeferredRegister.create(JojoRegistries.DEFAULT_STANDS_REG, HermitPurpleAddon.MOD_ID);
-	
-	public static final DeferredHolder<StandType, HermitPurpleType> HERMIT_PURPLE = STANDS.register("hermit_purple",StandInitHermitPurple::create);
+    public static final DeferredRegister<StandType> STANDS = DeferredRegister.create(JojoRegistries.DEFAULT_STANDS_REG, HermitPurpleAddon.MOD_ID);
 
-	public static final DeferredHolder<StandType, EmperorType> EMPEROR = STANDS.register("emperor", StandInitEmperor::create);
+    public static final DeferredHolder<StandType, HermitPurpleType> HERMIT_PURPLE = STANDS.register("hermit_purple", StandInitHermitPurple::create);
 
-	static{
-		ModStands.PLAYER_CAN_GET_FROM_ARROW.add(HERMIT_PURPLE);
-		ModStands.PLAYER_CAN_GET_FROM_ARROW.add(EMPEROR);
-	}
+    public static final DeferredHolder<StandType, EmperorType> EMPEROR = STANDS.register("emperor", StandInitEmperor::create);
+
+    static {
+        ModStands.PLAYER_CAN_GET_FROM_ARROW.add(HERMIT_PURPLE);
+        ModStands.PLAYER_CAN_GET_FROM_ARROW.add(EMPEROR);
+    }
 }

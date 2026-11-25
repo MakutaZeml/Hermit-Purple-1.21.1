@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class HermitGrabAbility extends HermitAction{
+public class HermitGrabAbility extends HermitAction {
 
     public HermitGrabAbility(AbilityType<?> abilityType, AbilityId abilityId) {
         super(abilityType, abilityId, HermitGrabbing::new);
@@ -38,23 +38,25 @@ public class HermitGrabAbility extends HermitAction{
     }
 
 
-    public static class HermitGrabbing extends EntityActionInstance implements ActionOBB{
+    public static class HermitGrabbing extends EntityActionInstance implements ActionOBB {
         private ExtendableOBB vines;
         private final Set<Entity> entities = new HashSet<>();
         private Vec3 retainPos;
+
         public HermitGrabbing(EntityActionType ability) {
             super(ability);
         }
+
         @Override
         public void onActionSet(@Nullable EntityActionInstance prevAction) {
-            float lifespan = phasesLength.getFloat(ActionPhase.PERFORM)+ phasesLength.getFloat(ActionPhase.RECOVERY)+phasesLength.getFloat(ActionPhase.WINDUP)-5;
+            float lifespan = phasesLength.getFloat(ActionPhase.PERFORM) + phasesLength.getFloat(ActionPhase.RECOVERY) + phasesLength.getFloat(ActionPhase.WINDUP) - 5;
             OrientedBoundingBox obb = new OrientedBoundingBox(new Vec3(0, 1.35, 0), 0.25d, 0.25d, 1d, getPerformer().getYRot(), getPerformer().getXRot());
             this.vines = new ExtendableOBB(obb, .92F, (int) lifespan, 0, new Vec3(0, 1.35, 0));
         }
 
         @Override
-        public void actionTick(){
-            if(extendableOBB() != null){
+        public void actionTick() {
+            if (extendableOBB() != null) {
                 //Moving the vine
                 Vec3 pos = getPerformer().position();
                 Vec3 offset = new Vec3(0.0, 1.5, 0)
@@ -62,25 +64,25 @@ public class HermitGrabAbility extends HermitAction{
                 this.extendableOBB().updatePosition(level(), pos, offset, getPerformer().getXRot(), getPerformer().getYRot());
 
 
-                if(getPhase() == ActionPhase.WINDUP){
+                if (getPhase() == ActionPhase.WINDUP) {
                     //Throwing Sounds
-                    if(curPhaseTick == 5){
-                        if(!level().isClientSide){
-                            PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer,new StandSoundPacket(performer.getId(), AddonSoundEvents.HP_VINE_THROW,true,1,1));
+                    if (curPhaseTick == 5) {
+                        if (!level().isClientSide) {
+                            PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer, new StandSoundPacket(performer.getId(), AddonSoundEvents.HP_VINE_THROW, true, 1, 1));
                         }
                     }
-                    if(curPhaseTick>5){
-                        if(!entities.isEmpty()){
+                    if (curPhaseTick > 5) {
+                        if (!entities.isEmpty()) {
                             setPhaseStart(ActionPhase.PERFORM);
                             syncPhaseChanges();
                         }
                         Vec3 endPos = this.extendableOBB().rotatableHitbox().center.add(getPerformer().getLookAngle().scale(extendableOBB().rotatableHitbox().extent.length()));
 
                         HitResult result = level().clip(new ClipContext(extendableOBB().rotatableHitbox().center, endPos, ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, CollisionContext.empty()));
-                        if (result instanceof BlockHitResult blockHitResult){
+                        if (result instanceof BlockHitResult blockHitResult) {
                             BlockState blockCollision = OBBCollisionUtil.getCollidingBlock(level(), blockHitResult.getBlockPos());
-                            if(blockCollision != null){
-                                if(!blockCollision.getCollisionShape(level(),blockHitResult.getBlockPos()).isEmpty()){
+                            if (blockCollision != null) {
+                                if (!blockCollision.getCollisionShape(level(), blockHitResult.getBlockPos()).isEmpty()) {
                                     setPhaseStart(ActionPhase.PERFORM);
                                     syncPhaseChanges();
                                 }
@@ -92,16 +94,16 @@ public class HermitGrabAbility extends HermitAction{
 
                 }
                 // Catching the entities while extending or retracting
-                if(getPhase() == ActionPhase.WINDUP || getPhase() == ActionPhase.PERFORM){
-                    if (!level().isClientSide()){
+                if (getPhase() == ActionPhase.WINDUP || getPhase() == ActionPhase.PERFORM) {
+                    if (!level().isClientSide()) {
                         Vec3 endPos = this.extendableOBB().rotatableHitbox().center.add(getPerformer().getLookAngle().scale(extendableOBB().rotatableHitbox().extent.length()));
                         OBBCollisionUtil.getEntitiesInOBB(level(), this.extendableOBB().rotatableHitbox(),
                                 entity -> entity != getPerformer() && entity != getPowerUser() &&
-                                        entity.distanceToSqr(endPos.x,entity.getY(),endPos.z)<entity.getBbWidth()*1.1
+                                        entity.distanceToSqr(endPos.x, entity.getY(), endPos.z) < entity.getBbWidth() * 1.1
                         ).forEach(entity -> {
                             //FIXME Sound when catch
-                            if(!entities.contains(entity)){
-                                PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer,new StandSoundPacket(entity.getId(),AddonSoundEvents.HP_VINE_CATCH,true,1,1));
+                            if (!entities.contains(entity)) {
+                                PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer, new StandSoundPacket(entity.getId(), AddonSoundEvents.HP_VINE_CATCH, true, 1, 1));
                             }
                             entity.setNoGravity(true);
                             entities.add(entity);
@@ -110,26 +112,26 @@ public class HermitGrabAbility extends HermitAction{
                 }
 
                 //Move Entities
-                if(!entities.isEmpty()){
-                    if(!level().isClientSide){
+                if (!entities.isEmpty()) {
+                    if (!level().isClientSide) {
                         Vec3 endPos = this.extendableOBB().rotatableHitbox().center.add(getPerformer().getLookAngle().scale(extendableOBB().rotatableHitbox().extent.length()));
-                        if(!entities.isEmpty()){
+                        if (!entities.isEmpty()) {
                             entities.forEach(entity -> {
                                 retainPos = this.extendableOBB().rotatableHitbox().center.add(performer.getLookAngle().scale(2.3));
-                                if(phase == ActionPhase.WINDUP || (phase == ActionPhase.PERFORM && this.extendableOBB().rotatableHitbox().extent.length() > 2.3)
-                                ){
+                                if (phase == ActionPhase.WINDUP || (phase == ActionPhase.PERFORM && this.extendableOBB().rotatableHitbox().extent.length() > 2.3)
+                                ) {
                                     retainPos = endPos;
                                 }
-                                entity.teleportTo(retainPos.x,retainPos.y-1.35,retainPos.z);
+                                entity.teleportTo(retainPos.x, retainPos.y - 1.35, retainPos.z);
                             });
                             //Finish when it doesn't have entities
-                        }else if(phase == ActionPhase.PERFORM && this.extendableOBB().rotatableHitbox().extent.length() < 2.3){
+                        } else if (phase == ActionPhase.PERFORM && this.extendableOBB().rotatableHitbox().extent.length() < 2.3) {
                             setPhaseStart(ActionPhase.RECOVERY);
                             syncPhaseChanges();
                         }
 
                     }
-                } 
+                }
 
 
                 //Tick
@@ -137,20 +139,20 @@ public class HermitGrabAbility extends HermitAction{
             }
 
             //Leave them all
-            if(getPhase() == ActionPhase.RECOVERY && getPhaseTicksLeft()<=1){
+            if (getPhase() == ActionPhase.RECOVERY && getPhaseTicksLeft() <= 1) {
                 HermitPurpleAddon.getLogger().debug("tru end");
             }
 
         }
 
-        private void dragQueenEntity(Entity entity, Vec3 retainPos){
+        private void dragQueenEntity(Entity entity, Vec3 retainPos) {
             entity = entity.getRootVehicle();
 
         }
 
         @Override
         public void actionPerformEnd() {
-            if(!level().isClientSide){
+            if (!level().isClientSide) {
                 entities.forEach(entity -> entity.setNoGravity(false));
 
             }
@@ -161,7 +163,7 @@ public class HermitGrabAbility extends HermitAction{
 
         @Override
         public void onButtonStopHold() {
-            if(!level().isClientSide){
+            if (!level().isClientSide) {
                 entities.forEach(entity -> entity.setNoGravity(false));
             }
             setPhaseStart(ActionPhase.RECOVERY);
@@ -170,7 +172,7 @@ public class HermitGrabAbility extends HermitAction{
 
         @Override
         public void actionPerformStart() {
-            if (!level().isClientSide() && this.extendableOBB() != null){
+            if (!level().isClientSide() && this.extendableOBB() != null) {
                 this.extendableOBB().forceRetract(level(), getPerformer(), this.id);
             }
         }

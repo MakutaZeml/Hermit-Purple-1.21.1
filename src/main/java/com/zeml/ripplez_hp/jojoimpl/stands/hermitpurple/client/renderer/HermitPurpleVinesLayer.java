@@ -36,9 +36,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 
-public class HermitPurpleVinesLayer <T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M> implements FirstPersonModelLayer {
+public class HermitPurpleVinesLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M> implements FirstPersonModelLayer {
     public ResourceModelEntry purpleModel;
-    public static final ResourceLocation HERMIT = ResourceLocation.tryBuild(HermitPurpleAddon.MOD_ID,"textures/entity/stand/hp_vine.png");
+    public static final ResourceLocation HERMIT = ResourceLocation.tryBuild(HermitPurpleAddon.MOD_ID, "textures/entity/stand/hp_vine.png");
+
     public HermitPurpleVinesLayer(RenderLayerParent<T, M> renderer) {
         super(renderer);
         this.purpleModel = RotpGeckoModelLoader.getInstance().getModelContainer(HermitPurpleAddon.resLoc("hermit_vines"));
@@ -47,18 +48,18 @@ public class HermitPurpleVinesLayer <T extends LivingEntity, M extends HumanoidM
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T t, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if(!ClientGlobals.canSeeStands || (t.isInvisible() && !(t instanceof MannequinEntity))){
+        if (!ClientGlobals.canSeeStands || (t.isInvisible() && !(t instanceof MannequinEntity))) {
             return;
         }
-        
+
         HumanoidRenderState renderState = RenderStateCrutches.currentEntityRenderState;
         if (renderState == null) {
-        	return;
+            return;
         }
         EntityActionRenderState actionRenderState = ((RipplesRenderStateExtensionMixin) renderState).get().entityAction;
 
         StandPower standData = StandPower.get(t);
-        if(standData != null && standData.getPowerType() == AddonStands.HERMIT_PURPLE.get() && standData.getSummonedStand() instanceof SyncableSummonedStand stand){
+        if (standData != null && standData.getPowerType() == AddonStands.HERMIT_PURPLE.get() && standData.getSummonedStand() instanceof SyncableSummonedStand stand) {
             StandSkin standSkin = StandSkinsLoader.getInstance().getSkin(standData);
             ResourceLocation texture = standSkin.getTexture(HERMIT);
             M parentModel = getParentModel();
@@ -77,14 +78,14 @@ public class HermitPurpleVinesLayer <T extends LivingEntity, M extends HumanoidM
             float alpha = stand.unsummonAlpha(partialTicks);
             int color = ARGB.white(alpha);
             VertexConsumer ivertexbuilder = buffer.getBuffer(RenderType.entityTranslucent(texture));
-            purpleModel.renderToBuffer(poseStack,ivertexbuilder,packedLight, OverlayTexture.NO_OVERLAY, color);
+            purpleModel.renderToBuffer(poseStack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, color);
 
         }
     }
 
-	@Override
-	public void renderHandFirstPerson(HumanoidArm side, PoseStack poseStack, MultiBufferSource buffer, int light,
-			LivingEntity entity, LivingEntityRenderer<?, ?> entityRenderer, float partialTick) {
-		// only renders during an animation anyway, so we don't have to do the vanilla rendering (for now)
-	}
+    @Override
+    public void renderHandFirstPerson(HumanoidArm side, PoseStack poseStack, MultiBufferSource buffer, int light,
+                                      LivingEntity entity, LivingEntityRenderer<?, ?> entityRenderer, float partialTick) {
+        // only renders during an animation anyway, so we don't have to do the vanilla rendering (for now)
+    }
 }

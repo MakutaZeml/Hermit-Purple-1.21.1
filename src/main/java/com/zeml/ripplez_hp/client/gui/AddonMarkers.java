@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 
 public class AddonMarkers {
 
-    public static void registerMarkers(Minecraft mc){
+    public static void registerMarkers(Minecraft mc) {
         MarkerRenderer.registerMarkerRenderer(new WeakenedMarker(mc));
     }
 }

@@ -7,7 +7,7 @@ import net.minecraft.client.model.geom.ModelPart;
 public class HermitPurpleModel extends HumanoidPlayerModel {
 
     public HermitPurpleModel(ModelPart root) {
-    	super(root);
+        super(root);
     }
 
 }

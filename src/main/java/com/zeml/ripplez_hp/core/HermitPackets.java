@@ -14,27 +14,29 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class HermitPackets {
 
-    public static void register(RegisterPayloadHandlersEvent event){
+    public static void register(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1");
-        registerPacket(registrar,PayloadRegistrar::playToServer, new SetTargetPacket.Handler(HermitPurpleAddon.resLoc("hermit")));
-        registerPacket(registrar,PayloadRegistrar::playToServer, new SetColorPacket.Handler(HermitPurpleAddon.resLoc("color")));
-        registerPacket(registrar,PayloadRegistrar::playToServer, new ClientRemoveNodes.Handler(HermitPurpleAddon.resLoc("add_cl_nodes")));
-        registerPacket(registrar,PayloadRegistrar::playToClient, new HermitTargetDataPacket.Handler(HermitPurpleAddon.resLoc("hermit_data")));
-        registerPacket(registrar,PayloadRegistrar::playToClient, new StandSoundPacket.Handler(HermitPurpleAddon.resLoc("stand_sound")));
-        registerPacket(registrar,PayloadRegistrar::playToClient, new GuidedPacket.Handler(HermitPurpleAddon.resLoc("guided")));
-        registerPacket(registrar,PayloadRegistrar::playToClient, new AnotherGuidedPacket.Handler(HermitPurpleAddon.resLoc("another_guided")));
-        registerPacket(registrar,PayloadRegistrar::playToClient, new WeakedBlockPacket.Handler(HermitPurpleAddon.resLoc("weak_block")));
-        registerPacket(registrar,PayloadRegistrar::playToClient, new SetNodes.Handler(HermitPurpleAddon.resLoc("add_nodes")));
+        registerPacket(registrar, PayloadRegistrar::playToServer, new SetTargetPacket.Handler(HermitPurpleAddon.resLoc("hermit")));
+        registerPacket(registrar, PayloadRegistrar::playToServer, new SetColorPacket.Handler(HermitPurpleAddon.resLoc("color")));
+        registerPacket(registrar, PayloadRegistrar::playToServer, new ClientRemoveNodes.Handler(HermitPurpleAddon.resLoc("add_cl_nodes")));
+        registerPacket(registrar, PayloadRegistrar::playToClient, new HermitTargetDataPacket.Handler(HermitPurpleAddon.resLoc("hermit_data")));
+        registerPacket(registrar, PayloadRegistrar::playToClient, new StandSoundPacket.Handler(HermitPurpleAddon.resLoc("stand_sound")));
+        registerPacket(registrar, PayloadRegistrar::playToClient, new GuidedPacket.Handler(HermitPurpleAddon.resLoc("guided")));
+        registerPacket(registrar, PayloadRegistrar::playToClient, new AnotherGuidedPacket.Handler(HermitPurpleAddon.resLoc("another_guided")));
+        registerPacket(registrar, PayloadRegistrar::playToClient, new WeakedBlockPacket.Handler(HermitPurpleAddon.resLoc("weak_block")));
+        registerPacket(registrar, PayloadRegistrar::playToClient, new SetNodes.Handler(HermitPurpleAddon.resLoc("add_nodes")));
 
     }
 
     public static interface PacketHandler<T extends CustomPacketPayload> {
         CustomPacketPayload.Type<T> type();
+
         void handle(T payload, IPayloadContext context);
     }
 
     public static interface PacketOGHandler<T extends CustomPacketPayload> extends HermitPackets.PacketHandler<T> {
         void encode(T packet, RegistryFriendlyByteBuf buf);
+
         T decode(RegistryFriendlyByteBuf buf);
     }
 

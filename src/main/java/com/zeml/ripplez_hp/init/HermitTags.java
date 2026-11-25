@@ -8,13 +8,13 @@ import net.minecraft.world.level.block.Block;
 
 public class HermitTags {
 
-    public static class Items{
+    public static class Items {
         public static final TagKey<Item> CAMERA = TagKey.create(Registries.ITEM,
                 HermitPurpleAddon.resLoc("camera"));
     }
 
-    public static class Blocks{
-        public static final TagKey<Block> NOT_CAR = TagKey.create(Registries.BLOCK,HermitPurpleAddon.resLoc("not_car"));
+    public static class Blocks {
+        public static final TagKey<Block> NOT_CAR = TagKey.create(Registries.BLOCK, HermitPurpleAddon.resLoc("not_car"));
 
     }
 }

@@ -21,13 +21,10 @@ public class OhNoCringeAbility extends HermitAction {
 
     public OhNoCringeAbility(AbilityType<?> abilityType, AbilityId abilityId) {
         super(abilityType, abilityId);
-        setDefaultPhaseLength(ActionPhase.WINDUP,20);
+        setDefaultPhaseLength(ActionPhase.WINDUP, 20);
         usageGroup = AbilityUsageGroup.SPECIAL;
 
     }
 
 
-
-
-   
 }

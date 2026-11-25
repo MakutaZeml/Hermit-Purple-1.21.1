@@ -43,7 +43,7 @@ public class ClientRemoveNodes implements CustomPacketPayload {
         public void handle(ClientRemoveNodes payload, IPayloadContext context) {
             Player player = context.player();
             StandPower power = StandPower.get(player);
-            if(power != null){
+            if (power != null) {
                 power.userStandEffects.getEffectsOfType(AddonStandAbilities.NODES_CONTROL.get()).forEach(EntityCustomEffect::remove);
             }
 

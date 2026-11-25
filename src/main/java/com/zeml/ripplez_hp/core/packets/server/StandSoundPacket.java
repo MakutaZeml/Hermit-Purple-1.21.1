@@ -55,7 +55,7 @@ public record StandSoundPacket(int entityId, Holder<SoundEvent> sound, boolean o
                     Entity entity = ClientProxy.getEntityById(payload.entityId);
                     if (entity instanceof LivingEntity living) {
                         StandPower power = StandPower.get(living);
-                        if(power != null){
+                        if (power != null) {
                             EntityLingeringSoundInstance sound = new EntityLingeringSoundInstance(ClientsideSoundsHelper.withStandSkin(
                                     soundEvent, power),
                                     living.getSoundSource(), payload.volume, payload.pitch, living, living.level());
