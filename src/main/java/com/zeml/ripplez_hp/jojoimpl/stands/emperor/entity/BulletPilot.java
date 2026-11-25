@@ -29,17 +29,17 @@ public class BulletPilot extends TamableAnimal {
         super(entityType, level);
     }
 
-    public BulletPilot(Level level,LivingEntity owner, boolean visual){
+    public BulletPilot(Level level, LivingEntity owner, boolean visual) {
         super(AddonEntityTypes.EMPEROR_RIDER.get(), level);
-        if(owner != null){
+        if (owner != null) {
             setOwnerUUID(owner.getUUID());
         }
         setIsVisual(visual);
     }
 
-    public BulletPilot(Level level,LivingEntity owner){
+    public BulletPilot(Level level, LivingEntity owner) {
         super(AddonEntityTypes.EMPEROR_RIDER.get(), level);
-        if(owner != null){
+        if (owner != null) {
             setOwnerUUID(owner.getUUID());
         }
     }
@@ -49,7 +49,7 @@ public class BulletPilot extends TamableAnimal {
     public void tick() {
         super.tick();
         HermitPurpleAddon.getLogger().debug("does pilot exist? {}", getIsVisual());
-        if(this.getVehicle() == null && !getIsVisual()){
+        if (this.getVehicle() == null && !getIsVisual()) {
             this.remove(RemovalReason.DISCARDED);
         }
     }
@@ -65,8 +65,8 @@ public class BulletPilot extends TamableAnimal {
 
     @Override
     public boolean isDamageSourceBlocked(DamageSource damageSource) {
-        if(damageSource.is(DamageTypes.IN_FIRE) || damageSource.is(DamageTypes.DROWN) || damageSource.is(DamageTypes.SWEET_BERRY_BUSH)
-        || damageSource.is(DamageTypes.CACTUS) || damageSource.is(DamageTypes.CAMPFIRE) || damageSource.is(DamageTypes.FALL)){
+        if (damageSource.is(DamageTypes.IN_FIRE) || damageSource.is(DamageTypes.DROWN) || damageSource.is(DamageTypes.SWEET_BERRY_BUSH)
+                || damageSource.is(DamageTypes.CACTUS) || damageSource.is(DamageTypes.CAMPFIRE) || damageSource.is(DamageTypes.FALL)) {
             return true;
         }
         return super.isDamageSourceBlocked(damageSource);
@@ -102,30 +102,40 @@ public class BulletPilot extends TamableAnimal {
         return false;
     }
 
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.getEntity() instanceof BulletPilot pilot) {
+            if (pilot.getOwner() != null) {
+                return pilot.getOwner() != this.getOwner();
+            }
+
+        }
+        return super.hurt(source, amount);
+    }
 
     public boolean getIsVisual() {
         return entityData.get(IS_VISUAL);
     }
 
-    public void setIsVisual(boolean visual){
-        entityData.set(IS_VISUAL,visual);
+    public void setIsVisual(boolean visual) {
+        entityData.set(IS_VISUAL, visual);
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(IS_VISUAL,false);
+        builder.define(IS_VISUAL, false);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        entityData.set(IS_VISUAL,compound.getBoolean("is_visual"));
+        entityData.set(IS_VISUAL, compound.getBoolean("is_visual"));
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putBoolean("is_visual",entityData.get(IS_VISUAL));
+        compound.putBoolean("is_visual", entityData.get(IS_VISUAL));
     }
 }

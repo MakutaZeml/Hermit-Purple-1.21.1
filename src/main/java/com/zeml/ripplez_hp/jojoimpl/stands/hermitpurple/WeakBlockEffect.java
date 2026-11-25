@@ -52,11 +52,11 @@ public class WeakBlockEffect extends StandEffectInstance {
                     for (Entity ent : entities) {
                         if (ent.mainSupportingBlockPos.map(affectedBlocks::contains).orElse(false)) {
                             for (BlockPos pos : new ArrayList<>(affectedBlocks)) {
-                                level.destroyBlock(pos, true);
-                                affectedBlocks.remove(pos);
                                 if (!level.isClientSide) {
                                     level.getData(AddonDataAttachmentTypes.WEAK).removeWeakBlock(pos);
+                                    level.destroyBlock(pos, true);
                                 }
+                                affectedBlocks.remove(pos);
                             }
                             break;
                         }
@@ -82,7 +82,7 @@ public class WeakBlockEffect extends StandEffectInstance {
         Iterable<BlockPos> pos = BlockPos.betweenClosed(blockPos.offset(-1, -1, -1), blockPos.offset(1, 1, 1));
         pos.forEach(position -> {
             if (!level.getBlockState(position).isAir() && !level.getBlockState(position).liquid() &&
-                    tier.canMine(level.getBlockState(position))) {
+                    tier.canMine(level.getBlockState(position)) && level.getBlockState(position).getDestroySpeed(level, position) > 0) {
                 affectedBlocks.add(position.immutable());
                 level.getData(AddonDataAttachmentTypes.WEAK).addWeakBlocks(position.immutable());
             }
