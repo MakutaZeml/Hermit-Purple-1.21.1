@@ -1,16 +1,14 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.emperor;
 
-import com.github.standobyte.jojo.client.ui.hud_power.PowerHud;
-import com.github.standobyte.jojo.client.ui.utils.BlitFloat;
+import com.github.standobyte.jojo.client.sound.ClientsideSoundsHelper;
+import com.github.standobyte.jojo.client.sound.sounds.EntityLingeringSoundInstance;
 import com.github.standobyte.jojo.client.util.functions.ClientUtil;
 import com.github.standobyte.jojo.powersystem.Power;
 import com.github.standobyte.jojo.powersystem.PowerClass;
 import com.github.standobyte.jojo.powersystem.ability.Ability;
 import com.github.standobyte.jojo.powersystem.ability.AbilityId;
 import com.github.standobyte.jojo.powersystem.ability.AbilityType;
-import com.github.standobyte.jojo.powersystem.ability.EntityActionAbility;
 import com.github.standobyte.jojo.powersystem.ability.condition.AvailableAbilities;
-import com.github.standobyte.jojo.powersystem.ability.condition.ConditionCheck;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionAnimIdentifier;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionPhase;
 import com.github.standobyte.jojo.powersystem.entityaction.EntityActionInstance;
@@ -19,7 +17,6 @@ import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.zeml.ripplez_hp.core.packets.server.AnotherGuidedPacket;
-import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import com.zeml.ripplez_hp.init.power.AddonStandAbilities;
@@ -32,8 +29,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Items;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -94,8 +89,10 @@ public class GuideBulletAbility extends EmperorAbility {
                 emperorBullet.shootFromRotation(performer, 1F, 1F);
                 emperorBullet.setControlled(true);
                 level().addFreshEntity(emperorBullet);
-                if (!level().isClientSide) {
-                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer, new StandSoundPacket(performer.getId(), AddonSoundEvents.EMP_SHOT, true, 1, 1));
+                if (level().isClientSide) {
+                    ClientsideSoundsHelper.playNonVanillaClassSound(new EntityLingeringSoundInstance(ClientsideSoundsHelper.withStandSkin(
+                            AddonSoundEvents.EMP_SHOT.get(), StandPower.get(performer)),
+                            performer.getSoundSource(), 1, 1, performer, level()));
                 }
                 BulletPilot bulletPilot = new BulletPilot(level(), performer);
                 bulletPilot.startRiding(emperorBullet);

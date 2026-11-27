@@ -1,5 +1,7 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple;
 
+import com.github.standobyte.jojo.client.sound.ClientsideSoundsHelper;
+import com.github.standobyte.jojo.client.sound.sounds.EntityLingeringSoundInstance;
 import com.github.standobyte.jojo.customobjects.DamageSourceModified;
 import com.github.standobyte.jojo.entityattachment.custom_effect.EntityCustomEffect;
 import com.github.standobyte.jojo.entityattachment.custom_effect.EntityCustomEffectType;
@@ -21,6 +23,7 @@ import com.github.standobyte.jojo.powersystem.standpower.effect.StandEffectInsta
 import com.github.standobyte.jojo.powersystem.standpower.entity.StandStatFormulas;
 import com.github.standobyte.jojo.util.functions.DamageUtil;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
+import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import com.zeml.ripplez_hp.init.power.AddonStandAbilities;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.tags.DamageTypeTags;
@@ -73,10 +76,20 @@ public class HermitThornsAbility extends HermitAction {
             boolean active = !standPower.userStandEffects.getEffectsOfType(AddonStandAbilities.HERMIT_THORNS_EFFECT.get()).findAny().isEmpty();
             if (active) {
                 standPower.userStandEffects.getEffectsOfType(AddonStandAbilities.HERMIT_THORNS_EFFECT.get()).forEach(EntityCustomEffect::remove);
+                if (level.isClientSide) {
+                    ClientsideSoundsHelper.playNonVanillaClassSound(new EntityLingeringSoundInstance(ClientsideSoundsHelper.withStandSkin(
+                            AddonSoundEvents.HP_UNDO.get(), standPower),
+                            user.getSoundSource(), 1, 1, user, level));
+                }
             } else {
                 if (standPower.getPowerType() != null) standPower.getPowerType().summon(user, standPower);
                 HermitThornsEffect effect = AddonStandAbilities.HERMIT_THORNS_EFFECT.get().create(level);
                 standPower.userStandEffects.addEffect(effect);
+                if (level.isClientSide) {
+                    ClientsideSoundsHelper.playNonVanillaClassSound(new EntityLingeringSoundInstance(ClientsideSoundsHelper.withStandSkin(
+                            AddonSoundEvents.HP_TENSION.get(), standPower),
+                            user.getSoundSource(), 1, 1, user, level));
+                }
             }
 
         }
@@ -103,6 +116,7 @@ public class HermitThornsAbility extends HermitAction {
 
         @Override
         protected void start() {
+
         }
 
         @Override

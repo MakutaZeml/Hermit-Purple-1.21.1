@@ -1,11 +1,11 @@
 package com.zeml.ripplez_hp.mc.item;
 
 import com.github.standobyte.jojo.client.sound.ClientsideSoundsHelper;
+import com.github.standobyte.jojo.client.sound.sounds.EntityLingeringSoundInstance;
 import com.github.standobyte.jojo.init.ModStatusEffects;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.github.standobyte.jojo.powersystem.standpower.entity.StandEntity;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
-import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import com.zeml.ripplez_hp.init.HermitDataComponents;
 import com.zeml.ripplez_hp.jojoimpl.stands.emperor.entity.EmperorBulletEntity;
@@ -45,12 +45,7 @@ public class EmperorItem extends Item {
                 int t = remainingTicks % 13;
                 boolean shotTick = t == 1 || t == 3 || t == 5 || t == 7 || t == 9 || t == 11;
                 if (shotTick) {
-                    if (!level.isClientSide()) {
-                        shot(level, data, multStamina, livingEntity);
-                        level.playSound(null, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(),
-                                ClientsideSoundsHelper.withStandSkin(AddonSoundEvents.EMP_SHOT.get(), StandPower.get(livingEntity)), livingEntity.getSoundSource()
-                        );
-                    }
+                    shot(level, data, multStamina, livingEntity);
                 }
                 if (t == 1) {
                     livingEntity.releaseUsingItem();
@@ -62,8 +57,8 @@ public class EmperorItem extends Item {
                 int t = remainingTicks % 5;
                 boolean shotTick = t == 4;
                 if (shotTick) {
+                    shot(level, data, multStamina, livingEntity);
                     if (!level.isClientSide()) {
-                        shot(level, data, multStamina, livingEntity);
                         livingEntity.releaseUsingItem();
                         if (livingEntity instanceof Player) {
                             ((Player) livingEntity).getCooldowns().addCooldown(this, 10);
@@ -123,30 +118,38 @@ public class EmperorItem extends Item {
 
     @Nullable
     public static EmperorBulletEntity shot(Level level, EmperorGunData data, float multStamina, LivingEntity shooter) {
-        Entity entity = ((ServerLevel) level).getEntity(data.getUuidOwner().get());
-        if (entity instanceof LivingEntity) {
-            LivingEntity user = (LivingEntity) entity;
-            if (StandPower.get(user).hasPower() && StandPower.get(user).getStamina() >= 35 * multStamina) {
+        EmperorBulletEntity emperorBullet = new EmperorBulletEntity(shooter, level);
+        if (level instanceof ServerLevel serverLevel) {
+            Entity entity = serverLevel.getEntity(data.getUuidOwner().get());
+            if (entity instanceof LivingEntity user) {
+                emperorBullet.setOwner(user);
                 StandPower power = StandPower.get(user);
-                if (power != null && power.getStandInstance().isPresent() && power.getStandInstance().get().getStandType() != null &&
-                        power.getStandInstance().get().getStandType().getStandStats() != null) {
-                    EmperorBulletEntity emperorBullet = new EmperorBulletEntity(user, level);
-                    emperorBullet.setStandPower((float) power.getStandInstance().get().getStandType().getStandStats().power());
-                    emperorBullet.setStandRange((float) power.getStandInstance().get().getStandType().getStandStats().rangeMax());
-                    setTargetToBullet(emperorBullet, user, data, (float) power.getStandInstance().get().getStandType().getStandStats().rangeMax());
-                    if (data.getUuidTarget().isPresent()) {
-                        Entity target = ((ServerLevel) level).getEntity(data.getUuidTarget().get());
-                        if (target != null) {
-                            emperorBullet.setHomingTarget(target);
+                if (power != null && power.hasPower() && power.getStamina() >= 35 * multStamina) {
+                    if (power.getStandInstance().isPresent() && power.getStandInstance().get().getStandType() != null && power.getStandInstance().get().getStandType().getStandStats() != null) {
+                        emperorBullet.setStandPower((float) power.getStandInstance().get().getStandType().getStandStats().power());
+                        emperorBullet.setStandRange((float) power.getStandInstance().get().getStandType().getStandStats().rangeMax());
+                        setTargetToBullet(emperorBullet, user, data, (float) power.getStandInstance().get().getStandType().getStandStats().rangeMax());
+                        if (data.getUuidTarget().isPresent()) {
+                            Entity target = ((ServerLevel) level).getEntity(data.getUuidTarget().get());
+                            if (target != null) {
+                                emperorBullet.setHomingTarget(target);
+                            }
                         }
+                        emperorBullet.shootFromRotation(shooter, 1F, 1F);
+                        level.addFreshEntity(emperorBullet);
+                        power.consumeStamina(35 * multStamina);
+                        return emperorBullet;
                     }
-                    emperorBullet.shootFromRotation(shooter, 1F, 1F);
-                    level.addFreshEntity(emperorBullet);
-                    power.consumeStamina(35 * multStamina);
-                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, new StandSoundPacket(user.getId(), AddonSoundEvents.EMP_SHOT, true, 1, 1));
-                    return emperorBullet;
                 }
             }
+        } else {
+            if (StandPower.get(shooter) != null) {
+                ClientsideSoundsHelper.playNonVanillaClassSound(new EntityLingeringSoundInstance(ClientsideSoundsHelper.withStandSkin(
+                        AddonSoundEvents.EMP_SHOT.get(), StandPower.get(shooter)),
+                        shooter.getSoundSource(), 1, 1, shooter, level));
+            }
+
+            return emperorBullet;
         }
         return null;
     }

@@ -1,7 +1,9 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple;
 
+import com.github.standobyte.jojo.client.sound.ClientsideSoundsHelper;
+import com.github.standobyte.jojo.client.sound.sounds.EntityLingeringSoundInstance;
 import com.github.standobyte.jojo.init.ModDamageTypes;
-import com.github.standobyte.jojo.mechanics.resolve.ResolveModeEffect;
+import com.github.standobyte.jojo.init.ModSoundEvents;
 import com.github.standobyte.jojo.mechanics.voiceline.VoiceLineServerSide;
 import com.github.standobyte.jojo.powersystem.Moveset;
 import com.github.standobyte.jojo.powersystem.Power;
@@ -23,11 +25,8 @@ import com.github.standobyte.jojo.subsystems.hitboxes.OBBCollisionUtil;
 import com.github.standobyte.jojo.subsystems.hitboxes.OrientedBoundingBox;
 import com.github.standobyte.jojo.util.functions.DamageUtil;
 import com.github.standobyte.jojo.util.functions.MathUtil;
-import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
-import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import net.minecraft.Util;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -165,9 +164,11 @@ public class HermitVineWhip extends HermitAction {
         public void onSetPhase(ActionPhase newPhase) {
             Level level = level();
             if (newPhase == ActionPhase.PERFORM) {
-                if (!level.isClientSide) {
+                if (level.isClientSide && StandPower.get(performer) != null) {
                     float pitch = (float) (.5 + Math.random());
-                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer, new StandSoundPacket(performer.getId(), AddonSoundEvents.HP_VINE_SWING, true, 1, pitch));
+                    ClientsideSoundsHelper.playNonVanillaClassSound(new EntityLingeringSoundInstance(ClientsideSoundsHelper.withStandSkin(
+                            AddonSoundEvents.HP_VINE_SWING.get(), StandPower.get(performer)),
+                            performer.getSoundSource(), 1, pitch, performer, level()));
                 }
             }
             if (newPhase == ActionPhase.RECOVERY) {

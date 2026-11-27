@@ -1,5 +1,7 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple;
 
+import com.github.standobyte.jojo.client.sound.ClientsideSoundsHelper;
+import com.github.standobyte.jojo.client.sound.sounds.EntityLingeringSoundInstance;
 import com.github.standobyte.jojo.mechanics.voiceline.VoiceLineServerSide;
 import com.github.standobyte.jojo.powersystem.Power;
 import com.github.standobyte.jojo.powersystem.PowerClass;
@@ -14,8 +16,6 @@ import com.github.standobyte.jojo.powersystem.entityaction.ActionPhase;
 import com.github.standobyte.jojo.powersystem.entityaction.EntityActionInstance;
 import com.github.standobyte.jojo.powersystem.entityaction.type.EntityActionType;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
-import com.zeml.ripplez_hp.core.HermitPurpleAddon;
-import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import net.minecraft.core.BlockPos;
@@ -115,18 +115,17 @@ public class HermitCompassAbility extends HermitAction {
 
         @Override
         public void actionPerformStart() {
-            if (!level().isClientSide) {
-                BlockPos blockPos = null;
-                String target = null;
-                LivingEntity user = performer;
-                boolean self = false;
-                StandPower standPower = StandPower.get(user);
-                if (standPower != null) {
-                    standPower.consumeStamina(25);
-                    if (!standPower.isSummoned() && standPower.getPowerType() != null) {
-                        standPower.getPowerType().summon(user, standPower);
-                    }
+            BlockPos blockPos = null;
+            String target = null;
+            LivingEntity user = performer;
+            boolean self = false;
+            StandPower standPower = StandPower.get(user);
+            if (standPower != null) {
+                standPower.consumeStamina(25);
+                if (!standPower.isSummoned() && standPower.getPowerType() != null) {
+                    standPower.getPowerType().summon(user, standPower);
                 }
+
                 ItemStack itemStack = user.getItemInHand(InteractionHand.OFF_HAND);
                 if (itemStack.is(Items.COMPASS)) {
                     if (user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode() < 4) {
@@ -154,41 +153,44 @@ public class HermitCompassAbility extends HermitAction {
                         }
                     }
                     if (blockPos != null) {
-                        itemStack.shrink(1);
-                        ItemStack compass = new ItemStack(Items.COMPASS);
-                        if (user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode() < 4 && !self) {
-                            if (this.dimension != null) {
-                                GlobalPos globalPos = new GlobalPos(this.dimension, blockPos);
+                        if (!level().isClientSide) {
+                            itemStack.shrink(1);
+                            ItemStack compass = new ItemStack(Items.COMPASS);
+                            if (user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode() < 4 && !self) {
+                                if (this.dimension != null) {
+                                    GlobalPos globalPos = new GlobalPos(this.dimension, blockPos);
+                                    LodestoneTracker tracker = new LodestoneTracker(Optional.of(globalPos), false);
+                                    compass.set(DataComponents.LODESTONE_TRACKER, tracker);
+                                }
+                            } else if (self && user instanceof Player player) {
+                                LodestoneTracker tracker = new LodestoneTracker(player.getLastDeathLocation(), false);
+                                compass.set(DataComponents.LODESTONE_TRACKER, tracker);
+                            } else {
+                                GlobalPos globalPos = new GlobalPos(this.level().dimension(), blockPos);
                                 LodestoneTracker tracker = new LodestoneTracker(Optional.of(globalPos), false);
                                 compass.set(DataComponents.LODESTONE_TRACKER, tracker);
                             }
-                        } else if (self && user instanceof Player player) {
-                            LodestoneTracker tracker = new LodestoneTracker(player.getLastDeathLocation(), false);
-                            compass.set(DataComponents.LODESTONE_TRACKER, tracker);
-                        } else {
-                            GlobalPos globalPos = new GlobalPos(this.level().dimension(), blockPos);
-                            LodestoneTracker tracker = new LodestoneTracker(Optional.of(globalPos), false);
-                            compass.set(DataComponents.LODESTONE_TRACKER, tracker);
-                        }
-                        String displayName = "filled_map.divination";
-                        compass.set(DataComponents.ITEM_NAME, Component.translatable(displayName, target));
-                        user.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
-                        user.setItemInHand(InteractionHand.OFF_HAND, compass);
+                            String displayName = "filled_map.divination";
+                            compass.set(DataComponents.ITEM_NAME, Component.translatable(displayName, target));
+                            user.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
+                            user.setItemInHand(InteractionHand.OFF_HAND, compass);
 
-                        if (standPower != null) {
                             standPower.addExp(.2F);
-                        }
-                        if (user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode() > 4 || this.entity == performer) {
-                            setPhaseStart(ActionPhase.RECOVERY);
+                            if (user.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode() > 4 || this.entity == performer) {
+                                setPhaseStart(ActionPhase.RECOVERY);
+                            } else {
+                                this.brujula = user.getItemInHand(InteractionHand.OFF_HAND);
+                            }
+                            VoiceLineServerSide.play(user, AddonSoundEvents.DIVINATION, 0, false);
                         } else {
-                            this.brujula = user.getItemInHand(InteractionHand.OFF_HAND);
+                            ClientsideSoundsHelper.playNonVanillaClassSound(new EntityLingeringSoundInstance(ClientsideSoundsHelper.withStandSkin(
+                                    AddonSoundEvents.SUMMON_HP.get(), standPower),
+                                    performer.getSoundSource(), 1, 1, performer, level()));
                         }
-                        VoiceLineServerSide.play(user, AddonSoundEvents.DIVINATION, 0, false);
-                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(user,
-                                new StandSoundPacket(user.getId(), AddonSoundEvents.SUMMON_HP, true, 1, 1));
 
                     }
                 }
+
             }
 
         }

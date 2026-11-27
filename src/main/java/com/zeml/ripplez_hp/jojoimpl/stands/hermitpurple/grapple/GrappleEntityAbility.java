@@ -1,6 +1,7 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple;
 
 import com.github.standobyte.jojo.client.sound.ClientsideSoundsHelper;
+import com.github.standobyte.jojo.client.sound.sounds.EntityLingeringSoundInstance;
 import com.github.standobyte.jojo.customobjects.entity_projectile.ThrownBlockEntity;
 import com.github.standobyte.jojo.powersystem.ability.AbilityId;
 import com.github.standobyte.jojo.powersystem.ability.AbilityType;
@@ -10,13 +11,11 @@ import com.github.standobyte.jojo.powersystem.entityaction.EntityActionInstance;
 import com.github.standobyte.jojo.powersystem.entityaction.type.EntityActionType;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.github.standobyte.jojo.powersystem.standpower.entity.StandEntity;
-import com.github.standobyte.jojo.powersystem.standpower.entity.StandStatFormulas;
 import com.github.standobyte.jojo.subsystems.hitboxes.ExtendableOBB;
 import com.github.standobyte.jojo.subsystems.hitboxes.OBBCollisionUtil;
 import com.github.standobyte.jojo.subsystems.hitboxes.OrientedBoundingBox;
 import com.github.standobyte.jojo.util.functions.JojoModUtil;
 import com.github.standobyte.jojo.util.functions.MathUtil;
-import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.HermitAction;
 import net.minecraft.core.BlockPos;
@@ -142,10 +141,12 @@ public class GrappleEntityAbility extends HermitAction {
 
                 }
                 case WINDUP -> {
-                    if (!level().isClientSide) {
+                    if (level().isClientSide) {
                         StandPower power = StandPower.get(performer);
-                        if (power != null && !level().isClientSide) {
-                            PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer, new StandSoundPacket(performer.getId(), AddonSoundEvents.HP_VINE_THROW, true, 1, 1));
+                        if (power != null ) {
+                            ClientsideSoundsHelper.playNonVanillaClassSound(new EntityLingeringSoundInstance(ClientsideSoundsHelper.withStandSkin(
+                                    AddonSoundEvents.HP_VINE_THROW.get(), power),
+                                    performer.getSoundSource(), 1, 1, performer, level()));
                         }
                     }
                 }

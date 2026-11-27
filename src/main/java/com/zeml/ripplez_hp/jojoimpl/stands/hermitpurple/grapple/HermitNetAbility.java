@@ -1,5 +1,7 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple;
 
+import com.github.standobyte.jojo.client.sound.ClientsideSoundsHelper;
+import com.github.standobyte.jojo.client.sound.sounds.EntityLingeringSoundInstance;
 import com.github.standobyte.jojo.powersystem.Power;
 import com.github.standobyte.jojo.powersystem.PowerClass;
 import com.github.standobyte.jojo.powersystem.ability.AbilityId;
@@ -11,7 +13,6 @@ import com.github.standobyte.jojo.powersystem.entityaction.HeldInput;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.github.standobyte.jojo.subsystems.hitboxes.OBBCollisionUtil;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
-import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import com.zeml.ripplez_hp.init.power.AddonStandAbilities;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.HermitAction;
@@ -86,9 +87,11 @@ public class HermitNetAbility extends HermitAction {
                 effect.addNode(1);
                 effect.withTarget(nodeEntity);
                 effect.updateTarget(level);
-                if (!level.isClientSide) {
+                if (level.isClientSide) {
                     float pitch = (float) (.5 + Math.random());
-                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, new StandSoundPacket(user.getId(), AddonSoundEvents.HP_TENSION, true, 1, pitch));
+                    ClientsideSoundsHelper.playNonVanillaClassSound(new EntityLingeringSoundInstance(ClientsideSoundsHelper.withStandSkin(
+                            AddonSoundEvents.HP_TENSION.get(), StandPower.get(user)),
+                            user.getSoundSource(), 1, pitch, user, level));
                 }
             }
         }

@@ -1,5 +1,7 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple;
 
+import com.github.standobyte.jojo.client.sound.ClientsideSoundsHelper;
+import com.github.standobyte.jojo.client.sound.sounds.EntityLingeringSoundInstance;
 import com.github.standobyte.jojo.client.standskin.StandSkin;
 import com.github.standobyte.jojo.client.standskin.StandSkinsLoader;
 import com.github.standobyte.jojo.mechanics.voiceline.VoiceLineServerSide;
@@ -13,7 +15,6 @@ import com.github.standobyte.jojo.powersystem.entityaction.type.EntityActionType
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.core.packets.client.SetColorPacket;
-import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import net.minecraft.core.BlockPos;
@@ -80,36 +81,36 @@ public class MapDoxingAbility extends HermitAction {
                     standPower.getPowerType().summon(performer, standPower);
                 }
             }
-            if (!level().isClientSide) {
-                HermitPurpleAddon.getLogger().debug("Why is not working?");
-                byte scale = performer.isShiftKeyDown() ? (byte) 0 : (byte) 2;
-                BlockPos blockPos = null;
-                String target = null;
-                ItemStack itemStack = performer.getItemInHand(InteractionHand.OFF_HAND);
-                if (itemStack.is(Items.MAP)) {
-                    if (performer.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode() < 4) {
-                        Entity entity = DoxingHelper.HPLivingObjectives(performer);
-                        if (entity != null) {
-                            blockPos = entity.getOnPos();
-                            target = entity.getName().getString();
+            HermitPurpleAddon.getLogger().debug("Why is not working?");
+            byte scale = performer.isShiftKeyDown() ? (byte) 0 : (byte) 2;
+            BlockPos blockPos = null;
+            String target = null;
+            ItemStack itemStack = performer.getItemInHand(InteractionHand.OFF_HAND);
+            if (itemStack.is(Items.MAP)) {
+                if (performer.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode() < 4) {
+                    Entity entity = DoxingHelper.HPLivingObjectives(performer);
+                    if (entity != null) {
+                        blockPos = entity.getOnPos();
+                        target = entity.getName().getString();
 
+                    }
+                } else {
+                    switch (performer.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode()) {
+                        case 4 -> {
+                            blockPos = DoxingHelper.structurePos(performer);
+                            String data = performer.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget().split(":")[1];
+                            data = data.replace("_", " ");
+                            target = data;
                         }
-                    } else {
-                        switch (performer.getData(AddonDataAttachmentTypes.HERMIT_DATA).getMode()) {
-                            case 4 -> {
-                                blockPos = DoxingHelper.structurePos(performer);
-                                String data = performer.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget().split(":")[1];
-                                data = data.replace("_", " ");
-                                target = data;
-                            }
-                            case 5 -> {
-                                blockPos = DoxingHelper.biomesPos(performer);
-                                String biome = "biome.";
-                                target = Component.translatable(biome.concat(performer.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget().replace(":", "."))).getString();
-                            }
+                        case 5 -> {
+                            blockPos = DoxingHelper.biomesPos(performer);
+                            String biome = "biome.";
+                            target = Component.translatable(biome.concat(performer.getData(AddonDataAttachmentTypes.HERMIT_DATA).getTarget().replace(":", "."))).getString();
                         }
                     }
-                    if (blockPos != null) {
+                }
+                if (blockPos != null) {
+                    if (!level().isClientSide) {
                         itemStack.setCount(itemStack.getCount() - 1);
                         ServerLevel serverLevel = (ServerLevel) level();
                         ItemStack map = MapItem.create(level(), blockPos.getX(), blockPos.getZ(), scale, true, true);
@@ -123,11 +124,15 @@ public class MapDoxingAbility extends HermitAction {
                             standPower.addExp(.2F);
                         }
                         VoiceLineServerSide.play(performer, AddonSoundEvents.DIVINATION, 0, false);
-                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer,
-                                new StandSoundPacket(performer.getId(), AddonSoundEvents.SUMMON_HP, true, 1, 1));
+                    } else if (standPower != null) {
+                        ClientsideSoundsHelper.playNonVanillaClassSound(new EntityLingeringSoundInstance(ClientsideSoundsHelper.withStandSkin(
+                                AddonSoundEvents.SUMMON_HP.get(), standPower),
+                                performer.getSoundSource(), 1, 1, performer, level()));
                     }
                 }
             }
+
+
         }
     }
 

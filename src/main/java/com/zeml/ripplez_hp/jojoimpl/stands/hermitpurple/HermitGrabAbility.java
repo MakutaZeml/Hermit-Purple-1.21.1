@@ -1,5 +1,7 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple;
 
+import com.github.standobyte.jojo.client.sound.ClientsideSoundsHelper;
+import com.github.standobyte.jojo.client.sound.sounds.EntityLingeringSoundInstance;
 import com.github.standobyte.jojo.powersystem.ability.AbilityId;
 import com.github.standobyte.jojo.powersystem.ability.AbilityType;
 import com.github.standobyte.jojo.powersystem.ability.AbilityUsageGroup;
@@ -7,12 +9,12 @@ import com.github.standobyte.jojo.powersystem.entityaction.ActionOBB;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionPhase;
 import com.github.standobyte.jojo.powersystem.entityaction.EntityActionInstance;
 import com.github.standobyte.jojo.powersystem.entityaction.type.EntityActionType;
+import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.github.standobyte.jojo.subsystems.hitboxes.ExtendableOBB;
 import com.github.standobyte.jojo.subsystems.hitboxes.OBBCollisionUtil;
 import com.github.standobyte.jojo.subsystems.hitboxes.OrientedBoundingBox;
 import com.github.standobyte.jojo.util.functions.MathUtil;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
-import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ClipContext;
@@ -67,8 +69,10 @@ public class HermitGrabAbility extends HermitAction {
                 if (getPhase() == ActionPhase.WINDUP) {
                     //Throwing Sounds
                     if (curPhaseTick == 5) {
-                        if (!level().isClientSide) {
-                            PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer, new StandSoundPacket(performer.getId(), AddonSoundEvents.HP_VINE_THROW, true, 1, 1));
+                        if (level().isClientSide && StandPower.get(performer) != null) {
+                            ClientsideSoundsHelper.playNonVanillaClassSound(new EntityLingeringSoundInstance(ClientsideSoundsHelper.withStandSkin(
+                                    AddonSoundEvents.HP_VINE_THROW.get(), StandPower.get(performer)),
+                                    performer.getSoundSource(), 1, 1, performer, level()));
                         }
                     }
                     if (curPhaseTick > 5) {
@@ -95,20 +99,25 @@ public class HermitGrabAbility extends HermitAction {
                 }
                 // Catching the entities while extending or retracting
                 if (getPhase() == ActionPhase.WINDUP || getPhase() == ActionPhase.PERFORM) {
-                    if (!level().isClientSide()) {
-                        Vec3 endPos = this.extendableOBB().rotatableHitbox().center.add(getPerformer().getLookAngle().scale(extendableOBB().rotatableHitbox().extent.length()));
-                        OBBCollisionUtil.getEntitiesInOBB(level(), this.extendableOBB().rotatableHitbox(),
-                                entity -> entity != getPerformer() && entity != getPowerUser() &&
-                                        entity.distanceToSqr(endPos.x, entity.getY(), endPos.z) < entity.getBbWidth() * 1.1
-                        ).forEach(entity -> {
-                            //FIXME Sound when catch
-                            if (!entities.contains(entity)) {
-                                PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer, new StandSoundPacket(entity.getId(), AddonSoundEvents.HP_VINE_CATCH, true, 1, 1));
-                            }
+                    Vec3 endPos = this.extendableOBB().rotatableHitbox().center.add(getPerformer().getLookAngle().scale(extendableOBB().rotatableHitbox().extent.length()));
+                    OBBCollisionUtil.getEntitiesInOBB(level(), this.extendableOBB().rotatableHitbox(),
+                            entity -> entity != getPerformer() && entity != getPowerUser() &&
+                                    entity.distanceToSqr(endPos.x, entity.getY(), endPos.z) < entity.getBbWidth() * 1.1
+                    ).forEach(entity -> {
+                        //FIXME Sound when catch
+
+                        if (!level().isClientSide) {
                             entity.setNoGravity(true);
                             entities.add(entity);
-                        });
-                    }
+                        } else if (!entities.contains(entity)) {
+                            ClientsideSoundsHelper.playNonVanillaClassSound(new EntityLingeringSoundInstance(ClientsideSoundsHelper.withStandSkin(
+                                    AddonSoundEvents.HP_VINE_CATCH.get(), StandPower.get(performer)),
+                                    performer.getSoundSource(), 1, 1, performer, level()));
+                        }
+
+                    });
+
+
                 }
 
                 //Move Entities

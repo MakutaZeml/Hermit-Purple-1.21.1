@@ -1,13 +1,10 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple.entity;
 
 import com.github.standobyte.jojo.customobjects.entity_projectile.ModdedProjectileEntity;
-import com.github.standobyte.jojo.init.ModSoundEvents;
 import com.github.standobyte.jojo.network.s2c.StandSkinSoundPacket;
 import com.github.standobyte.jojo.powersystem.entityaction.LivingComponentAction;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.github.standobyte.jojo.subsystems.target.ActionTarget;
-import com.zeml.ripplez_hp.core.HermitPurpleAddon;
-import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonEntityTypes;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple.GrappleBlockAbility;
@@ -47,10 +44,7 @@ public class GrappleBlockEntity extends ModdedProjectileEntity {
             LivingComponentAction action = LivingComponentAction.getComponent(getOwner());
             if (!(action.getAction() instanceof GrappleBlockAbility.GrapplingBlock)) {
                 this.remove(RemovalReason.DISCARDED);
-            } else if (action.getAction() instanceof GrappleBlockAbility.GrapplingBlock act && act.getGrappleBlock() != this) {
-                this.remove(RemovalReason.DISCARDED);
             }
-
         }
     }
 

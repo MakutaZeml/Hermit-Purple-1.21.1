@@ -35,25 +35,21 @@ public class ShotAbility extends EmperorAbility {
     @Override
     public HeldInput onKeyPress(Level level, LivingEntity user, FriendlyByteBuf extraClientInput, InputMethod inputMethod, float clickHoldResolveTime, ActionInputBuffer.BufferingState bufferingState) {
         if (user.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem emperorItem) {
-            if (!level.isClientSide) {
-                EmperorGunData gunData = user.getItemInHand(InteractionHand.MAIN_HAND).get(HermitDataComponents.EMPEROR);
-                if (gunData != null) {
-                    float multStamina = user.hasEffect(ModStatusEffects.RESOLVE) ? .75F : 1;
-                    EmperorItem.shot(level, gunData, multStamina, user);
-                    if (user instanceof Player player) {
-                        player.getCooldowns().addCooldown(emperorItem, 10);
-                    }
+            EmperorGunData gunData = user.getItemInHand(InteractionHand.MAIN_HAND).get(HermitDataComponents.EMPEROR);
+            if (gunData != null) {
+                float multStamina = user.hasEffect(ModStatusEffects.RESOLVE) ? .75F : 1;
+                EmperorItem.shot(level, gunData, multStamina, user);
+                if (user instanceof Player player && !level.isClientSide) {
+                    player.getCooldowns().addCooldown(emperorItem, 10);
                 }
             }
         } else if (user.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem emperorItem) {
-            if (!level.isClientSide) {
-                EmperorGunData gunData = user.getItemInHand(InteractionHand.OFF_HAND).get(HermitDataComponents.EMPEROR);
-                if (gunData != null) {
-                    float multStamina = user.hasEffect(ModStatusEffects.RESOLVE) ? .75F : 1;
-                    EmperorItem.shot(level, gunData, multStamina, user);
-                    if (user instanceof Player player) {
-                        player.getCooldowns().addCooldown(emperorItem, 10);
-                    }
+            EmperorGunData gunData = user.getItemInHand(InteractionHand.OFF_HAND).get(HermitDataComponents.EMPEROR);
+            if (gunData != null) {
+                float multStamina = user.hasEffect(ModStatusEffects.RESOLVE) ? .75F : 1;
+                EmperorItem.shot(level, gunData, multStamina, user);
+                if (user instanceof Player player && !level.isClientSide) {
+                    player.getCooldowns().addCooldown(emperorItem, 10);
                 }
             }
         }

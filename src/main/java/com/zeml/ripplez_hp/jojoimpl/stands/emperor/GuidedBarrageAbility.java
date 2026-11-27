@@ -1,7 +1,8 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.emperor;
 
+import com.github.standobyte.jojo.client.sound.ClientsideSoundsHelper;
+import com.github.standobyte.jojo.client.sound.sounds.EntityLingeringSoundInstance;
 import com.github.standobyte.jojo.client.util.functions.ClientUtil;
-import com.github.standobyte.jojo.init.ModStatusEffects;
 import com.github.standobyte.jojo.powersystem.Power;
 import com.github.standobyte.jojo.powersystem.PowerClass;
 import com.github.standobyte.jojo.powersystem.ability.Ability;
@@ -16,24 +17,17 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
 import com.zeml.ripplez_hp.core.packets.server.AnotherGuidedPacket;
-import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
-import com.zeml.ripplez_hp.core.util.EmperorUtil;
 import com.zeml.ripplez_hp.init.AddonDataAttachmentTypes;
 import com.zeml.ripplez_hp.init.AddonItems;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
-import com.zeml.ripplez_hp.init.HermitDataComponents;
 import com.zeml.ripplez_hp.init.power.AddonStandAbilities;
 import com.zeml.ripplez_hp.jojoimpl.stands.emperor.entity.BulletPilot;
 import com.zeml.ripplez_hp.jojoimpl.stands.emperor.entity.EmperorBulletEntity;
-import com.zeml.ripplez_hp.mc.item.EmperorItem;
-import com.zeml.ripplez_hp.mc.item.component.EmperorGunData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
@@ -101,8 +95,10 @@ public class GuidedBarrageAbility extends ShotBarrageAbility {
                         emperorBullet.setStandRange((float) power.getStandInstance().get().getStandType().getStandStats().rangeMax());
                         emperorBullet.setControlled(true);
                         level().addFreshEntity(emperorBullet);
-                        if (!this.level().isClientSide) {
-                            PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer, new StandSoundPacket(performer.getId(), AddonSoundEvents.EMP_SHOT, true, 1, 1));
+                        if (this.level().isClientSide) {
+                            ClientsideSoundsHelper.playNonVanillaClassSound(new EntityLingeringSoundInstance(ClientsideSoundsHelper.withStandSkin(
+                                    AddonSoundEvents.EMP_SHOT.get(), StandPower.get(performer)),
+                                    performer.getSoundSource(), 1, 1, performer, level()));
                         }
                         if (t == 11) {
                             BulletPilot bulletPilot = new BulletPilot(level(), performer);

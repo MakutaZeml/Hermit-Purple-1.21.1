@@ -1,6 +1,7 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple;
 
 import com.github.standobyte.jojo.client.sound.ClientsideSoundsHelper;
+import com.github.standobyte.jojo.client.sound.sounds.EntityLingeringSoundInstance;
 import com.github.standobyte.jojo.mechanics.voiceline.VoiceLineServerSide;
 import com.github.standobyte.jojo.powersystem.ability.AbilityId;
 import com.github.standobyte.jojo.powersystem.ability.AbilityType;
@@ -10,26 +11,15 @@ import com.github.standobyte.jojo.powersystem.entityaction.EntityActionInstance;
 import com.github.standobyte.jojo.powersystem.entityaction.type.EntityActionType;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.github.standobyte.jojo.powersystem.standpower.entity.StandEntity;
-import com.github.standobyte.jojo.subsystems.hitboxes.ExtendableOBB;
-import com.github.standobyte.jojo.subsystems.hitboxes.OBBCollisionUtil;
-import com.github.standobyte.jojo.subsystems.hitboxes.OrientedBoundingBox;
 import com.github.standobyte.jojo.util.functions.JojoModUtil;
-import com.github.standobyte.jojo.util.functions.MathUtil;
-import com.zeml.ripplez_hp.core.HermitPurpleAddon;
-import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import com.zeml.ripplez_hp.init.HermitTags;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.HermitAction;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple.entity.GrappleBlockEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.CollisionContext;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
@@ -82,7 +72,7 @@ public class GrappleBlockAbility extends HermitAction {
         public void windUpStuff() {
             if (grappleBlock != null) {
                 endPos = grappleBlock.position();
-                
+
                 double length = grappleBlock.getDeltaMovement().length();
                 Vec3 view = performer.getViewVector(phasePartialTick).normalize().scale(length);
                 grappleBlock.setDeltaMovement(view);
@@ -140,8 +130,10 @@ public class GrappleBlockAbility extends HermitAction {
                     level().addFreshEntity(grappleBlock);
 
                     StandPower power = StandPower.get(performer);
-                    if (power != null && !level().isClientSide) {
-                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer, new StandSoundPacket(performer.getId(), AddonSoundEvents.HP_VINE_THROW, true, 1, 1));
+                    if (power != null && level().isClientSide) {
+                        ClientsideSoundsHelper.playNonVanillaClassSound(new EntityLingeringSoundInstance(ClientsideSoundsHelper.withStandSkin(
+                                AddonSoundEvents.HP_VINE_THROW.get(), power),
+                                performer.getSoundSource(), 1, 1, performer, level()));
                     }
                     BlockPos pos = performer.blockPosition();
                     boolean thisIsntTheCar = false;
@@ -170,6 +162,10 @@ public class GrappleBlockAbility extends HermitAction {
         @Override
         public void actionPerformEnd() {
             performer.fallDistance = 0;
+            if (grappleBlock != null) {
+                grappleBlock.remove(Entity.RemovalReason.DISCARDED);
+                grappleBlock = null;
+            }
         }
 
         @Override

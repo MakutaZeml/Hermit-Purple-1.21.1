@@ -1,27 +1,22 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple;
 
+import com.github.standobyte.jojo.client.sound.ClientsideSoundsHelper;
+import com.github.standobyte.jojo.client.sound.sounds.EntityLingeringSoundInstance;
 import com.github.standobyte.jojo.config.RotpConfig;
-import com.github.standobyte.jojo.init.power.ModStandAbilities;
 import com.github.standobyte.jojo.powersystem.Power;
 import com.github.standobyte.jojo.powersystem.PowerClass;
 import com.github.standobyte.jojo.powersystem.ability.Ability;
 import com.github.standobyte.jojo.powersystem.ability.AbilityId;
 import com.github.standobyte.jojo.powersystem.ability.AbilityType;
-import com.github.standobyte.jojo.powersystem.ability.EntityActionAbility;
 import com.github.standobyte.jojo.powersystem.ability.condition.AvailableAbilities;
 import com.github.standobyte.jojo.powersystem.ability.controls.InputMethod;
 import com.github.standobyte.jojo.powersystem.ability.input.ActionInputBuffer;
 import com.github.standobyte.jojo.powersystem.entityaction.ActionPhase;
-import com.github.standobyte.jojo.powersystem.entityaction.EntityActionInstance;
 import com.github.standobyte.jojo.powersystem.entityaction.HeldInput;
 import com.github.standobyte.jojo.powersystem.entityaction.LivingComponentAction;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
-import com.github.standobyte.jojo.powersystem.standpower.entity.StandEntity;
 import com.github.standobyte.jojo.powersystem.standpower.entity.StandStatFormulas;
-import com.github.standobyte.jojoimpl.stands._entitybase.StandEntityHeavyPunchAbility;
-import com.github.standobyte.jojoimpl.stands.crazydiamond.CrazyDAngeloRockPunchEffect;
 import com.zeml.ripplez_hp.core.HermitPurpleAddon;
-import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import com.zeml.ripplez_hp.init.power.AddonStandAbilities;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.HermitAction;
@@ -31,7 +26,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
-import org.jetbrains.annotations.Nullable;
 
 public class WeakGrappleBlockInput extends HermitAction {
     public WeakGrappleBlockInput(AbilityType<?> abilityType, AbilityId abilityId) {
@@ -70,9 +64,11 @@ public class WeakGrappleBlockInput extends HermitAction {
                     HermitPurpleAddon.getLogger().debug("pressed");
                     WeakBlockEffect effect = AddonStandAbilities.WEAK_BLOCK_EFFECT.get().create(level).setCenter(BlockPos.containing(grapplingBlock.getEndPos()), tier, user.getId());
                     standPower.userStandEffects.addEffect(effect);
-                    if (!level.isClientSide) {
+                    if (level.isClientSide) {
                         float pitch = (float) (.5 + Math.random());
-                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(user, new StandSoundPacket(user.getId(), AddonSoundEvents.HP_TENSION, true, 1, pitch));
+                        ClientsideSoundsHelper.playNonVanillaClassSound(new EntityLingeringSoundInstance(ClientsideSoundsHelper.withStandSkin(
+                                AddonSoundEvents.HP_TENSION.get(), standPower),
+                                user.getSoundSource(), 1, pitch, user, level));
                     }
                 }
             }

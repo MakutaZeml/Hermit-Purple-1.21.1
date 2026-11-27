@@ -55,24 +55,22 @@ public class ShotBarrageAbility extends EmperorAbility {
                 int t = Math.round(this.getPhaseTicksLeft()) % 13;
                 boolean shotTick = t == 1 || t == 3 || t == 5 || t == 7 || t == 9 || t == 11;
                 if (shotTick) {
-                    if (!this.level().isClientSide) {
-                        if (performer.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem emperorItem) {
-                            EmperorGunData gunData = performer.getItemInHand(InteractionHand.MAIN_HAND).get(HermitDataComponents.EMPEROR);
-                            if (gunData != null) {
-                                float multStamina = performer.hasEffect(ModStatusEffects.RESOLVE) ? .75F : 1;
-                                EmperorItem.shot(this.level(), gunData, multStamina, performer);
-                                if (performer instanceof Player player) {
-                                    player.getCooldowns().addCooldown(emperorItem, 10);
-                                }
+                    if (performer.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof EmperorItem emperorItem) {
+                        EmperorGunData gunData = performer.getItemInHand(InteractionHand.MAIN_HAND).get(HermitDataComponents.EMPEROR);
+                        if (gunData != null) {
+                            float multStamina = performer.hasEffect(ModStatusEffects.RESOLVE) ? .75F : 1;
+                            EmperorItem.shot(this.level(), gunData, multStamina, performer);
+                            if (performer instanceof Player player && !level().isClientSide) {
+                                player.getCooldowns().addCooldown(emperorItem, 10);
                             }
-                        } else if (performer.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem emperorItem) {
-                            EmperorGunData gunData = performer.getItemInHand(InteractionHand.OFF_HAND).get(HermitDataComponents.EMPEROR);
-                            if (gunData != null) {
-                                float multStamina = performer.hasEffect(ModStatusEffects.RESOLVE) ? .75F : 1;
-                                EmperorItem.shot(this.level(), gunData, multStamina, performer);
-                                if (performer instanceof Player player) {
-                                    player.getCooldowns().addCooldown(emperorItem, 10);
-                                }
+                        }
+                    } else if (performer.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof EmperorItem emperorItem) {
+                        EmperorGunData gunData = performer.getItemInHand(InteractionHand.OFF_HAND).get(HermitDataComponents.EMPEROR);
+                        if (gunData != null) {
+                            float multStamina = performer.hasEffect(ModStatusEffects.RESOLVE) ? .75F : 1;
+                            EmperorItem.shot(this.level(), gunData, multStamina, performer);
+                            if (performer instanceof Player player && !level().isClientSide) {
+                                player.getCooldowns().addCooldown(emperorItem, 10);
                             }
                         }
                     }

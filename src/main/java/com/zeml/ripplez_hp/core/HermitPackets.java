@@ -20,7 +20,6 @@ public class HermitPackets {
         registerPacket(registrar, PayloadRegistrar::playToServer, new SetColorPacket.Handler(HermitPurpleAddon.resLoc("color")));
         registerPacket(registrar, PayloadRegistrar::playToServer, new ClientRemoveNodes.Handler(HermitPurpleAddon.resLoc("add_cl_nodes")));
         registerPacket(registrar, PayloadRegistrar::playToClient, new HermitTargetDataPacket.Handler(HermitPurpleAddon.resLoc("hermit_data")));
-        registerPacket(registrar, PayloadRegistrar::playToClient, new StandSoundPacket.Handler(HermitPurpleAddon.resLoc("stand_sound")));
         registerPacket(registrar, PayloadRegistrar::playToClient, new GuidedPacket.Handler(HermitPurpleAddon.resLoc("guided")));
         registerPacket(registrar, PayloadRegistrar::playToClient, new AnotherGuidedPacket.Handler(HermitPurpleAddon.resLoc("another_guided")));
         registerPacket(registrar, PayloadRegistrar::playToClient, new WeakedBlockPacket.Handler(HermitPurpleAddon.resLoc("weak_block")));

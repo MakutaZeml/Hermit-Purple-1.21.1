@@ -1,5 +1,7 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple;
 
+import com.github.standobyte.jojo.client.sound.ClientsideSoundsHelper;
+import com.github.standobyte.jojo.client.sound.sounds.EntityLingeringSoundInstance;
 import com.github.standobyte.jojo.powersystem.ability.AbilityId;
 import com.github.standobyte.jojo.powersystem.ability.AbilityType;
 import com.github.standobyte.jojo.powersystem.ability.AbilityUsageGroup;
@@ -13,8 +15,6 @@ import com.github.standobyte.jojo.subsystems.hitboxes.ExtendableOBB;
 import com.github.standobyte.jojo.subsystems.hitboxes.OBBCollisionUtil;
 import com.github.standobyte.jojo.subsystems.hitboxes.OrientedBoundingBox;
 import com.github.standobyte.jojo.util.functions.MathUtil;
-import com.zeml.ripplez_hp.core.HermitPurpleAddon;
-import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import com.zeml.ripplez_hp.init.power.AddonStandAbilities;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -101,9 +101,11 @@ public class WeakBlockAbiliy extends HermitAction {
         @Override
         public void onSetPhase(ActionPhase newPhase) {
             if (newPhase == ActionPhase.WINDUP) {
-                if (!level().isClientSide) {
+                if (level().isClientSide && StandPower.get(performer) != null) {
                     float pitch = (float) (.5 + Math.random());
-                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer, new StandSoundPacket(performer.getId(), AddonSoundEvents.HP_VINE_SWING, true, 1, pitch));
+                    ClientsideSoundsHelper.playNonVanillaClassSound(new EntityLingeringSoundInstance(ClientsideSoundsHelper.withStandSkin(
+                            AddonSoundEvents.HP_VINE_THROW.get(), StandPower.get(performer)),
+                            performer.getSoundSource(), 1, pitch, performer, level()));
                 }
             }
         }
@@ -120,9 +122,11 @@ public class WeakBlockAbiliy extends HermitAction {
                     if (tier.canMine(level().getBlockState(blockPos))) {
                         WeakBlockEffect blockEffect = AddonStandAbilities.WEAK_BLOCK_EFFECT.get().create(level()).setCenter(blockPos, tier, getPowerUser().getId());
                         power.userStandEffects.addEffect(blockEffect);
-                        if (!level().isClientSide) {
+                        if (level().isClientSide) {
                             float pitch = (float) (.5 + Math.random());
-                            PacketDistributor.sendToPlayersTrackingEntityAndSelf(performer, new StandSoundPacket(performer.getId(), AddonSoundEvents.HP_TENSION, true, 1, pitch));
+                            ClientsideSoundsHelper.playNonVanillaClassSound(new EntityLingeringSoundInstance(ClientsideSoundsHelper.withStandSkin(
+                                    AddonSoundEvents.HP_TENSION.get(), StandPower.get(performer)),
+                                    performer.getSoundSource(), 1, pitch, performer, level()));
                         }
                     }
 
