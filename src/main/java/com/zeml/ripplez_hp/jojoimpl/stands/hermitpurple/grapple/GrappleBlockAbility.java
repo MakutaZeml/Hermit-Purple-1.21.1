@@ -82,16 +82,12 @@ public class GrappleBlockAbility extends HermitAction {
         public void windUpStuff() {
             if (grappleBlock != null) {
                 endPos = grappleBlock.position();
+                
+                double length = grappleBlock.getDeltaMovement().length();
+                Vec3 view = performer.getViewVector(phasePartialTick).normalize().scale(length);
+                grappleBlock.setDeltaMovement(view);
+
                 if (grappleBlock.isAttached()) {
-                    if (level().isClientSide) {
-                        if (endPos != null) {
-                            StandPower power = StandPower.get(performer);
-                            if (power != null) {
-                                SoundEvent event = ClientsideSoundsHelper.withStandSkin(AddonSoundEvents.HP_TENSION.get(), power);
-                                level().playLocalSound(endPos.x, endPos.y, endPos.z, event, performer.getSoundSource(), 1, 1, false);
-                            }
-                        }
-                    }
                     setPhase(ActionPhase.PERFORM, 0);
                     syncPhaseChanges();
                 } else if (curPhaseTick > 20) {
@@ -140,7 +136,7 @@ public class GrappleBlockAbility extends HermitAction {
             switch (newPhase) {
                 case WINDUP -> {
                     grappleBlock = new GrappleBlockEntity(performer, level());
-                    grappleBlock.shootFromRotation(performer, 1, 1);
+                    grappleBlock.shootFromRotation(performer, 1.5f, 1);
                     level().addFreshEntity(grappleBlock);
 
                     StandPower power = StandPower.get(performer);
@@ -209,6 +205,10 @@ public class GrappleBlockAbility extends HermitAction {
                 return false;
             }
             return super.canBeCancelledInto(cancellingAbility);
+        }
+
+        public GrappleBlockEntity getGrappleBlock() {
+            return grappleBlock;
         }
     }
 

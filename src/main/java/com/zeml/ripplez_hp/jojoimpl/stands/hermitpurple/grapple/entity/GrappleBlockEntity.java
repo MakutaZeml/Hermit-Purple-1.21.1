@@ -1,10 +1,15 @@
 package com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple.entity;
 
 import com.github.standobyte.jojo.customobjects.entity_projectile.ModdedProjectileEntity;
+import com.github.standobyte.jojo.init.ModSoundEvents;
+import com.github.standobyte.jojo.network.s2c.StandSkinSoundPacket;
 import com.github.standobyte.jojo.powersystem.entityaction.LivingComponentAction;
 import com.github.standobyte.jojo.powersystem.standpower.StandPower;
 import com.github.standobyte.jojo.subsystems.target.ActionTarget;
+import com.zeml.ripplez_hp.core.HermitPurpleAddon;
+import com.zeml.ripplez_hp.core.packets.server.StandSoundPacket;
 import com.zeml.ripplez_hp.init.AddonEntityTypes;
+import com.zeml.ripplez_hp.init.AddonSoundEvents;
 import com.zeml.ripplez_hp.jojoimpl.stands.hermitpurple.grapple.GrappleBlockAbility;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -20,6 +25,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 public class GrappleBlockEntity extends ModdedProjectileEntity {
@@ -41,10 +47,13 @@ public class GrappleBlockEntity extends ModdedProjectileEntity {
             LivingComponentAction action = LivingComponentAction.getComponent(getOwner());
             if (!(action.getAction() instanceof GrappleBlockAbility.GrapplingBlock)) {
                 this.remove(RemovalReason.DISCARDED);
+            } else if (action.getAction() instanceof GrappleBlockAbility.GrapplingBlock act && act.getGrappleBlock() != this) {
+                this.remove(RemovalReason.DISCARDED);
             }
 
         }
     }
+
 
     @Override
     public int ticksLifespan() {
@@ -66,6 +75,15 @@ public class GrappleBlockEntity extends ModdedProjectileEntity {
         this.setPosRaw(this.getX() - vec31.x, this.getY() - vec31.y, this.getZ() - vec31.z);
         this.setOnGround(true);
         this.setAttached(true);
+        if (!level().isClientSide && standPower() != null) {
+            float pitch = (float) (.5 + Math.random());
+            StandSkinSoundPacket soundPacket = StandSkinSoundPacket.play(
+                    this.position(), AddonSoundEvents.HP_TENSION,
+                    standPower(), this.getSoundSource(), 1, pitch);
+            if (soundPacket != null) {
+                PacketDistributor.sendToPlayersTrackingEntityAndSelf(this, soundPacket);
+            }
+        }
     }
 
     public boolean isAttached() {
@@ -129,5 +147,10 @@ public class GrappleBlockEntity extends ModdedProjectileEntity {
     protected void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
         nbt.putBoolean("attached", this.isAttached());
+    }
+
+    @Override
+    public boolean shouldRenderAtSqrDistance(double distance) {
+        return true;
     }
 }

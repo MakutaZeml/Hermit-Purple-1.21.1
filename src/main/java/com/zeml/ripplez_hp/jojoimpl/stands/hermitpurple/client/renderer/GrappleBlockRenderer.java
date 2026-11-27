@@ -90,7 +90,7 @@ public class GrappleBlockRenderer extends SimpleEntityRenderer<GrappleBlockEntit
             return true;
         } else {
             double range = livingEntity.getOwner() == null ? 20 : livingEntity.getOwner().distanceTo(livingEntity);
-            AABB aabb = livingEntity.getBoundingBoxForCulling().inflate(.75 + range);
+            AABB aabb = livingEntity.getBoundingBoxForCulling().inflate(.75 + range*1.5);
 
             if (aabb.hasNaN() || aabb.getSize() == 0.0) {
                 aabb = new AABB(livingEntity.getX() - 2.0, livingEntity.getY() - 2.0, livingEntity.getZ() - 2.0, livingEntity.getX() + 2.0, livingEntity.getY() + 2.0, livingEntity.getZ() + 2.0);
@@ -98,5 +98,6 @@ public class GrappleBlockRenderer extends SimpleEntityRenderer<GrappleBlockEntit
             return camera.isVisible(aabb);
         }
     }
+
 
 }

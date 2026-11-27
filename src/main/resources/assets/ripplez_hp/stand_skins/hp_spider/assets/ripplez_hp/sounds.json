@@ -1,0 +1,6 @@
+{
+  "vine_throw": {
+    "replace": true,
+    "sounds": [ "ripplez_hp:hermit_purple/spider_man/web_sling_1","ripplez_hp:hermit_purple/spider_man/web_sling_2","ripplez_hp:hermit_purple/spider_man/web_sling_3","ripplez_hp:hermit_purple/spider_man/web_sling_4" ]
+  }
+}

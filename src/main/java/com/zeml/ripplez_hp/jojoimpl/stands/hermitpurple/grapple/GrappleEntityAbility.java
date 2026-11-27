@@ -185,9 +185,11 @@ public class GrappleEntityAbility extends HermitAction {
 
         private void doDragEntity(Entity entity, Vec3 vec) {
             if (entity != null) {
-                entity.setDeltaMovement(vec);
-                if (!entity.level().isClientSide && !(entity instanceof ThrownBlockEntity))
-                    JojoModUtil.forceSyncMotion(entity);
+                if (!entity.level().isClientSide) {
+                    entity.setDeltaMovement(vec);
+                    if (!(entity instanceof ThrownBlockEntity))
+                        JojoModUtil.forceSyncMotion(entity);
+                }
             }
 
         }
